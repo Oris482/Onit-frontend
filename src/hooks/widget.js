@@ -101,6 +101,7 @@ export function usePostData() {
   const history = useHistory();
   const { myInfo } = useMyInfo();
   const [postData, setPostData] = useState(null);
+  const [pageUrl, setPageUrl] = useState('');
 
   const userSeq = useMemo(() => {
     if (myInfo) {
@@ -110,7 +111,7 @@ export function usePostData() {
   }, [myInfo]);
 
   const { res, request } = useRequestAuth({
-    endpoint: `${getApiEndpoint()}/user/${userSeq}/widgets/save`,
+    endpoint: `${getApiEndpoint()}/user/${userSeq}/widgets/${pageUrl}`,
     method: 'post',
     data: postData,
   });
@@ -131,8 +132,9 @@ export function usePostData() {
     }
   }, [res]);
 
-  const post = (data) => {
-    if (data) {
+  const post = (data, url) => {
+    if (data && url) {
+      setPageUrl(url);
       setPostData(convertForServer(data));
     }
   };
@@ -251,8 +253,6 @@ export function useUpdateTextWidgetData() {
   const dispatch = useDispatch();
 
   const updateTextData = (changedText) => {
-    console.log('updating textData');
-    console.log(changedText);
     if (modal.targetWidgetId !== '-1') {
       const changed = JSON.parse(JSON.stringify(widgets.list));
       const targetId = modal.targetWidgetId;

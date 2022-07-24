@@ -8,7 +8,7 @@ import { PageWrapper, EditModeGrid, EditWrapper } from '../components';
 import { getApiEndpoint, urlMatched } from '../utils/util';
 import useRequestAuth from '../hooks/useRequestAuth';
 import { usePostData, useSaveWidgetsFromServer } from '../hooks/widget';
-import { useGetPersonalUrl } from '../hooks/useParamsUrl';
+import { useGetPersonalUrl, useGetPublishingUrl } from '../hooks/useParamsUrl';
 import { useMyInfo } from '../hooks/myInfo';
 import { mainColor } from '../styles/color';
 import { edit_toggle } from '../asset';
@@ -19,6 +19,7 @@ function EditMode() {
     modal: state.info.modal,
   }));
   const pageUrl = useGetPersonalUrl();
+  const publishingUrl = useGetPublishingUrl();
   const [userSeq, setUserSeq] = useState(null);
   const [userMatched, setUserMatched] = useState(null);
   const history = useHistory();
@@ -46,7 +47,7 @@ function EditMode() {
   }, [pageUrl, myInfo]);
 
   const { res: widgetRes, request: requestWidgetData } = useRequestAuth({
-    endpoint: `${getApiEndpoint()}/user/${userSeq}/widgets`,
+    endpoint: `${getApiEndpoint()}/user/${userSeq}/widgets/${publishingUrl}`,
     method: 'get',
   });
 
@@ -122,8 +123,7 @@ function EditMode() {
                   type='button'
                   css={[commonButtonStyle, moveHidden]}
                   onClick={() => {
-                    console.log(widgets.list);
-                    post(widgets.list);
+                    post(widgets.list, publishingUrl);
                   }}
                 >
                   저장하기

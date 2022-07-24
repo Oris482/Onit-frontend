@@ -12,7 +12,10 @@ function deleteKey(obj, targetKey) {
 }
 
 export function convertForServer(infos) {
-  const converted = JSON.parse(JSON.stringify(infos));
+  const widgetsInfo = JSON.parse(JSON.stringify(infos));
+  const converted = widgetsInfo.filter(function (element) {
+    return element.widget_type !== TYPE_NEW;
+  });
   converted.map(function (info) {
     changeKey(info, 'x', 'pos_x');
     changeKey(info, 'y', 'pos_y');

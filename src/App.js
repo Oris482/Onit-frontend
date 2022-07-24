@@ -25,7 +25,7 @@ function App() {
         <Route exact path='/callback/kakao' component={HandleKakaoLogin} />
         <Route exact path='/:personalUrl/' component={MyPage} />
         {/* 나중에 pageUrl로 바껴야 됨 */}
-        <Route
+        {/* <Route
           exact
           path='/:personalUrl/:publishingUrl'
           component={MultiPage}
@@ -34,7 +34,7 @@ function App() {
           exact
           path='/:personalUrl/:publishingUrl/:pageUrl'
           component={MultiPage}
-        />
+        /> */}
         <Route
           exact
           path='/:personalUrl/:publishingUrl/edit'

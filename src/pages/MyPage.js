@@ -333,7 +333,9 @@ function MyPage() {
           </div> */}
         </div>
       </div>
-      {popUp && <AddPagePopUp setPopUp={setPopUp} popUp={popUp} />}
+      {popUp && (
+        <AddPagePopUp setPopUp={setPopUp} popUp={popUp} userSeq={userSeq} />
+      )}
     </div>
   );
 }

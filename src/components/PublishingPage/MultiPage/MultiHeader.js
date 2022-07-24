@@ -2,7 +2,7 @@
 import { css } from '@emotion/react';
 import { useState } from 'react';
 import { useHistory } from 'react-router';
-import { useMyInfo } from '../../hooks/myInfo';
+import { useMyInfo } from '../../../hooks/myInfo';
 
 function MultiHeader({ pagesData }) {
   const [selected, setSelected] = useState('');

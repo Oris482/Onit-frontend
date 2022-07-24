@@ -1,19 +1,22 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import React from 'react';
+import React, { useState } from 'react';
 import useRequestAuth from '../../hooks/useRequestAuth';
 import { getApiEndpoint } from '../../utils/util';
 
-function AddPagePopUp({ popUp, setPopUp }) {
-  const endpoint = `${getApiEndpoint()}/user/page/save`;
+function AddPagePopUp({ popUp, setPopUp, userSeq }) {
+  const endpoint = `${getApiEndpoint()}/user/page/single/${userSeq}`;
+  const [title, setTitle] = useState('');
+  const [url, setUrl] = useState('');
+  const [thumbnail, setThumbnail] = useState('');
   const { res, request } = useRequestAuth({
     endpoint: endpoint,
     method: 'post',
     data: {
-      title: '현준',
-      page_url: 'yoyooBaboo',
-      hash_tag: ['예술가', '아티스트', '바보'],
-      user_seq: '81',
+      title,
+      url,
+      // hash_tag: ['예술가', '아티스트', '바보'],
+      thumbnail,
     },
   });
   // res인자 사용 후에 삭제할 것
@@ -27,9 +30,33 @@ function AddPagePopUp({ popUp, setPopUp }) {
     <div css={[backGroundPopStyle]}>
       <div css={[pagePopUpBoxStyle]}>
         <form css={[formWidth]} onSubmit={onChangeForm}>
-          <div>인풋</div>
-          <div>인풋</div>
-          <div>인풋</div>
+          <p>
+            title :
+            <input
+              value={title}
+              onChange={(event) => {
+                setTitle(event.currentTarget.value);
+              }}
+            />
+          </p>
+          <p>
+            url :
+            <input
+              value={url}
+              onChange={(event) => {
+                setUrl(event.currentTarget.value);
+              }}
+            />
+          </p>
+          <p>
+            thumbnail :
+            <input
+              value={thumbnail}
+              onChange={(event) => {
+                setThumbnail(event.currentTarget.value);
+              }}
+            />
+          </p>
           <button
             type='button'
             css={[commonLoginButtonStyle, LoginButtonColor]}
