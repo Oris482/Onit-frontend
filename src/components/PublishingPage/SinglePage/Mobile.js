@@ -4,9 +4,9 @@ import {
   breakpoints,
   FlexCenter,
   FlexColCenter,
-} from '../../styles/GlobalStyles';
-import { TYPE_IMAGE, TYPE_VIDEO } from '../../utils/constantValue';
-import VideoBox from '../Widgets/Video/VideoBox';
+} from '../../../styles/GlobalStyles';
+import { TYPE_IMAGE, TYPE_VIDEO } from '../../../utils/constantValue';
+import VideoBox from '../../Widgets/Video/VideoBox';
 
 // width에 따라서 모바일버전 on, off
 export function isMobile(width) {

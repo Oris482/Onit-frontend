@@ -1,5 +1,5 @@
 import React from 'react';
-import { NormalWrapper, PageWrapper } from '../components';
+import { NormalWrapper, PageWrapper } from '../../components';
 import MultiHeader from '../components/MultiPage/MultiHeader';
 import { useGetPageUrl } from '../hooks/useParamsUrl';
 import SinglePage from './SinglePage';

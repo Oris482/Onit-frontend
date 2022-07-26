@@ -15,7 +15,9 @@ import {
 import { useMyInfo } from '../hooks/myInfo';
 import { useSaveWidgetsFromServer } from '../hooks/widget';
 import { useRequest } from '../hooks/useRequest';
-import Mobile, { isMobile } from '../components/SinglePage/Mobile';
+import Mobile, {
+  isMobile,
+} from '../components/PublishingPage/SinglePage/Mobile';
 
 function SinglePage({ theme, pageNow }) {
   const [userSeq, setUserSeq] = useState(null);
