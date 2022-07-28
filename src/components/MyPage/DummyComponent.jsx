@@ -40,7 +40,7 @@ function component() {
               margin-top: 20px;
             `}
           >
-            | 수정
+            삭제
           </div>
         </div>
       </div>

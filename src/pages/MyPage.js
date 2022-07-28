@@ -2,9 +2,10 @@
 import { css } from '@emotion/react';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
-import Slider from 'react-slick';
+
 import { Header } from '../components';
 import AddPagePopUp from '../components/MyPage/AddPagePopUp';
+import EditPropfilePopUp from '../components/MyPage/EditProfilePopUp';
 import PageBlock from '../components/MyPage/PageBlock';
 import { useMyInfo } from '../hooks/myInfo';
 import { useRequest } from '../hooks/useRequest';
@@ -17,32 +18,25 @@ import {
 } from '../utils/util';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import DummyComponent from '../components/MyPage/DummyComponent';
-import useRequestAuth from '../hooks/useRequestAuth';
+
+// import useRequestAuth from '../hooks/useRequestAuth';
+import ProfileBlock from '../components/MyPage/ProfileBlock';
+// import ImageUpload from '../components/MyPage/ImageUpload';
 
 // import MyPageComment from '../components/MyPage/MyPageComment';
 // import MyPageCommentWrite from '../components/MyPage/MyPageCommentWrite';
 // import MyPageProfile from '../components/MyPage/MyPageProfile';
 
-// function MyPageProfileInput() {
-//   const { res, request } = useRequestAuth({
-//     endpoint: endpoint,
-//     method: 'post',
-//     data: {
-//       //불변성
-//       nickname: kdkdkdk,
-//     },
-//   });
-// }
-
 function MyPage() {
-  const settings = {
-    dots: false,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 4,
-    slidesToScroll: 1,
-  };
+  // const [localFiles, setLocalFiles] = useState(null);
+  // const handleLocalUpload = ({ target: { files } }) => {
+  //   setLocalFiles(files);
+  // // };
+  // function profilePicture() {
+  //   if (localFiles) return URL.createObjectURL(localFiles[0]);
+  //   return '';
+  // }
+
   const { myInfo } = useMyInfo();
   const history = useHistory();
   const pageUrl = useGetPersonalUrl();
@@ -50,31 +44,25 @@ function MyPage() {
   const [userMatched, setUserMatched] = useState(null);
   const [nickname, setNickname] = useState(null);
   const [popUp, setPopUp] = useState(false);
+  const [profilePopUp, setProfilePopUp] = useState(false);
 
   const { res: pageUserRes, request: requestPageUserInfo } = useRequest({
     endpoint: `${getApiEndpoint()}/url/${pageUrl}/user`,
     method: 'get',
   });
-  const [nicknametest, setNicknametext] = useState('');
+  // 나중에 필요할거라서, 일단 쓰는 중
 
-  // request
-  const endpoint = `${getApiEndpoint()}/profile/${userSeq}`;
-  const { res, request } = useRequestAuth({
-    endpoint: endpoint,
-    method: 'patch',
-    data: {
-      nickname: nicknametest,
-    },
+  // eslint-disable-next-line no-unused-vars
+  const { res: bZoneData, request: requestBZoneData } = useRequest({
+    endpoint: `${getApiEndpoint()}/user/page/single/${userSeq}`,
+    method: 'get',
   });
 
-  console.log(`res: ${res}`);
-  function sendProfile() {
-    request();
-  }
+  // console.log(bZoneData?.data.data[0].title);
+  // console.log(bZoneData?.data);
 
-  const onChangenickname = (e) => {
-    setNicknametext(e.target.value);
-  };
+  // const [bzone, setBzone] = useState({});
+
   // 내 페이지인지 남의 페이지인지 확인 로직
   useEffect(() => {
     // 로그인 유무
@@ -83,6 +71,8 @@ function MyPage() {
       if (myInfo && urlMatched(myInfo.url, pageUrl)) {
         setUserMatched(true);
         setNickname(myInfo.nickname);
+        if (userSeq) requestBZoneData();
+
         // 다른 사람 페이지일 경우
       } else {
         setUserMatched(false);
@@ -94,7 +84,7 @@ function MyPage() {
       setUserMatched(null);
       setNickname(null);
     };
-  }, [pageUrl, myInfo]);
+  }, [pageUrl, myInfo, userSeq]);
 
   // pageUserRes에 변화가 있으면 -> 데이터를 받아서 userseq, nickname 세팅.
   useEffect(() => {
@@ -117,6 +107,65 @@ function MyPage() {
     };
   }, [pageUserRes]);
 
+  // const users = [
+  //   { title: 'arch', url: 'arch1', index: 4, delete: 'n' },
+  //   { title: 'movie', url: 'movie1', index: 2, delete: 'n' },
+  //   { title: 'design', url: 'design1', index: 3, delete: 'n' },
+  //   { title: 'art', url: 'art1', index: 1, delete: 'n' },
+  //   { title: 'yoyoo', url: 'yoyoo1', index: 5, delete: 'y' },
+  // ];
+  // const users = [
+  //   { title: 'arch', url: 'arch1', index: 4, delete: 'n' },
+  //   { title: 'movie', url: 'movie1', index: 2, delete: 'n' },
+  //   { title: 'design', url: 'design1', index: 3, delete: 'n' },
+  //   { title: 'art', url: 'art1', index: 1, delete: 'n' },
+  //   { title: 'yoyoo', url: 'yoyoo1', index: 5, delete: 'y' },
+  // ];
+
+  // {
+  //   users.map((page) => {
+  //     if (page.delete === 'n')
+  //       return (
+  //         <div>
+  //           <PageBlock
+  //             key={page.index}
+  //             data={page}
+  //             addBlock={false}
+  //             setPopUp={setPopUp}
+  //             popUp={popUp}
+  //           />
+  //         </div>
+  //       );
+  //     return null;
+  //   });
+  // }
+
+  // console.log(usersb);
+  function bzoneimage() {
+    if (bZoneData && bZoneData.data.message === 'success') {
+      const usersb = bZoneData.data.data;
+
+      return (
+        <>
+          {usersb.map((page, index) => {
+            const semiIndex = index + 1;
+            return (
+              <div key={semiIndex}>
+                <PageBlock
+                  data={page}
+                  addBlock={false}
+                  setPopUp={setPopUp}
+                  popUp={popUp}
+                />
+              </div>
+            );
+          })}
+        </>
+      );
+    }
+    return <div>no data</div>;
+  }
+
   return (
     <div css={[positionRelative]}>
       <Header
@@ -125,25 +174,17 @@ function MyPage() {
         pageUserName={nickname}
         pageType='normal'
       />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      닉네임 입력 :
-      <input onChange={onChangenickname} value={nicknametest} />
-      <br />
-      {!nicknametest ? '빈문자' : nicknametest}
-      <button type='button' onClick={sendProfile}>
-        보내기
-      </button>
+
       <div css={MyPageWrapper}>
-        <div
-          css={css`
-            height: 50px;
-          `}
-        />
+        {/* <ImageUpload /> */}
+        {/* <input
+          id='file'
+          type='file'
+          name='imgae_file'
+          accept='image/png, image/jpeg, image/gif'
+          onChange={handleLocalUpload}
+        /> */}
+
         <div css={MyPageAZone}>
           <div
             css={css`
@@ -160,7 +201,11 @@ function MyPage() {
                 /* border: 1px solid lightgray; */
               `}
             >
-              <div css={ProfileAZone}> </div>
+              <div
+                className='profileImage'
+                css={ProfileAZone}
+                // src={profilePicture}
+              />
             </div>
             <div
               css={css`
@@ -200,120 +245,54 @@ function MyPage() {
                   text-align: left;
                 `}
               >
-                <div
-                  css={css`
-                    display: inline-block;
-                    margin: 5px;
-                    background-color: white;
-                    border-radius: 20px;
-                    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.15);
-                    justify-content: center;
-                    text-align: center;
-                    font-size: 13px;
-                    padding: 10px 20px 10px 20px;
-                  `}
-                >
-                  일러스트레이션
-                </div>
-                <div
-                  css={css`
-                    display: inline-block;
-                    margin: 5px;
-                    background-color: white;
-                    border-radius: 20px;
-                    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.15);
-                    justify-content: center;
-                    text-align: center;
-                    font-size: 13px;
-                    padding: 10px 20px 10px 20px;
-                  `}
-                >
-                  포토그래퍼
-                </div>
-                <div
-                  css={css`
-                    display: inline-block;
-                    margin: 5px;
-                    background-color: white;
-                    border-radius: 20px;
-                    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.15);
-                    justify-content: center;
-                    text-align: center;
-                    font-size: 13px;
-                    padding: 10px 20px 10px 20px;
-                  `}
-                >
-                  현대미술
-                </div>
+                <div css={ProfileAZoneTagButton}>일러스트레이션</div>
+                <div css={ProfileAZoneTagButton}>포토그래퍼</div>
+                <div css={ProfileAZoneTagButton}>현대미술</div>
               </div>
             </div>
             <div
               css={css`
                 display: flex;
                 margin: 5px;
-                /* border: 1px solid lightgray; */
+                // border: 1px solid lightgray;
                 justify-content: center;
                 text-align: center;
               `}
             >
-              <div
-                css={css`
-                  display: flex;
-                  margin: 5px;
-                  background-color: #f5f5f5;
-                  border-radius: 20px;
-                  width: 100px;
-                  height: 45px;
-                  justify-content: center;
-                  line-height: 45px;
-                  text-align: center;
-                `}
-              >
-                수정하기
-              </div>
+              <ProfileBlock
+                addBlock
+                setPopUp={setProfilePopUp}
+                popUp={profilePopUp}
+              />
 
-              {/* <div
-                css={css`
-                  display: flex;
-                  margin: 5px;
-                  background-color: #f5f5f5;
-                  border-radius: 20px;
-                  width: 150px;
-                  height: 45px;
-                  justify-content: center;
-                  line-height: 45px;
-                  text-align: center;
-                `}
-              >
-                팔로우
-              </div> */}
-              {/* <div
-                css={css`
-                  display: flex;
-                  margin: 5px;
-                  width: 150px;
-                  height: 45px;
-                  justify-content: center;
-                  text-align: center;
-                  background-color: #f5f5f5;
-                  line-height: 45px;
-                  border-radius: 20px;
-                `}
-              >
-                메시지
-              </div> */}
+              {/* <div css={ProfileAZoneInputButton}>팔로우</div> */}
+              {/* <div css={ProfileAZoneMessageButton}>메시지</div> */}
             </div>
           </div>
         </div>
+        <hr css={[divLine]} />
+
         <div css={MyPageBZoneWrapper}>
           <div css={MyPageBZone}>
-            <Slider {...settings}>
-              <DummyComponent />
-              <DummyComponent />
-              <DummyComponent />
-              <PageBlock addBlock setPopUp={setPopUp} popUp={popUp} />
-              <PageBlock addBlock setPopUp={setPopUp} popUp={popUp} />
-            </Slider>
+            {/* {users.map((page) => {
+              if (page.delete === 'n')
+                return (
+                  <div>
+                    <PageBlock
+                      key={page.index}
+                      data={page}
+                      addBlock={false}
+                      setPopUp={setPopUp}
+                      popUp={popUp}
+                    />
+                  </div>
+                );
+              return null;
+            })} */}
+            {/* {console.log(users)} */}
+            {bzoneimage()}
+            <PageBlock addBlock setPopUp={setPopUp} popUp={popUp} />
+
             <div css={[overFlowHidden]} />
           </div>
         </div>
@@ -333,7 +312,16 @@ function MyPage() {
           </div> */}
         </div>
       </div>
-      {popUp && <AddPagePopUp setPopUp={setPopUp} popUp={popUp} />}
+      {profilePopUp && (
+        <EditPropfilePopUp
+          userSeq={userSeq}
+          setPopUp={setProfilePopUp}
+          popUp={profilePopUp}
+        />
+      )}
+      {popUp && (
+        <AddPagePopUp userSeq={userSeq} setPopUp={setPopUp} popUp={popUp} />
+      )}
     </div>
   );
 }
@@ -345,15 +333,21 @@ const positionRelative = css`
 `;
 
 const MyPageWrapper = css`
-  text-align: center;
+  width: 1470px;
+  height: 100vh;
+
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  /* background-color: lightblue; */
+  /* text-align: center; */
 `;
 
 const MyPageAZone = css`
   width: 1470px;
-  margin-top: 70px;
-  height: 200px;
+  height: 120px;
   background-color: white;
-  display: inline-block;
+  margin-top: 100px;
   /* border: 1px solid lightgray; */
 `;
 
@@ -361,29 +355,51 @@ const ProfileAZone = css`
   width: 100px;
   height: 100px;
   background-color: lightgray;
+  border-color: black;
+
   text-align: center;
   justify-content: center;
   border-radius: 50%;
   display: flex;
 `;
 
+const ProfileAZoneTagButton = css`
+  display: inline-block;
+  margin: 5px;
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.15);
+  justify-content: center;
+  text-align: center;
+  font-size: 13px;
+  padding: 10px 20px 10px 20px;
+`;
+
+// const ProfileAZoneMessageButton = css`
+//   display: flex;
+//   margin: 5px;
+//   width: 150px;
+//   height: 45px;
+//   justify-content: center;
+//   text-align: center;
+//   background-color: #f5f5f5;
+//   line-height: 45px;
+//   border-radius: 20px;
+// `;
+
 const MyPageBZoneWrapper = css`
   width: 100vw;
   height: 300px;
   background-color: white;
-  display: flex;
-  justify-content: center;
+  /* display: flex; */
+  /* justify-content: center; */
+  /* flex-direction: column; */
   /* border: 1px solid lightgray; */
 `;
 const MyPageBZone = css`
   width: 1470px;
-  /* min-width: 1470px; */
-  /* height: 360px; */
-  background-color: white;
-  /* text-align: center; */
-  /* justify-content: center; */
-  /* align-items: center; */
-  /* display: flex; */
+  flex-wrap: wrap;
+  display: flex;
 `;
 
 // const MyPageCZone = css`
@@ -412,6 +428,15 @@ const MyPageBZone = css`
 //   display: flex;
 //   flex-direction: column;
 // `;
+
+const divLine = css`
+  width: 100%;
+  height: 1px;
+  border: none;
+  background-color: lightgray;
+  /* padding-top: 10px; */
+  /* padding-bottom: 10px; */
+`;
 
 const overFlowHidden = css`
   overflow: hidden;
