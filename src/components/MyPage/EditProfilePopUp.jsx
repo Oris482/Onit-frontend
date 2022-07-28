@@ -4,13 +4,13 @@ import React, { useState } from 'react';
 import useRequestAuth from '../../hooks/useRequestAuth';
 import { getApiEndpoint } from '../../utils/util';
 
-function AddPopUp({ userSeq, popUp, setPopUp }) {
+function EditProfilePopUP({ userSeq, popUp, setPopUp }) {
   const [inputs, setInputs] = useState({
-    title: '',
-    url: '',
-    thumbnail: '',
+    nickname: '',
+    hashtag: '',
   });
-  const { title, url } = inputs;
+  const { nickname, hashtag } = inputs;
+
   const onChange = (e) => {
     const { name, value } = e.target;
     setInputs({
@@ -18,44 +18,34 @@ function AddPopUp({ userSeq, popUp, setPopUp }) {
       [name]: value,
     });
   };
-  // eslint-disable-next-line no-unused-vars
 
-  const [test, setTest] = useState({ title: '', url: '' });
-
-  function onChangeForm(event) {
-    // eslint-disable-next-line no-unused-vars
-    const data = { title, url, thumbnail: 'later' };
-    // setDatas(data);
-    // setTest('hi');
-    setTest(data);
-    setInputs({
-      title: '',
-      url: '',
-    });
-    // console.log(data.title);
-    event.preventDefault();
-    request();
-    console.log(test);
-    // setPopUp(!popUp);
-  }
-
-  const endpoint = `${getApiEndpoint()}/user/page/single/${userSeq}`;
+  const endpoint = `${getApiEndpoint()}/profile/${userSeq}`;
   // eslint-disable-next-line no-unused-vars
   const { res, request } = useRequestAuth({
     endpoint: endpoint,
-    method: 'post',
-    // data: test,
+    method: 'patch',
     data: {
-      title: test.title,
-      url: 'urltest',
-      thumbnail: '',
+      nickname: 'dongslee_profile',
     },
   });
+
+  function onChangeForm(event) {
+    // eslint-disable-next-line no-unused-vars
+    const data = { nickname: { nickname }, hashtag: { hashtag } };
+    setInputs({
+      nickname: '',
+      hashtag: '',
+    });
+    // if (data) console.log(data);
+    event.preventDefault();
+    // request(data);
+    setPopUp(!popUp);
+  }
 
   return (
     <div css={[backGroundPopStyle]}>
       <div css={[pagePopUpBoxStyle]}>
-        <div css={[pagePopUpBoxTitle]}>페이지 추가</div>
+        <div css={[pagePopUpBoxTitle]}>프로필 수정</div>
         <form css={[formWidth]} onSubmit={onChangeForm}>
           <button
             type='button'
@@ -65,27 +55,27 @@ function AddPopUp({ userSeq, popUp, setPopUp }) {
             X{' '}
           </button>
           <div css={[pagePopUpBoxContentsWraper]}>
-            <div css={[pagePopUpBoxContents]}>페이지 이름</div>
+            <div css={[pagePopUpBoxContents]}>닉네임</div>
             <input
-              name='title'
-              value={title}
               css={[pagePopUpBoxInput]}
-              placeholder='페이지 이름을 입력해주세요.'
+              name='nickname'
+              value={nickname}
+              placeholder='닉네임을 입력해주세요. 닉네임을 변경하면 URL도 변경됩니다.'
               onChange={onChange}
             />
           </div>
           <div css={[pagePopUpBoxContentsWraper]}>
-            <div css={[pagePopUpBoxContents]}>페이지 URL</div>
+            <div css={[pagePopUpBoxContents]}>관심 분야</div>
             <input
               css={[pagePopUpBoxInput]}
-              name='url'
-              value={url}
-              placeholder='영문과 숫자 조합으로 설정해주세요.'
+              placeholder='관심분야를 입력주세요. ex) 순수미술'
+              name='hashtag'
+              value={hashtag}
               onChange={onChange}
             />
           </div>
           <div css={[pagePopUpBoxContentsWraper]}>
-            <div css={[pagePopUpBoxContents]}>페이지 썸네일</div>
+            <div css={[pagePopUpBoxContents]}>프로필 이미지</div>
             <input
               css={[pagePopUpBoxInput]}
               type='file'
@@ -106,7 +96,7 @@ function AddPopUp({ userSeq, popUp, setPopUp }) {
   );
 }
 
-export default AddPopUp;
+export default EditProfilePopUP;
 
 const backGroundPopStyle = css`
   position: fixed;
