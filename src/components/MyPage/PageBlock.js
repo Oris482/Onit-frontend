@@ -3,9 +3,11 @@ import { css } from '@emotion/react';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { InitButtonStyle } from '../../styles/GlobalStyles';
+import { useGetPersonalUrl } from '../../hooks/useParamsUrl';
 
 // eslint-disable-next-line no-unused-vars
 function PageBlock({ data, addBlock, popUp, setPopUp }) {
+  const pageUrl = useGetPersonalUrl();
   // if (data) {
   // console.log(`data: ${data.title}`);
   // console.log(`data: ${data.url}`);
@@ -29,7 +31,7 @@ function PageBlock({ data, addBlock, popUp, setPopUp }) {
         </>
       ) : (
         <div css={siteViewBZone}>
-          <Link to={data.url ? `/dongslee/${data.url}` : ''}>
+          <Link to={data.url ? `/${pageUrl}/${data.url}` : ''}>
             <div
               css={css`
                 height: 70%;

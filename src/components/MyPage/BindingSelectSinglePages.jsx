@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import BindingSinglePageBlock from './BindingSinglePageBlock';
 
@@ -35,7 +35,11 @@ const BindingSelectSinglePages = ({ selectedPages, setSelectedPages }) => {
         const semiIndex = index + 1;
         return (
           <div key={semiIndex}>
-            <BindingSinglePageBlock data={page} handleSelect={handleSelect} />
+            <BindingSinglePageBlock
+              data={page}
+              handleSelect={handleSelect}
+              selectedPages={selectedPages}
+            />
           </div>
         );
       })}
@@ -49,7 +53,7 @@ export default BindingSelectSinglePages;
 
 const siteViewBZone = css`
   display: flex;
-  height: 100%;
+  height: 180px;
   justify-content: flex-start;
   align-items: flex-start;
   overflow: scroll;

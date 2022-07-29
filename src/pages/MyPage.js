@@ -316,12 +316,7 @@ function MyPage() {
             })} */}
             {/* {console.log(users)} */}
             {bzoneimage()}
-            <PageBlock
-              data={bZoneData}
-              addBlock
-              setPopUp={setPopUp}
-              popUp={popUp}
-            />
+            <PageBlock addBlock setPopUp={setPopUp} popUp={popUp} />
 
             <div css={[overFlowHidden]} />
           </div>

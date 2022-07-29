@@ -20,22 +20,22 @@ function AddPopUp({ userSeq, popUp, setPopUp }) {
   };
   // eslint-disable-next-line no-unused-vars
 
-  const [test, setTest] = useState({ title: '', url: '' });
+  // const [test, setTest] = useState({ title: '', url: '' });
 
   function onChangeForm(event) {
     // eslint-disable-next-line no-unused-vars
-    const data = { title, url, thumbnail: 'later' };
+    // const data = { title, url, thumbnail: 'later' };
     // setDatas(data);
     // setTest('hi');
-    setTest(data);
-    setInputs({
-      title: '',
-      url: '',
-    });
+    // setTest(data);
+    // setInputs({
+    //   title: '',
+    //   url: '',
+    // });
     // console.log(data.title);
     event.preventDefault();
+    console.log(inputs);
     request();
-    console.log(test);
     // setPopUp(!popUp);
   }
 
@@ -45,11 +45,7 @@ function AddPopUp({ userSeq, popUp, setPopUp }) {
     endpoint: endpoint,
     method: 'post',
     // data: test,
-    data: {
-      title: test.title,
-      url: 'urltest',
-      thumbnail: '',
-    },
+    data: inputs,
   });
 
   return (

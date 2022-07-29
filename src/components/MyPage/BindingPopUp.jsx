@@ -53,7 +53,6 @@ function BindingPopUp({ userSeq, popUp, setPopUp }) {
     setPopUp(!popUp);
   }
 
-  console.log(inputs);
   return (
     <div css={[backGroundPopStyle]}>
       <div css={[pagePopUpBoxStyle]}>

@@ -7,6 +7,10 @@ const BindingSinglePageBlock = (props) => {
     props.data.thumbnail !== ''
       ? props.data.thumbnail
       : 'https://mblogthumb-phinf.pstatic.net/MjAxNzA2MjNfNDEg/MDAxNDk4MjExMTE1OTYy.RGjgC51-8rYSISInewpiERaIWLuYkk6h8-DHImZWlNog.6nJ1cYNwJuFRBYbzuXIlfFC2vAz9SSYihxEpnVX2ttUg.PNG.kkp0079/1.PNG?type=w800';
+  const selectedIndex =
+    props.selectedPages.findIndex(
+      (element) => element.singlePageUrl === props.data.url
+    ) + 1;
 
   return (
     <div
@@ -14,6 +18,14 @@ const BindingSinglePageBlock = (props) => {
       onClick={() => props.handleSelect(props.data.url)}
       onKeyDown={() => props.handleSelect(props.data.url)}
     >
+      {selectedIndex !== 0 ? (
+        <div>
+          <div css={[selectedPageOverlay]} />
+          <div css={[selectedPageIndexText]}>{selectedIndex}</div>
+        </div>
+      ) : (
+        <></>
+      )}
       <img css={[thumbnailImg]} src={thumbnailUrl} />
       <div css={[singlePageTitle]}>{props.data.title}</div>
     </div>
@@ -30,6 +42,7 @@ const thumbnailImg = css`
 `;
 
 const singlePageBox = css`
+  position: relative;
   width: 100px;
   height: 160px;
   border: 10px black;
@@ -43,4 +56,23 @@ const singlePageTitle = css`
   margin-top: 5px;
   margin-bottom: 10px;
   overflow: hidden;
+`;
+
+const selectedPageOverlay = css`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0.7;
+  border-radius: 20px;
+  background-color: rgba(239, 100, 8, 1);
+`;
+
+const selectedPageIndexText = css`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 50px;
+  color: white;
 `;
