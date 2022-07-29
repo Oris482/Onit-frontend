@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import './Text.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
@@ -12,6 +12,8 @@ function TextEditor(props) {
     modal: state.info.modal,
   }));
 
+  const editorRef = useRef(null);
+
   const dispatch = useDispatch();
   const setEditorWidgetId = (id) => {
     dispatch(
@@ -22,13 +24,45 @@ function TextEditor(props) {
     );
   };
 
-  const newList = JSON.parse(JSON.stringify(widgets.list));
-  const targetId = modal.targetWidgetId;
-  const found = newList.find((widget) => widget.i === targetId);
-  let isPinned;
-  if (found?.static !== undefined) {
-    isPinned = found.static === true;
-  }
+  useEffect(() => {
+    const editor = editorRef.current;
+    const newList = JSON.parse(JSON.stringify(widgets.list));
+    const found = newList.find((widget) => widget.i === props.widgetId);
+    let isPinned = false;
+    if (found?.static !== undefined) {
+      isPinned = found.static;
+    }
+    if (isPinned === true) {
+      editor.editor.disableReadOnlyMode(props.widgetId);
+    } else if (isPinned === false) {
+      editor.editor.enableReadOnlyMode(props.widgetId);
+    }
+  }, [widgets.list, props.widgetId]);
+
+  // const handleClick = useCallback(() => {
+  //   const editor = editorRef.current;
+  //   // const newList = JSON.parse(JSON.stringify(widgets.list));
+  //   // const targetId = modal.targetWidgetId;
+  //   // const found = newList.find((widget) => widget.i === targetId);
+  //   // let isPinned = false;
+  //   // console.log(found);
+  //   // if (found?.static !== undefined) {
+  //   //   isPinned = found.static;
+  //   // }
+  //   console.log(props.isPinned);
+  //   if (props.isPinned === true) {
+  //     editor.editor.disableReadOnlyMode(props.widgetId);
+  //   }
+  // }, [props.isPinned]);
+
+  // useEffect(() => {
+  //   const editor = editorRef.current;
+  //   editor.domContainer.current.addEventListener('click', handleClick);
+
+  //   return () => {
+  //     editor.domContainer.current.removeEventListener('click', handleClick);
+  //   };
+  // }, []);
 
   // const [thumbnail, setThumbnail] = useState('');
 
@@ -51,15 +85,16 @@ function TextEditor(props) {
   //     handleSubmit();
   //   }
   // }, [thumbnail, handleSubmit]);
-
   return (
     <div className='TextEditor'>
       <div className='Textbox'>
         <div className='Editor'>
           <CKEditor
+            ref={editorRef}
             style={{ margin: 0, padding: 0 }}
             editor={InlineEditor}
             data={originText}
+            id={props.widgetId}
             config={{
               toolbar: {
                 items: ['heading', '|', 'link', 'bold', 'italic', 'alignment'],
@@ -112,7 +147,7 @@ function TextEditor(props) {
                 },
               },
             }}
-            onFocus={() => {
+            onFocus={(event, editor) => {
               if (props.widgetId !== undefined && props.widgetId !== -1) {
                 setEditorWidgetId(props.widgetId);
               }
