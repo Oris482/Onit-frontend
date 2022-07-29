@@ -2,10 +2,11 @@
 import { css } from '@emotion/react';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
-
+import { useDispatch } from 'react-redux';
 import { Header } from '../components';
 import AddPagePopUp from '../components/MyPage/AddPagePopUp';
 import EditPropfilePopUp from '../components/MyPage/EditProfilePopUp';
+import BindingPagePopUp from '../components/MyPage/BindingPopUp';
 import PageBlock from '../components/MyPage/PageBlock';
 import { useMyInfo } from '../hooks/myInfo';
 import { useRequest } from '../hooks/useRequest';
@@ -26,6 +27,7 @@ import ProfileBlock from '../components/MyPage/ProfileBlock';
 // import MyPageComment from '../components/MyPage/MyPageComment';
 // import MyPageCommentWrite from '../components/MyPage/MyPageCommentWrite';
 // import MyPageProfile from '../components/MyPage/MyPageProfile';
+import { createReplacementSinglePagesAction } from '../redux/slice';
 
 function MyPage() {
   // const [localFiles, setLocalFiles] = useState(null);
@@ -45,6 +47,8 @@ function MyPage() {
   const [nickname, setNickname] = useState(null);
   const [popUp, setPopUp] = useState(false);
   const [profilePopUp, setProfilePopUp] = useState(false);
+  const [bindingPopUp, setBindingPopUp] = useState(false);
+  const dispatch = useDispatch();
 
   const { res: pageUserRes, request: requestPageUserInfo } = useRequest({
     endpoint: `${getApiEndpoint()}/url/${pageUrl}/user`,
@@ -54,7 +58,12 @@ function MyPage() {
 
   // eslint-disable-next-line no-unused-vars
   const { res: bZoneData, request: requestBZoneData } = useRequest({
-    endpoint: `${getApiEndpoint()}/user/page/single/${userSeq}`,
+    endpoint: `${getApiEndpoint()}/user/page/singles/${userSeq}`,
+    method: 'get',
+  });
+
+  const { res: singlePagesData, request: requestSinglePagesData } = useRequest({
+    endpoint: `${getApiEndpoint()}/user/page/singles/${userSeq}`,
     method: 'get',
   });
 
@@ -71,7 +80,10 @@ function MyPage() {
       if (myInfo && urlMatched(myInfo.url, pageUrl)) {
         setUserMatched(true);
         setNickname(myInfo.nickname);
-        if (userSeq) requestBZoneData();
+        if (userSeq) {
+          requestBZoneData();
+          requestSinglePagesData();
+        }
 
         // 다른 사람 페이지일 경우
       } else {
@@ -107,6 +119,12 @@ function MyPage() {
     };
   }, [pageUserRes]);
 
+  // 바인딩 페이지용 싱글페이지 목록 데이터 리덕스에 저장
+  useEffect(() => {
+    if (singlePagesData && singlePagesData.data) {
+      dispatch(createReplacementSinglePagesAction(singlePagesData.data));
+    }
+  }, [singlePagesData]);
   // const users = [
   //   { title: 'arch', url: 'arch1', index: 4, delete: 'n' },
   //   { title: 'movie', url: 'movie1', index: 2, delete: 'n' },
@@ -261,8 +279,15 @@ function MyPage() {
             >
               <ProfileBlock
                 addBlock
+                setPopUp={setBindingPopUp}
+                popUp={bindingPopUp}
+                buttonText='페이지 바인딩'
+              />
+              <ProfileBlock
+                addBlock
                 setPopUp={setProfilePopUp}
                 popUp={profilePopUp}
+                buttonText='프로필 수정'
               />
 
               {/* <div css={ProfileAZoneInputButton}>팔로우</div> */}
@@ -291,7 +316,12 @@ function MyPage() {
             })} */}
             {/* {console.log(users)} */}
             {bzoneimage()}
-            <PageBlock addBlock setPopUp={setPopUp} popUp={popUp} />
+            <PageBlock
+              data={bZoneData}
+              addBlock
+              setPopUp={setPopUp}
+              popUp={popUp}
+            />
 
             <div css={[overFlowHidden]} />
           </div>
@@ -317,6 +347,13 @@ function MyPage() {
           userSeq={userSeq}
           setPopUp={setProfilePopUp}
           popUp={profilePopUp}
+        />
+      )}
+      {bindingPopUp && (
+        <BindingPagePopUp
+          userSeq={userSeq}
+          setPopUp={setBindingPopUp}
+          popUp={bindingPopUp}
         />
       )}
       {popUp && (
