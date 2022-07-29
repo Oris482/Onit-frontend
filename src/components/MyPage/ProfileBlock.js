@@ -2,7 +2,7 @@
 import { css } from '@emotion/react';
 import React from 'react';
 
-function ProfileBlock({ addBlock, popUp, setPopUp }) {
+function ProfileBlock({ addBlock, popUp, setPopUp, buttonText }) {
   return (
     <>
       {addBlock ? (
@@ -12,7 +12,7 @@ function ProfileBlock({ addBlock, popUp, setPopUp }) {
             css={[ProfileAZoneInputButton]}
             onClick={() => setPopUp(!popUp)}
           >
-            프로필 수정
+            {buttonText}
           </button>
         </>
       ) : (
