@@ -58,7 +58,7 @@ const siteViewBZone = css`
   width: 680px;
   max-height: 284px;
   min-height: 150px;
-  height: 23vh;
+  height: 29vh;
   justify-content: flex-start;
   align-items: flex-start;
   overflow-y: scroll;
