@@ -53,12 +53,20 @@ export default BindingSelectSinglePages;
 
 const siteViewBZone = css`
   display: flex;
-  height: 180px;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+  width: 680px;
+  max-height: 284px;
+  min-height: 150px;
+  height: 23vh;
   justify-content: flex-start;
   align-items: flex-start;
-  overflow: scroll;
-  margin-top: 5px;
-  margin-bottom: 5px;
+  overflow-y: scroll;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 20px 10px 10px 20px;
+  border-radius: 20px;
+  box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.1);
   background-color: white;
 `;
 
