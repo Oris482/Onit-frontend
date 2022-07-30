@@ -1,10 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import React, { useState, useRef, useEffect, useMemo } from 'react';
+import { BlockDrag } from '../../styles/GlobalStyles';
 import { isURL } from '../../utils/util';
 import { useGetPersonalUrl } from '../../hooks/useParamsUrl';
 
 const BindingInputBox = (props) => {
+  const { url, title, onChange } = props;
   const [paddingSize, setPaddingSize] = useState(0);
   const fixedTextRef = useRef(null);
   const pageUrl = useGetPersonalUrl();
@@ -14,19 +16,19 @@ const BindingInputBox = (props) => {
   }, []);
 
   const validateURL = useMemo(() => {
-    if (props.url === '') return '';
-    if (!isURL(props.url)) return '숫자와 영어만 사용하실 수 있습니다!';
-    else if (props.url.length < 4) return '4글자 이상 입력해주세요.';
-    else if (props.url.length > 20) return '16글자 이하로 입력해주세요';
+    if (url === '') return '';
+    if (!isURL(url)) return '숫자와 영어만 사용하실 수 있습니다!';
+    else if (url.length < 4) return '4글자 이상 입력해주세요.';
+    else if (url.length > 20) return '16글자 이하로 입력해주세요';
     else {
       // 중복 체크 API 들어갈 부분
       return 'ok';
     }
-  }, [props.url]);
+  }, [url]);
 
   return (
     <div css={[VerticalLayout]}>
-      <div css={[pagePopUpBoxContents]}>페이지 주소</div>
+      <div css={[pagePopUpBoxContents, BlockDrag]}>페이지 주소</div>
       <div css={[formText]}>
         <span css={[fixedText]} ref={fixedTextRef}>
           https://iamonit.kr/{pageUrl}/
@@ -39,10 +41,10 @@ const BindingInputBox = (props) => {
             `,
           ]}
           name='url'
-          value={props.url}
+          value={url}
           maxLength='24'
           autoComplete='off'
-          onChange={props.onChange}
+          onChange={onChange}
         />
         {validateURL !== 'ok' ? (
           <span css={[checkURLMsg]}>{validateURL}</span>
@@ -50,14 +52,14 @@ const BindingInputBox = (props) => {
           <></>
         )}
       </div>
-      <div css={[pagePopUpBoxContents]}>페이지 제목</div>
+      <div css={[pagePopUpBoxContents, BlockDrag]}>페이지 제목</div>
       <input
         css={[pagePopUpBoxInput]}
         placeholder='제목을 입력해주세요! 최상단에 표시됩니다.'
         name='title'
-        value={props.title}
+        value={title}
         autoComplete='off'
-        onChange={props.onChange}
+        onChange={onChange}
       />
     </div>
   );

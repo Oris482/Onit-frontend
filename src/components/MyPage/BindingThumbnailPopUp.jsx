@@ -10,7 +10,6 @@ import {
   OrangeColorButton,
   RoundButtonSmall,
   getAbsoluteBtn,
-  SHADOW_STYLE,
   BasicInputStyle,
   DisplayNone,
   autofillF2f2f2,
@@ -69,94 +68,133 @@ function BindingThumbnailPopUp(props) {
   };
 
   return (
-    <div css={[Container]}>
-      <div css={PopupHeader}>
-        <p css={[PopupLabel]}>{label}</p>
-        <button
-          type='button'
-          css={[commonBtn, btn]}
-          onClick={() => {
-            endPop();
-          }}
-        >
-          <div css={img}>
-            <img alt='img' height='50px' src={closeSet} />
-          </div>
-        </button>
-      </div>
-
-      <div css={[PopupColumnWrapper]}>
-        <button
-          type='button'
-          css={[InitButtonStyle, ChangeModeButton, textColor(isLocalUpload)]}
-          onClick={() => setIsLocalUpload(true)}
-        >
-          내 컴퓨터에서 업로드
-        </button>
-        <button
-          type='button'
-          css={[InitButtonStyle, ChangeModeButton, textColor(!isLocalUpload)]}
-          onClick={() => setIsLocalUpload(false)}
-        >
-          링크로 업로드
-        </button>
-      </div>
-      <div css={[Line]} />
-      <div css={[PopUpBody]}>
-        {!isLocalUpload && (
-          <input
-            type='thumbnail'
-            name='thumbnail'
-            value={props.thumbnail}
-            css={[urlInputStyle]}
-            placeholder='이미지 링크를 입력해주세요'
-            onChange={handleThumbChange}
-            onKeyDown={handleKeyDown}
-          />
-        )}
-        {isLocalUpload && (
-          <>
+    <div css={[Container]} aria-hidden='true'>
+      <div css={[Overlay]} aria-hidden='true'>
+        <div css={[PopUpBox]}>
+          <div css={PopupHeader}>
+            <p css={[PopupLabel]}>{label}</p>
             <button
               type='button'
-              css={[urlInputStyle, fontColorGrey]}
-              onClick={onClickFileInput}
+              css={[commonBtn, btn]}
+              onClick={() => {
+                endPop();
+              }}
             >
-              {localFiles === null
-                ? '클릭하여 이미지 선택하기'
-                : localFiles[0].name}
+              <div css={img}>
+                <img alt='img' height='50px' src={closeSet} />
+              </div>
             </button>
+          </div>
 
-            <input
-              id='file'
-              type='file'
-              name='imgae_file'
-              accept='image/png, image/jpeg, image/gif'
-              css={[DisplayNone, autofillF2f2f2]}
-              onChange={handleLocalUpload}
-              ref={imageInput}
-            />
-          </>
-        )}
+          <div css={[PopupColumnWrapper]}>
+            <button
+              type='button'
+              css={[
+                InitButtonStyle,
+                ChangeModeButton,
+                textColor(isLocalUpload),
+              ]}
+              onClick={() => setIsLocalUpload(true)}
+            >
+              내 컴퓨터에서 업로드
+            </button>
+            <button
+              type='button'
+              css={[
+                InitButtonStyle,
+                ChangeModeButton,
+                textColor(!isLocalUpload),
+              ]}
+              onClick={() => setIsLocalUpload(false)}
+            >
+              링크로 업로드
+            </button>
+          </div>
+          <div css={[Line]} />
+          <div css={[PopUpBody]}>
+            {!isLocalUpload && (
+              <input
+                type='thumbnail'
+                name='thumbnail'
+                value={props.thumbnail}
+                css={[urlInputStyle]}
+                placeholder='이미지 링크를 입력해주세요'
+                onChange={handleThumbChange}
+                onKeyDown={handleKeyDown}
+              />
+            )}
+            {isLocalUpload && (
+              <>
+                <button
+                  type='button'
+                  css={[urlInputStyle, fontColorGrey]}
+                  onClick={onClickFileInput}
+                >
+                  {localFiles === null
+                    ? '클릭하여 이미지 선택하기'
+                    : localFiles[0].name}
+                </button>
 
-        <button
-          type='button'
-          css={[InitButtonStyle, OrangeColorButton, RoundButtonSmall]}
-          onClick={(e) => {
-            handleSubmit(e.target);
-          }}
-        >
-          업로드
-        </button>
+                <input
+                  id='file'
+                  type='file'
+                  name='imgae_file'
+                  accept='image/png, image/jpeg, image/gif'
+                  css={[DisplayNone, autofillF2f2f2]}
+                  onChange={handleLocalUpload}
+                  ref={imageInput}
+                />
+              </>
+            )}
+
+            <button
+              type='button'
+              css={[InitButtonStyle, OrangeColorButton, RoundButtonSmall]}
+              onClick={(e) => {
+                handleSubmit(e.target);
+              }}
+            >
+              업로드
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
 }
 
 const Container = css`
-  ${FlexColCenter}
-  ${SHADOW_STYLE.pale}
+  position: fixed;
   width: 100%;
+  height: 100%;
+  z-index: 999999;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Overlay = css`
+  display: flex;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
+  justify-content: center;
+  align-items: center;
+`;
+
+const PopUpBox = css`
+  ${FlexColCenter}
+  position: relative;
+  width: 540px;
+  height: 250px;
+  border-radius: 20px;
   margin: 30px 0 20px 0;
+  background-color: white;
 `;
 
 const PopupHeader = css`

@@ -1,27 +1,42 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import React, { useState } from 'react';
+import BindingThumbnailPopUp from './BindingThumbnailPopUp';
+import { BlockDrag } from '../../styles/GlobalStyles';
 
 const BindingThumbnailBox = (props) => {
+  const { thumbnail, setThumbnail } = props;
   const [thumbnailBoxHover, setThumbnailBoxHover] = useState(false);
+  const [thumbnailPopUp, setThumbnailPopUp] = useState(false);
+
+  function closeThumbnailPopUp() {
+    setThumbnailPopUp(false);
+    setThumbnailBoxHover(false);
+  }
 
   return (
     <div
-      css={[thumbnailBox]}
+      css={[thumbnailBox, BlockDrag]}
       onMouseEnter={() => setThumbnailBoxHover(true)}
       onMouseLeave={() => setThumbnailBoxHover(false)}
     >
-      {props.thumbnail !== '' && (
-        <img css={[thumbnailImg]} src={props.thumbnail} />
-      )}
-      {(props.thumbnail === '' || thumbnailBoxHover) && (
+      {thumbnail !== '' && <img css={[thumbnailImg]} src={thumbnail} />}
+      {(thumbnail === '' || thumbnailBoxHover) && (
         <button
           css={[thumbnailButton, LoginButtonColor]}
           type='button'
-          onClick={() => props.setThumbnailPopUp(true)}
+          onClick={() => setThumbnailPopUp(true)}
         >
-          {props.thumbnail === '' ? '썸네일 업로드' : '썸네일 수정'}
+          {thumbnail === '' ? '썸네일 업로드' : '썸네일 수정'}
         </button>
+      )}
+      {thumbnailPopUp && (
+        <BindingThumbnailPopUp
+          label='썸네일 설정'
+          thumbnail={thumbnail}
+          setThumbnail={setThumbnail}
+          endPop={closeThumbnailPopUp}
+        />
       )}
     </div>
   );

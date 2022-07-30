@@ -167,6 +167,15 @@ export const OrangeColorButton = css`
     background-color: ${BUTTON_COLOR.orange};
   }
 `;
+
+// 드래그 방지
+export const BlockDrag = css`
+  -ms-user-select: none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+`;
 // media query
 
 export const breakpoints = [576, 768, 992, 1200];

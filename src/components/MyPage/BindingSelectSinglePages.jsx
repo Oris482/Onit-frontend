@@ -3,6 +3,7 @@ import { css } from '@emotion/react';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import BindingSinglePageBlock from './BindingSinglePageBlock';
+import { BlockDrag } from '../../styles/GlobalStyles';
 
 const BindingSelectSinglePages = ({ selectedPages, setSelectedPages }) => {
   const { singlePages } = useSelector((state) => ({
@@ -30,7 +31,7 @@ const BindingSelectSinglePages = ({ selectedPages, setSelectedPages }) => {
   }
 
   return singlePages.data.length !== 0 ? (
-    <div css={siteViewBZone}>
+    <div css={[siteViewBZone, BlockDrag]}>
       {singlePagesInfo.map((page, index) => {
         const semiIndex = index + 1;
         return (
@@ -45,13 +46,16 @@ const BindingSelectSinglePages = ({ selectedPages, setSelectedPages }) => {
       })}
     </div>
   ) : (
-    <div css={[noneSinglePageMsg]}>싱글 페이지가 없습니다!</div>
+    <div css={siteViewBZone}>
+      <div css={[noneSinglePageMsg]}>합칠 수 있는 페이지가 없어요!</div>
+    </div>
   );
 };
 
 export default BindingSelectSinglePages;
 
 const siteViewBZone = css`
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   box-sizing: border-box;
@@ -74,6 +78,11 @@ const siteViewBZone = css`
 `;
 
 const noneSinglePageMsg = css`
-  display: block;
-  margin-top: 10px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 25px;
+  color: grey;
+  text-align: center;
 `;

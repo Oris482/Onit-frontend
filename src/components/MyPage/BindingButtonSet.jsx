@@ -5,8 +5,10 @@ import { getApiEndpoint } from '../../utils/util';
 import useRequestAuth from '../../hooks/useRequestAuth';
 import BindingPreview from './BindingPreview';
 import { PlainPopUp } from '../FeedbackBox/PlainPopUp';
+import { BlockDrag } from '../../styles/GlobalStyles';
 
 const BindingButtonSet = (props) => {
+  const { userSeq, inputs, setPopUp } = props;
   const [previewPopUp, setPreviewPopUp] = useState(false);
   const [sendingPopUp, setSendingPopUp] = useState(false);
   const [errorRes, setErrorRes] = useState(false);
@@ -16,18 +18,18 @@ const BindingButtonSet = (props) => {
     bottomText: '',
   });
   const [hasButton, setHasButton] = useState(true);
-  const endpoint = `${getApiEndpoint()}/user/page/multi/${props.userSeq}`;
+  const endpoint = `${getApiEndpoint()}/user/page/multi/${userSeq}`;
   // eslint-disable-next-line no-unused-vars
   const { res, request } = useRequestAuth({
     endpoint: endpoint,
     method: 'post',
-    data: props.inputs,
+    data: inputs,
   });
 
   useEffect(() => {
     // 마이페이지 업데이트를 위해 멀티페이지 GET 필요
     if (res) setSendingPopUp(false);
-    if (res && res.data.message === 'ok') props.setPopUp(false);
+    if (res && res.data.message === 'ok') setPopUp(false);
     else if (res) {
       setErrorRes(true);
       console.log(res);
@@ -36,7 +38,16 @@ const BindingButtonSet = (props) => {
 
   useEffect(() => {
     // 서버 응답 에러 시 메시지 출력 부분
-    if (errorRes === true) alert('전송 실패');
+    if (errorRes === true) {
+      setHasButton(true);
+      setPopUpText({
+        topText: '전송 실패',
+        middleText: '서버에 저장하는데 문제가 발생했어요!',
+        bottomText:
+          '죄송하시만 다시 한 번 시도해주세요 ㅠ.ㅠ\n지속적으로 오류가 발생하면 꼭 저희에게 알려주세요!',
+      });
+      setSendingPopUp(true);
+    }
   }, [errorRes]);
 
   function submitMultiPageForm() {
@@ -57,9 +68,9 @@ const BindingButtonSet = (props) => {
 
   const checkFormInputs = (e) => {
     if (
-      props.inputs.url === '' ||
-      props.inputs.title === '' ||
-      props.inputs.singlePages.length === 0
+      inputs.url === '' ||
+      inputs.title === '' ||
+      inputs.singlePages.length === 0
     ) {
       setHasButton(true);
       setPopUpText({
@@ -85,7 +96,7 @@ const BindingButtonSet = (props) => {
   };
 
   return (
-    <div css={[HorizontalLayout, buttonLayout]}>
+    <div css={[HorizontalLayout, buttonLayout, BlockDrag]}>
       <button
         type='button'
         css={[CommonButtonStyle, WhiteButtonColor]}
@@ -114,7 +125,7 @@ const BindingButtonSet = (props) => {
         hasButton={hasButton}
       />
       {previewPopUp && (
-        <BindingPreview inputs={props.inputs} setPopUp={setPreviewPopUp} />
+        <BindingPreview inputs={inputs} setPopUp={setPreviewPopUp} />
       )}
     </div>
   );
@@ -131,7 +142,7 @@ const buttonLayout = css`
   width: 100%;
   font-size: 20px;
   justify-content: space-between;
-  margin-top: 20px; ;
+  margin-top: 20px;
 `;
 
 const CommonButtonStyle = css`

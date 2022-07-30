@@ -1,9 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import React, { useState, useEffect } from 'react';
+import { BlockDrag } from '../../styles/GlobalStyles';
 import BindingThumbnailBox from './BindingThumbnailBox';
 import BindingSelectSinglePages from './BindingSelectSinglePages';
-import BindingThumbnailPopUp from './BindingThumbnailPopUp';
 import BindingInputBox from './BindingInputBox';
 import BindingButtonSet from './BindingButtonSet';
 
@@ -16,8 +16,16 @@ function BindingPopUp({ userSeq, popUp, setPopUp }) {
   });
   const [thumbnail, setThumbnail] = useState('');
   const [selectedPages, setSelectedPages] = useState([]);
-  const [thumbnailPopUp, setThumbnailPopUp] = useState(false);
 
+  // 모달이 열린 상태에서는 뒷 페이지 스크롤 방지
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, []);
+
+  // inputs값 업데이트 부분
   useEffect(() => {
     setInputs({
       ...inputs,
@@ -42,19 +50,14 @@ function BindingPopUp({ userSeq, popUp, setPopUp }) {
     });
   };
 
-  function closeThumbnailPopUp() {
-    setThumbnailPopUp(false);
-  }
-
-  console.log(inputs);
   return (
     <div css={[backGroundPopStyle]}>
       <div css={[pagePopUpBoxStyle]}>
-        <div css={[pagePopUpBoxTitle]}>페이지 합치기</div>
+        <div css={[pagePopUpBoxTitle, BlockDrag]}>페이지 합치기</div>
         <form css={[formWidth]}>
           <button
             type='button'
-            css={[pagePopUpBoxCloseButton]}
+            css={[pagePopUpBoxCloseButton, BlockDrag]}
             onClick={() => setPopUp(!popUp)}
           >
             X{' '}
@@ -63,13 +66,13 @@ function BindingPopUp({ userSeq, popUp, setPopUp }) {
             <div css={[HorizontalLayout, InputSection]}>
               <BindingThumbnailBox
                 thumbnail={thumbnail}
-                setThumbnailPopUp={setThumbnailPopUp}
+                setThumbnail={setThumbnail}
               />
               <BindingInputBox url={url} title={title} onChange={onChange} />
             </div>
             <div>
               <div css={[VerticalLayout]}>
-                <div css={[pagePopUpBoxContents]}>페이지 선택</div>
+                <div css={[pagePopUpBoxContents, BlockDrag]}>페이지 선택</div>
                 <BindingSelectSinglePages
                   selectedPages={selectedPages}
                   setSelectedPages={setSelectedPages}
@@ -84,18 +87,6 @@ function BindingPopUp({ userSeq, popUp, setPopUp }) {
           </div>
         </form>
       </div>
-      {thumbnailPopUp && (
-        <div css={[backGroundPopStyle]}>
-          <div css={[widgetBoxPopStyle]}>
-            <BindingThumbnailPopUp
-              label='썸네일 설정'
-              thumbnail={thumbnail}
-              setThumbnail={setThumbnail}
-              endPop={closeThumbnailPopUp}
-            />
-          </div>
-        </div>
-      )}
     </div>
   );
 }

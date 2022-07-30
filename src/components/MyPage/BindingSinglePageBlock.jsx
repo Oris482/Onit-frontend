@@ -3,20 +3,20 @@ import { css } from '@emotion/react';
 import React from 'react';
 
 const BindingSinglePageBlock = (props) => {
+  const { data, selectedPages, handleSelect } = props;
   const thumbnailUrl =
-    props.data.thumbnail !== ''
-      ? props.data.thumbnail
+    data.thumbnail !== ''
+      ? data.thumbnail
       : 'https://mblogthumb-phinf.pstatic.net/MjAxNzA2MjNfNDEg/MDAxNDk4MjExMTE1OTYy.RGjgC51-8rYSISInewpiERaIWLuYkk6h8-DHImZWlNog.6nJ1cYNwJuFRBYbzuXIlfFC2vAz9SSYihxEpnVX2ttUg.PNG.kkp0079/1.PNG?type=w800';
   const selectedIndex =
-    props.selectedPages.findIndex(
-      (element) => element.singlePageUrl === props.data.url
-    ) + 1;
+    selectedPages.findIndex((element) => element.singlePageUrl === data.url) +
+    1;
 
   return (
     <div
       css={[singlePageBox]}
-      onClick={() => props.handleSelect(props.data.url)}
-      onKeyDown={() => props.handleSelect(props.data.url)}
+      onClick={() => handleSelect(data.url)}
+      onKeyDown={() => handleSelect(data.url)}
     >
       <div css={[defaultPageOverlay]} />
       {selectedIndex !== 0 ? (
@@ -30,7 +30,7 @@ const BindingSinglePageBlock = (props) => {
         <></>
       )}
       <img css={[thumbnailImg]} src={thumbnailUrl} />
-      <div css={[singlePageTitle]}>{props.data.title}</div>
+      <div css={[singlePageTitle]}>{data.title}</div>
     </div>
   );
 };
@@ -70,9 +70,11 @@ const defaultPageOverlay = css`
 
 const selectedPageOverlay = css`
   position: absolute;
-  width: 99%;
-  height: 99%;
-  border-radius: 8px;
+  left: -1%;
+  top: -1%;
+  width: 98%;
+  height: 98%;
+  border-radius: 9px;
   border: solid 2px #fc3f1d;
   /* background-color: rgba(85, 85, 85, 0.4); */
   z-index: 10;

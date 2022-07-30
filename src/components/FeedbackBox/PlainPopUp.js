@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
+import { BlockDrag } from '../../styles/GlobalStyles';
 
 export function PlainPopUp(props) {
   const { state, close, textObject, hasButton } = props;
@@ -12,7 +13,11 @@ export function PlainPopUp(props) {
           <div css={[MiddleText]}>{textObject.middleText}</div>
           <div css={[BottomText]}>{textObject.bottomText}</div>
           {(hasButton === undefined || hasButton) && (
-            <button type='button' css={[ConfirmButtom]} onClick={close}>
+            <button
+              type='button'
+              css={[ConfirmButtom, BlockDrag]}
+              onClick={close}
+            >
               확인
             </button>
           )}
@@ -60,7 +65,6 @@ const PopUpBox = css`
   border-radius: 20px;
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.16);
   background-color: white;
-}
 `;
 
 const TopText = css`
