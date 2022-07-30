@@ -1,13 +1,18 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import React, { useState, useEffect } from 'react';
-import { BlockDrag } from '../../styles/GlobalStyles';
 import BindingThumbnailBox from './BindingThumbnailBox';
 import BindingSelectSinglePages from './BindingSelectSinglePages';
 import BindingInputBox from './BindingInputBox';
 import BindingButtonSet from './BindingButtonSet';
+import {
+  commonBtn,
+  BlockDrag,
+  getAbsoluteBtn,
+} from '../../styles/GlobalStyles';
+import { closeSet } from '../../asset';
 
-function BindingPopUp({ userSeq, popUp, setPopUp }) {
+function BindingPopUp({ userSeq, setPopUp }) {
   const [inputs, setInputs] = useState({
     title: '',
     url: '',
@@ -50,6 +55,8 @@ function BindingPopUp({ userSeq, popUp, setPopUp }) {
     });
   };
 
+  const { btn, img } = getAbsoluteBtn(25, 42, 25);
+
   return (
     <div css={[backGroundPopStyle]}>
       <div css={[pagePopUpBoxStyle]}>
@@ -57,10 +64,14 @@ function BindingPopUp({ userSeq, popUp, setPopUp }) {
         <form css={[formWidth]}>
           <button
             type='button'
-            css={[pagePopUpBoxCloseButton, BlockDrag]}
-            onClick={() => setPopUp(!popUp)}
+            css={[commonBtn, btn]}
+            onClick={() => {
+              setPopUp(false);
+            }}
           >
-            X{' '}
+            <div css={img}>
+              <img alt='img' height='50px' src={closeSet} />
+            </div>
           </button>
           <div css={[VerticalLayout]}>
             <div css={[HorizontalLayout, InputSection]}>
@@ -170,15 +181,3 @@ const InputSection = css`
   align-items: flex-start;
   margin-top: 40px;
 `;
-
-const widgetBoxPopStyle = {
-  position: 'fixed',
-  zIndex: '11',
-  top: `50%`,
-  left: `50%`,
-  transform: 'translate(-50%, -50%)',
-  width: '540px',
-  height: `250px`,
-  backgroundColor: 'white',
-  borderRadius: '20px',
-};

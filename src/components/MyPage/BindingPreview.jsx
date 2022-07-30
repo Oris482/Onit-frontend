@@ -1,17 +1,29 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import MultiPage from '../../pages/MultiPage';
+import {
+  commonBtn,
+  BlockDrag,
+  getAbsoluteBtn,
+} from '../../styles/GlobalStyles';
+import { closeSet } from '../../asset';
 
 const BindingPreview = (props) => {
   const { inputs, setPopUp } = props;
+  const { btn, img } = getAbsoluteBtn(25, 42, 25);
+
   return (
-    <div css={[previewLayout]}>
+    <div css={[previewLayout, BlockDrag]}>
       <button
         type='button'
-        css={[pagePopUpBoxCloseButton]}
-        onClick={() => setPopUp(false)}
+        css={[commonBtn, btn]}
+        onClick={() => {
+          setPopUp(false);
+        }}
       >
-        X{' '}
+        <div css={img}>
+          <img alt='img' height='50px' src={closeSet} />
+        </div>
       </button>
       <MultiPage />
     </div>

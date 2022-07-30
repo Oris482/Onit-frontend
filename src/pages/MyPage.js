@@ -346,11 +346,7 @@ function MyPage() {
         />
       )}
       {bindingPopUp && (
-        <BindingPagePopUp
-          userSeq={userSeq}
-          setPopUp={setBindingPopUp}
-          popUp={bindingPopUp}
-        />
+        <BindingPagePopUp userSeq={userSeq} setPopUp={setBindingPopUp} />
       )}
       {popUp && (
         <AddPagePopUp userSeq={userSeq} setPopUp={setPopUp} popUp={popUp} />
