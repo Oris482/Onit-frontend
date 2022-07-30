@@ -2,7 +2,7 @@
 import { css } from '@emotion/react';
 
 export function PlainPopUp(props) {
-  const { state, close, textObject } = props;
+  const { state, close, textObject, hasButton } = props;
 
   return state ? (
     <div css={[Container]} aria-hidden='true'>
@@ -11,9 +11,11 @@ export function PlainPopUp(props) {
           <div css={[TopText]}>{textObject.topText}</div>
           <div css={[MiddleText]}>{textObject.middleText}</div>
           <div css={[BottomText]}>{textObject.bottomText}</div>
-          <button type='button' css={[ConfirmButtom]} onClick={close}>
-            확인
-          </button>
+          {(hasButton === undefined || hasButton) && (
+            <button type='button' css={[ConfirmButtom]} onClick={close}>
+              확인
+            </button>
+          )}
         </div>
       </div>
     </div>
@@ -69,7 +71,7 @@ const TopText = css`
   line-height: normal;
   letter-spacing: normal;
   color: var(--red-orange, #ff3d00);
-  margin-top: 20px;
+  margin-top: 17px;
   margin-bottom: 8px;
 `;
 
@@ -93,6 +95,7 @@ const BottomText = css`
   color: var(--black, #000000);
   white-space: pre-line;
   margin-top: 20px;
+  margin-bottom: 5px;
 `;
 
 const ConfirmButtom = css`
