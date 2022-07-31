@@ -61,7 +61,10 @@ function MyPage() {
         setUserMatched(true);
         setNickname(myInfo.nickname);
         setUserUrl(myInfo.url);
-        if (userSeq) requestBZoneData();
+        if (userSeq) {
+          requestSinglePagesData();
+          requestBZoneData();
+        }
         // 다른 사람 페이지일 경우
       } else {
         setUserMatched(false);
@@ -104,7 +107,7 @@ function MyPage() {
   }, [singlePagesData]);
 
   function bzoneimage() {
-    console.log(bZoneData);
+    // console.log(bZoneData);
     if (bZoneData && bZoneData.data.message === 'ok') {
       const usersb = bZoneData.data.data;
 
@@ -144,9 +147,9 @@ function MyPage() {
           myInfo={myInfo}
           setPopUp={setProfilePopUp}
           popUp={profilePopUp}
-          setBindingPopUp
-          bindingPopUp
-        />{' '}
+          setBindingPopUp={setBindingPopUp}
+          bindingPopUp={bindingPopUp}
+        />
         <hr css={[divLine]} />
         <div css={MyPageBZoneWrapper}>
           <div css={MyPageBZone}>
