@@ -20,6 +20,7 @@ import {
   ACTION_EDIT,
   TYPE_MOUSE,
   TYPE_NONEDISPLAY,
+  TYPE_NEW,
 } from '../../utils/constantValue';
 import useWindowSize from './useWindowSize';
 import ToolBar from '../ToolBar/ToolBar';
@@ -114,7 +115,7 @@ function EditModeGrid() {
       found.y = target.y;
       found.w = target.w;
       found.h = target.h;
-      if (found.widget_action === ACTION_NONE || found.widget_code !== '') {
+      if (found.widget_action === ACTION_NONE || found._id !== '') {
         found.widget_action = ACTION_EDIT;
       }
       dispatch(

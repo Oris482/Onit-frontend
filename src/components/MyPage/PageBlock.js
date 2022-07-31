@@ -5,16 +5,8 @@ import { Link } from 'react-router-dom';
 import { InitButtonStyle } from '../../styles/GlobalStyles';
 
 // eslint-disable-next-line no-unused-vars
-function PageBlock({ data, addBlock, popUp, setPopUp }) {
-  // if (data) {
-  // console.log(`data: ${data.title}`);
-  // console.log(`data: ${data.url}`);
-  // const pageurl = `/dongslee/${data.url}`;
-  // console.log(pageurl);
-  // }
-
-  // console.log(addBlock);
-
+function PageBlock({ data, popUp, setPopUp, userUrl }) {
+  console.log(data);
   return (
     <>
       {!data ? (
@@ -29,7 +21,7 @@ function PageBlock({ data, addBlock, popUp, setPopUp }) {
         </>
       ) : (
         <div css={siteViewBZone}>
-          <Link to={data.url ? `/dongslee/${data.url}` : ''}>
+          <Link to={data.url ? `${data.url}` : ''}>
             <div
               css={css`
                 height: 70%;
@@ -56,17 +48,19 @@ function PageBlock({ data, addBlock, popUp, setPopUp }) {
             >
               {data ? `${data.title}` : ''}
             </div>
-            <div
-              css={css`
-                font-size: 20px;
-                display: flex;
-                display: flex;
-                margin: auto;
-                margin-top: 20px;
-              `}
-            >
-              수정
-            </div>
+            <Link to={data.url ? `heom/${data.url}/edit` : ''}>
+              <div
+                css={css`
+                  font-size: 20px;
+                  display: flex;
+                  display: flex;
+                  margin: auto;
+                  margin-top: 20px;
+                `}
+              >
+                수정
+              </div>
+            </Link>
           </div>
         </div>
       )}

@@ -12,7 +12,10 @@ function deleteKey(obj, targetKey) {
 }
 
 export function convertForServer(infos) {
-  const converted = JSON.parse(JSON.stringify(infos));
+  const widgetsInfo = JSON.parse(JSON.stringify(infos));
+  const converted = widgetsInfo.filter(function (element) {
+    return element.widget_type !== TYPE_NEW;
+  });
   converted.map(function (info) {
     changeKey(info, 'x', 'pos_x');
     changeKey(info, 'y', 'pos_y');
@@ -20,14 +23,16 @@ export function convertForServer(infos) {
     changeKey(info, 'h', 'height');
     deleteKey(info, 'i');
     if (info.widget_action === ACTION_CREATE) {
-      info.widget_code = '';
+      delete info._id;
     }
     if (info.widget_action === ACTION_NONE) {
       deleteKey(info, 'widget_action');
     }
     return info;
   });
-  return converted;
+  const real_converted = { widget_list: converted };
+  console.log(real_converted);
+  return real_converted;
 }
 
 function createIdKey(obj, index) {
