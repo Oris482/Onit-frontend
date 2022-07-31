@@ -29,10 +29,7 @@ export function useInitWidget() {
 
     targetItem.widget_type = _type;
     targetItem.widget_data = _data;
-    if (
-      targetItem.widget_action === ACTION_NONE ||
-      targetItem.widget_code !== ''
-    ) {
+    if (targetItem.widget_action === ACTION_NONE || targetItem._id !== '') {
       targetItem.widget_action = ACTION_EDIT;
     }
     updateRedux(changed);
@@ -189,7 +186,7 @@ export function useAddEmptyWidget() {
   const addEmptyWidget = (mouseOverWidget) => {
     const newWidget = {
       widget_action: ACTION_CREATE,
-      widget_code: '',
+      _id: '',
       widget_type: TYPE_NEW,
       widget_data: {},
       i: `${widgets.count}`,
@@ -218,10 +215,7 @@ export function useReverseStaticWidget() {
   const reverseStaticWidget = (_widgetId, _nextState) => {
     const changed = JSON.parse(JSON.stringify(widgets.list));
     const targetItem = changed.find((widget) => widget.i === _widgetId);
-    if (
-      targetItem.widget_action === ACTION_NONE ||
-      targetItem.widget_code !== ''
-    ) {
+    if (targetItem.widget_action === ACTION_NONE || targetItem._id !== '') {
       targetItem.widget_action = ACTION_EDIT;
     }
     targetItem.static = _nextState;
@@ -259,10 +253,7 @@ export function useUpdateTextWidgetData() {
       const targetItem = changed.find((widget) => widget.i === targetId);
 
       targetItem.widget_data.thumbnail = changedText;
-      if (
-        targetItem.widget_action === ACTION_NONE ||
-        targetItem.widget_code !== ''
-      ) {
+      if (targetItem.widget_action === ACTION_NONE || targetItem._id !== '') {
         targetItem.widget_action = ACTION_EDIT;
       }
       dispatch(

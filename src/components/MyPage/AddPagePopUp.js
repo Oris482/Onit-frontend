@@ -4,7 +4,7 @@ import React, { useState, useCallback } from 'react';
 import useRequestAuth from '../../hooks/useRequestAuth';
 import { getApiEndpoint } from '../../utils/util';
 
-function AddPopUp({ userSeq, popUp, setPopUp }) {
+function AddPagePopUp({ userSeq, popUp, setPopUp }) {
   const [inputs, setInputs] = useState({
     title: '',
     url: '',
@@ -58,7 +58,7 @@ function AddPopUp({ userSeq, popUp, setPopUp }) {
             css={[pagePopUpBoxCloseButton]}
             onClick={() => setPopUp(!popUp)}
           >
-            X{' '}
+            X
           </button>
           <div css={[pagePopUpBoxContentsWraper]}>
             <div css={[pagePopUpBoxContents]}>페이지 이름</div>
@@ -102,7 +102,7 @@ function AddPopUp({ userSeq, popUp, setPopUp }) {
   );
 }
 
-export default AddPopUp;
+export default AddPagePopUp;
 
 const backGroundPopStyle = css`
   position: fixed;

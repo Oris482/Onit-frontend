@@ -27,10 +27,10 @@ function getOrderedWidgetList(arr) {
   return arr;
 }
 
-function Mobile({ widgetRes }) {
+function Mobile({ widgetList }) {
   function mobileWidget() {
-    if (widgetRes) {
-      const { widget_list } = widgetRes.data;
+    if (widgetList) {
+      const { widget_list } = widgetList.data;
       const filtered = widget_list.filter(
         (element) => element.widget_data !== {} && element.widget_data.thumbnail
       );
@@ -40,7 +40,7 @@ function Mobile({ widgetRes }) {
           if (element.widget_type === TYPE_IMAGE) {
             return (
               <img
-                key={element.widget_code}
+                key={element._id}
                 src={element.widget_data.thumbnail}
                 alt='thumbnail'
                 css={ThumbnailStyle}
@@ -48,7 +48,7 @@ function Mobile({ widgetRes }) {
             );
           } else if (element.widget_type === TYPE_VIDEO) {
             return (
-              <div key={element.widget_code} css={ThumbnailStyle}>
+              <div key={element._id} css={ThumbnailStyle}>
                 <VideoBox element={element} mode='normal' />
               </div>
             );

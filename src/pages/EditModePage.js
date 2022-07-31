@@ -52,7 +52,7 @@ function EditMode() {
   });
 
   useEffect(() => {
-    if (userSeq) {
+    if (userSeq && publishingUrl) {
       requestWidgetData();
     }
   }, [userSeq, requestWidgetData]);

@@ -26,6 +26,11 @@ function App() {
         {/* 나중에 pageUrl로 바껴야 됨 */}
         <Route
           exact
+          path='/:personalUrl/:publishingUrl/edit'
+          component={EditModePage}
+        />
+        <Route
+          exact
           path='/:personalUrl/:publishingUrl'
           component={PublishingSplitPage}
         />
@@ -33,11 +38,6 @@ function App() {
           exact
           path='/:personalUrl/:publishingUrl/:pageUrl'
           component={PublishingSplitPage}
-        />
-        <Route
-          exact
-          path='/:personalUrl/:publishingUrl/edit'
-          component={EditModePage}
         />
         <Route
           exact

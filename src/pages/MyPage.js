@@ -21,14 +21,15 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import ProfileBlock from '../components/MyPage/ProfileBlock';
 import { createReplacementSinglePagesAction } from '../redux/slice';
+import Azone from '../components/MyPage/Azone';
 
 function MyPage() {
-
   const { myInfo } = useMyInfo();
   const history = useHistory();
   const pageUrl = useGetPersonalUrl();
   const [userSeq, setUserSeq] = useState(null);
   const [userMatched, setUserMatched] = useState(null);
+  const [userUrl, setUserUrl] = useState(null);
   const [nickname, setNickname] = useState(null);
   const [popUp, setPopUp] = useState(false);
   const [profilePopUp, setProfilePopUp] = useState(false);
@@ -48,10 +49,9 @@ function MyPage() {
 
   const { res: singlePagesData, request: requestSinglePagesData } = useRequest({
     endpoint: `${getApiEndpoint()}/user/page/singles/${userSeq}`,
+
     method: 'get',
   });
-
-
 
   // 내 페이지인지 남의 페이지인지 확인 로직
   useEffect(() => {
@@ -61,10 +61,8 @@ function MyPage() {
       if (myInfo && urlMatched(myInfo.url, pageUrl)) {
         setUserMatched(true);
         setNickname(myInfo.nickname);
-        if (userSeq) {
-          requestBZoneData();
-          requestSinglePagesData();
-        }
+
+        setUserUrl(myInfo.url);
 
         // 다른 사람 페이지일 경우
       } else {
@@ -77,7 +75,7 @@ function MyPage() {
       setUserMatched(null);
       setNickname(null);
     };
-  }, [pageUrl, myInfo, userSeq]);
+  }, [pageUrl, myInfo, userSeq, requestPageUserInfo, requestBZoneData]);
 
   // pageUserRes에 변화가 있으면 -> 데이터를 받아서 userseq, nickname 세팅.
   useEffect(() => {
@@ -98,7 +96,7 @@ function MyPage() {
       setUserSeq(null);
       setNickname(null);
     };
-  }, [pageUserRes]);
+  }, [pageUserRes, history]);
 
   // 바인딩 페이지용 싱글페이지 목록 데이터 리덕스에 저장
   useEffect(() => {
@@ -132,6 +130,12 @@ function MyPage() {
     return <div>no data</div>;
   }
 
+  const AzoneComponent = useEffect(() => {
+    return (
+      <Azone myInfo={myInfo} setPopUp={setProfilePopUp} popUp={profilePopUp} />
+    );
+  }, [myInfo, setProfilePopUp, profilePopUp]);
+
   return (
     <div css={[positionRelative]}>
       <Header
@@ -143,106 +147,20 @@ function MyPage() {
 
       <div css={MyPageWrapper}>
 
-        <div css={MyPageAZone}>
-          <div
-            css={css`
-              display: flex;
-              height: 100%;
-              align-items: center;
-              /* border: 1px solid lightgray; */
-            `}
-          >
-            <div
-              css={css`
-                display: flex;
-                margin: 5px;
-                /* border: 1px solid lightgray; */
-              `}
-            >
-              <div
-                className='profileImage'
-                css={ProfileAZone}
-                // src={profilePicture}
-              />
-            </div>
-            <div
-              css={css`
-                width: 100%;
-                margin: 5px;
-                /* border: 1px solid lightgray; */
-              `}
-            >
-              <div
-                css={css`
-                  width: 40%;
-                  height: 30px;
-                  margin: 15px;
-                  /* border: 1px solid lightgray; */
-                  text-align: left;
-                  font-size: 30px;
-                `}
-              >
-                {myInfo ? myInfo.nickname : ''}
-              </div>
-
-              <div
-                css={css`
-                  width: 40%;
-                  margin: 5px;
-                  /* border: 1px solid lightgray; */
-                  text-align: left;
-                `}
-              >
-                {/* Following 64 Follower 1982 */}
-              </div>
-              <div
-                css={css`
-                  width: 40%;
-                  margin: 5px;
-                  /* border: 1px solid lightgray; */
-                  text-align: left;
-                `}
-              >
-                <div css={ProfileAZoneTagButton}>일러스트레이션</div>
-                <div css={ProfileAZoneTagButton}>포토그래퍼</div>
-                <div css={ProfileAZoneTagButton}>현대미술</div>
-              </div>
-            </div>
-            <div
-              css={css`
-                display: flex;
-                margin: 5px;
-                // border: 1px solid lightgray;
-                justify-content: center;
-                text-align: center;
-              `}
-            >
-              <ProfileBlock
+        {AzoneComponent}
+                      <ProfileBlock
                 // 기존에 있던 버튼 컴포넌트 재활용_이름 변경 혹은 별도 컴포넌트로 분리 필요
                 addBlock
                 setPopUp={setBindingPopUp}
                 popUp={bindingPopUp}
                 buttonText='페이지 합치기'
               />
-              <ProfileBlock
-                addBlock
-                setPopUp={setProfilePopUp}
-                popUp={profilePopUp}
-                buttonText='프로필 수정'
-              />
-
-              {/* <div css={ProfileAZoneInputButton}>팔로우</div> */}
-              {/* <div css={ProfileAZoneMessageButton}>메시지</div> */}
-            </div>
-          </div>
-        </div>
         <hr css={[divLine]} />
 
         <div css={MyPageBZoneWrapper}>
           <div css={MyPageBZone}>
-
             {bzoneimage()}
-            <PageBlock addBlock setPopUp={setPopUp} popUp={popUp} />
+            <PageBlock userUrl={userUrl} setPopUp={setPopUp} popUp={popUp} />
 
             <div css={[overFlowHidden]} />
           </div>
@@ -253,15 +171,7 @@ function MyPage() {
             display: flex;
             justify-content: center;
           `}
-        >
-          {/* <div css={MyPageCZone}>
-            <MyPageProfile />
-          </div>
-          <div css={MyPageDZone}>
-            <MyPageCommentWrite />
-            <MyPageComment />
-          </div> */}
-        </div>
+        />
       </div>
       {profilePopUp && (
         <EditPropfilePopUp
@@ -293,40 +203,6 @@ const MyPageWrapper = css`
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  /* background-color: lightblue; */
-  /* text-align: center; */
-`;
-
-const MyPageAZone = css`
-  width: 1470px;
-  height: 120px;
-  background-color: white;
-  margin-top: 100px;
-  /* border: 1px solid lightgray; */
-`;
-
-const ProfileAZone = css`
-  width: 100px;
-  height: 100px;
-  background-color: lightgray;
-  border-color: black;
-
-  text-align: center;
-  justify-content: center;
-  border-radius: 50%;
-  display: flex;
-`;
-
-const ProfileAZoneTagButton = css`
-  display: inline-block;
-  margin: 5px;
-  background-color: white;
-  border-radius: 20px;
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.15);
-  justify-content: center;
-  text-align: center;
-  font-size: 13px;
-  padding: 10px 20px 10px 20px;
 `;
 
 const MyPageBZoneWrapper = css`
@@ -345,8 +221,6 @@ const divLine = css`
   height: 1px;
   border: none;
   background-color: lightgray;
-  /* padding-top: 10px; */
-  /* padding-bottom: 10px; */
 `;
 
 const overFlowHidden = css`

@@ -1,6 +1,6 @@
 import React from 'react';
-import { NormalWrapper, PageWrapper } from '../../components';
-import MultiHeader from '../components/MultiPage/MultiHeader';
+import { NormalWrapper, PageWrapper } from '../components';
+import MultiHeader from '../components/PublishingPage/MultiPage/MultiHeader';
 import { useGetPageUrl } from '../hooks/useParamsUrl';
 import SinglePage from './SinglePage';
 

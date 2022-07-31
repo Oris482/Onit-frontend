@@ -23,14 +23,16 @@ export function convertForServer(infos) {
     changeKey(info, 'h', 'height');
     deleteKey(info, 'i');
     if (info.widget_action === ACTION_CREATE) {
-      info.widget_code = '';
+      delete info._id;
     }
     if (info.widget_action === ACTION_NONE) {
       deleteKey(info, 'widget_action');
     }
     return info;
   });
-  return converted;
+  const real_converted = { widget_list: converted };
+  console.log(real_converted);
+  return real_converted;
 }
 
 function createIdKey(obj, index) {
