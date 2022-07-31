@@ -19,7 +19,6 @@ import {
 } from '../utils/util';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import ProfileBlock from '../components/MyPage/ProfileBlock';
 import { createReplacementSinglePagesAction } from '../redux/slice';
 import Azone from '../components/MyPage/Azone';
 
@@ -61,9 +60,8 @@ function MyPage() {
       if (myInfo && urlMatched(myInfo.url, pageUrl)) {
         setUserMatched(true);
         setNickname(myInfo.nickname);
-
         setUserUrl(myInfo.url);
-
+        if (userSeq) requestBZoneData();
         // 다른 사람 페이지일 경우
       } else {
         setUserMatched(false);
@@ -104,8 +102,9 @@ function MyPage() {
       dispatch(createReplacementSinglePagesAction(singlePagesData.data));
     }
   }, [singlePagesData]);
-  
+
   function bzoneimage() {
+    console.log(bZoneData);
     if (bZoneData && bZoneData.data.message === 'ok') {
       const usersb = bZoneData.data.data;
 
@@ -116,6 +115,7 @@ function MyPage() {
             return (
               <div key={semiIndex}>
                 <PageBlock
+                  userUrl={userUrl}
                   data={page}
                   addBlock={false}
                   setPopUp={setPopUp}
@@ -130,12 +130,6 @@ function MyPage() {
     return <div>no data</div>;
   }
 
-  const AzoneComponent = useEffect(() => {
-    return (
-      <Azone myInfo={myInfo} setPopUp={setProfilePopUp} popUp={profilePopUp} />
-    );
-  }, [myInfo, setProfilePopUp, profilePopUp]);
-
   return (
     <div css={[positionRelative]}>
       <Header
@@ -146,17 +140,14 @@ function MyPage() {
       />
 
       <div css={MyPageWrapper}>
-
-        {AzoneComponent}
-                      <ProfileBlock
-                // 기존에 있던 버튼 컴포넌트 재활용_이름 변경 혹은 별도 컴포넌트로 분리 필요
-                addBlock
-                setPopUp={setBindingPopUp}
-                popUp={bindingPopUp}
-                buttonText='페이지 합치기'
-              />
+        <Azone
+          myInfo={myInfo}
+          setPopUp={setProfilePopUp}
+          popUp={profilePopUp}
+          setBindingPopUp
+          bindingPopUp
+        />{' '}
         <hr css={[divLine]} />
-
         <div css={MyPageBZoneWrapper}>
           <div css={MyPageBZone}>
             {bzoneimage()}
