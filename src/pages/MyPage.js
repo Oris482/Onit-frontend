@@ -141,7 +141,6 @@ function MyPage() {
         pageUserName={nickname}
         pageType='normal'
       />
-
       <div css={MyPageWrapper}>
         <Azone
           myInfo={myInfo}

@@ -31,7 +31,6 @@ export function convertForServer(infos) {
     return info;
   });
   const real_converted = { widget_list: converted };
-  console.log(real_converted);
   return real_converted;
 }
 
