@@ -23,7 +23,6 @@ function PageBlock({ data, popUp, setPopUp, userUrl }) {
         </>
       ) : (
         <div css={siteViewBZone}>
-
           <Link to={data.url ? `${data.url}` : ''}>
             <div
               css={css`
