@@ -20,7 +20,6 @@ import {
   ACTION_EDIT,
   TYPE_MOUSE,
   TYPE_NONEDISPLAY,
-  TYPE_NEW,
 } from '../../utils/constantValue';
 import useWindowSize from './useWindowSize';
 import ToolBar from '../ToolBar/ToolBar';
