@@ -1,13 +1,29 @@
-import React from 'react';
+import { useCallback } from 'react';
+import MultiPage from './MultiPage';
+import SinglePage from './SinglePage';
 
 function PublishingSplitPage() {
   // 싱글 멀티 구분
+  // const { res, request } = useRequestAuth({
+  //   endpoint: endpoint,
+  //   method: 'patch',
+  //   data: {
+  //     nickname: nicknametest,
+  //   },
+  // });
+  const res = 'single';
 
-  // 싱글 -> 페이지 정보 받아서 띄워주기
+  const container = useCallback(() => {
+    if (res === 'single') {
+      // 싱글 -> 페이지 정보 받아서 띄워주기
+      return <SinglePage />;
+    } else if (res === 'multi') {
+      return <MultiPage />;
+    }
+    return;
+  }, [res]);
 
-  // 멀티 ->
-
-  return <center>페이지를 불러오는 중입니다.</center>;
+  return <>{container}</>;
 }
 
 export default PublishingSplitPage;

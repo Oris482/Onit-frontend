@@ -8,11 +8,10 @@ import {
   JoinPage,
   FeedbackPage,
   EditModePage,
-  SinglePage,
   EmailCertPage,
   MyPage,
 } from './pages';
-import MultiPage from './pages/MultiPage';
+import PublishingSplitPage from './pages/PublishingSplitPage';
 
 function App() {
   return (
@@ -28,13 +27,13 @@ function App() {
         {/* <Route
           exact
           path='/:personalUrl/:publishingUrl'
-          component={MultiPage}
+          component={PublishingSplitPage}
         />
         <Route
           exact
           path='/:personalUrl/:publishingUrl/:pageUrl'
-          component={MultiPage}
-        /> */}
+          component={PublishingSplitPage}
+        />
         <Route
           exact
           path='/:personalUrl/:publishingUrl/edit'

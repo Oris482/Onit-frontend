@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import useRequestAuth from '../../hooks/useRequestAuth';
 import { getApiEndpoint } from '../../utils/util';
 
@@ -11,48 +11,48 @@ function AddPopUp({ userSeq, popUp, setPopUp }) {
     thumbnail: '',
   });
   const { title, url } = inputs;
-  const onChange = (e) => {
-    const { name, value } = e.target;
-    setInputs({
-      ...inputs,
-      [name]: value,
-    });
-  };
+
+  const onChange = useCallback(
+    (e) => {
+      setInputs({
+        ...inputs,
+        [e.target.name]: e.target.value,
+      });
+    },
+    [inputs]
+  );
+
   // eslint-disable-next-line no-unused-vars
-
-  // const [test, setTest] = useState({ title: '', url: '' });
-
-  function onChangeForm(event) {
-    // eslint-disable-next-line no-unused-vars
-    // const data = { title, url, thumbnail: 'later' };
-    // setDatas(data);
-    // setTest('hi');
-    // setTest(data);
-    // setInputs({
-    //   title: '',
-    //   url: '',
-    // });
-    // console.log(data.title);
-    event.preventDefault();
-    console.log(inputs);
-    request();
-    // setPopUp(!popUp);
-  }
+  const [test, setTest] = useState({ title: '', url: '' });
 
   const endpoint = `${getApiEndpoint()}/user/page/single/${userSeq}`;
+
   // eslint-disable-next-line no-unused-vars
   const { res, request } = useRequestAuth({
     endpoint: endpoint,
     method: 'post',
-    // data: test,
     data: inputs,
   });
+
+  const onSubmit = useCallback(
+    (event) => {
+      console.log('inputs', inputs);
+      // eslint-disable-next-line no-unused-vars
+      // setTest(1); // 이유가뭐지, test에 의존성이 걸려있는 애들을 업데이트하겠다., 페이지를 넘긴다는 의미, 그다음단계에서는 테스트가 1위 됏으니깐
+      // // component안에서 함수 만들때는 무조건 useCallback을 써라?
+      // // 관리하기 편해짐
+      event.preventDefault();
+      request();
+      setPopUp(!popUp);
+    },
+    [inputs, request, setPopUp, popUp] // 의존성을 넣는 이유, 리랜더링 하는 시점에서 목록안에 있는것들이 이전의 값들과 바꼇는지 안바꼇는지를 테스트한다음에 바꼇으면 함수를 다시만듬
+  );
 
   return (
     <div css={[backGroundPopStyle]}>
       <div css={[pagePopUpBoxStyle]}>
         <div css={[pagePopUpBoxTitle]}>페이지 추가</div>
-        <form css={[formWidth]} onSubmit={onChangeForm}>
+        <form css={[formWidth]}>
           <button
             type='button'
             css={[pagePopUpBoxCloseButton]}
@@ -92,7 +92,7 @@ function AddPopUp({ userSeq, popUp, setPopUp }) {
           <button
             type='button'
             css={[commonLoginButtonStyle, LoginButtonColor]}
-            onClick={onChangeForm}
+            onClick={onSubmit}
           >
             추가하기
           </button>
