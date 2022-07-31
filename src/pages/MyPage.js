@@ -48,7 +48,6 @@ function MyPage() {
 
   const { res: singlePagesData, request: requestSinglePagesData } = useRequest({
     endpoint: `${getApiEndpoint()}/user/page/singles/${userSeq}`,
-
     method: 'get',
   });
 
@@ -115,12 +114,12 @@ function MyPage() {
         <>
           {usersb.map((page, index) => {
             const semiIndex = index + 1;
+            console.log(page);
             return (
               <div key={semiIndex}>
                 <PageBlock
                   userUrl={userUrl}
                   data={page}
-                  addBlock={false}
                   setPopUp={setPopUp}
                   popUp={popUp}
                 />
