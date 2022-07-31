@@ -8,7 +8,6 @@ import { useGetPersonalUrl } from '../../hooks/useParamsUrl';
 // eslint-disable-next-line no-unused-vars
 
 function PageBlock({ data, popUp, setPopUp, userUrl }) {
-  console.log(data);
   return (
     <>
       {!data ? (

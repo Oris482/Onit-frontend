@@ -144,7 +144,7 @@ const BindingButtonSet = (props) => {
       <button
         type='button'
         css={[CommonButtonStyle, WhiteButtonColor]}
-        onClick={() => setPreviewPopUp(true)}
+        onClick={saveTemporarily}
       >
         미리보기
       </button>
@@ -169,7 +169,11 @@ const BindingButtonSet = (props) => {
         hasButton={hasButton}
       />
       {previewPopUp && (
-        <BindingPreview inputs={inputs} setPopUp={setPreviewPopUp} />
+        <BindingPreview
+          inputs={inputs}
+          setPopUp={setPreviewPopUp}
+          userSeq={userSeq}
+        />
       )}
     </div>
   );

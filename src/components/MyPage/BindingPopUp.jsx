@@ -34,7 +34,7 @@ function BindingPopUp({ userSeq, setPopUp }) {
   useEffect(() => {
     setInputs({
       ...inputs,
-      singlePages: { selectedPages },
+      singlePages: selectedPages,
     });
   }, [selectedPages]);
 
