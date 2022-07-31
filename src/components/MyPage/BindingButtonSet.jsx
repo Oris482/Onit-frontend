@@ -3,6 +3,7 @@ import { css } from '@emotion/react';
 import React, { useState, useEffect } from 'react';
 import { getApiEndpoint } from '../../utils/util';
 import useRequestAuth from '../../hooks/useRequestAuth';
+import { useRequest } from '../../hooks/useRequest';
 import BindingPreview from './BindingPreview';
 import { PlainPopUp } from '../FeedbackBox/PlainPopUp';
 import { BlockDrag } from '../../styles/GlobalStyles';
@@ -11,7 +12,7 @@ const BindingButtonSet = (props) => {
   const { userSeq, inputs, setPopUp } = props;
   const [previewPopUp, setPreviewPopUp] = useState(false);
   const [sendingPopUp, setSendingPopUp] = useState(false);
-  const [errorRes, setErrorRes] = useState(false);
+  const [errorRes, setErrorRes] = useState(0);
   const [popUpText, setPopUpText] = useState({
     topText: '',
     middleText: '',
@@ -26,29 +27,72 @@ const BindingButtonSet = (props) => {
     data: inputs,
   });
 
+  const { res: urlOverlapRes, request: requestUrlOverlap } = useRequest({
+    endpoint: `${getApiEndpoint()}/user/page/overlap/${inputs.url}/${userSeq}`,
+    method: 'get',
+  });
+
+  const SUCCESS = 0;
+  const EXTRA_ERROR = 1;
+  const URL_OVERLAP_ERROR = 2;
+  const URL_FORMAT_ERROR = 3;
+
   useEffect(() => {
     // 마이페이지 업데이트를 위해 멀티페이지 GET 필요
-    if (res) setSendingPopUp(false);
-    if (res && res.data.message === 'ok') setPopUp(false);
-    else if (res) {
-      setErrorRes(true);
+    if (res) {
+      setSendingPopUp(false);
       console.log(res);
+      if (res.data.message === 'ok') setPopUp(false);
+      else setErrorRes(EXTRA_ERROR);
     }
   }, [res]);
 
   useEffect(() => {
     // 서버 응답 에러 시 메시지 출력 부분
-    if (errorRes === true) {
-      setHasButton(true);
-      setPopUpText({
-        topText: '전송 실패',
-        middleText: '서버에 저장하는데 문제가 발생했어요!',
-        bottomText:
-          '죄송하시만 다시 한 번 시도해주세요 ㅠ.ㅠ\n지속적으로 오류가 발생하면 꼭 저희에게 알려주세요!',
-      });
+    if (errorRes !== SUCCESS) {
+      if (errorRes === EXTRA_ERROR) {
+        setHasButton(true);
+        setPopUpText({
+          topText: '전송 실패',
+          middleText: '서버에 저장하는데 문제가 발생했어요!',
+          bottomText:
+            '죄송하시만 다시 한 번 시도해주세요 ㅠ.ㅠ\n지속적으로 오류가 발생하면 꼭 저희에게 알려주세요!',
+        });
+      } else if (errorRes === URL_OVERLAP_ERROR) {
+        setHasButton(true);
+        setPopUpText({
+          topText: '문제가 발생했어요!',
+          middleText: '가지고 계신 페이지에 이미 해당 주소가 있어요.',
+          bottomText:
+            '같은 주소에는 하나의 페이지만 있을 수 있습니다.\n아쉽지만 다른 주소로 설정해주세요!',
+        });
+      } else if (errorRes === URL_FORMAT_ERROR) {
+        setHasButton(true);
+        setPopUpText({
+          topText: '문제가 발생했어요!',
+          middleText: '설정하신 페이지 주소가 규칙에 맞지 않아요.',
+          bottomText:
+            '페이지 주소는 4글자 이상 20글자 이하\n영어와 숫자만 사용가능해요!',
+        });
+      }
       setSendingPopUp(true);
     }
   }, [errorRes]);
+
+  useEffect(() => {
+    if (urlOverlapRes) {
+      if (urlOverlapRes.data.code === 'ok') {
+        setSendingPopUp(true);
+        request();
+      } else if (urlOverlapRes.data.code === 'overlap') {
+        setErrorRes(URL_OVERLAP_ERROR);
+      } else if (urlOverlapRes.data.message === 'url is invalid') {
+        setErrorRes(URL_FORMAT_ERROR);
+      } else {
+        setErrorRes(1);
+      }
+    }
+  }, [urlOverlapRes]);
 
   function submitMultiPageForm() {
     // eslint-disable-next-line no-unused-vars
@@ -58,11 +102,11 @@ const BindingButtonSet = (props) => {
       middleText: '열심히 데이터를 보내고 있습니다!',
       bottomText: '조금만 더 기다려주시면 멋진 페이지를 보여드릴게요!',
     });
-    setSendingPopUp(true);
-    request();
+    requestUrlOverlap();
   }
 
   function closeSendingPopUp() {
+    setErrorRes(0);
     setSendingPopUp(false);
   }
 

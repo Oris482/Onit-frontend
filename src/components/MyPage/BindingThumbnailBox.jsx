@@ -1,13 +1,20 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import BindingThumbnailPopUp from './BindingThumbnailPopUp';
 import { BlockDrag } from '../../styles/GlobalStyles';
 
 const BindingThumbnailBox = (props) => {
   const { thumbnail, setThumbnail } = props;
   const [thumbnailBoxHover, setThumbnailBoxHover] = useState(false);
+  const [previewThumbnail, setPreviewThumbnail] = useState('');
   const [thumbnailPopUp, setThumbnailPopUp] = useState(false);
+
+  useEffect(() => {
+    if (thumbnailPopUp === false) {
+      setPreviewThumbnail(thumbnail);
+    }
+  }, [thumbnailPopUp]);
 
   function closeThumbnailPopUp() {
     setThumbnailPopUp(false);
@@ -20,14 +27,16 @@ const BindingThumbnailBox = (props) => {
       onMouseEnter={() => setThumbnailBoxHover(true)}
       onMouseLeave={() => setThumbnailBoxHover(false)}
     >
-      {thumbnail !== '' && <img css={[thumbnailImg]} src={thumbnail} />}
+      {previewThumbnail !== '' && (
+        <img css={[thumbnailImg]} src={previewThumbnail} />
+      )}
       {(thumbnail === '' || thumbnailBoxHover) && (
         <button
           css={[thumbnailButton, LoginButtonColor]}
           type='button'
           onClick={() => setThumbnailPopUp(true)}
         >
-          {thumbnail === '' ? '썸네일 업로드' : '썸네일 수정'}
+          {previewThumbnail === '' ? '썸네일 업로드' : '썸네일 수정'}
         </button>
       )}
       {thumbnailPopUp && (

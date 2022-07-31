@@ -49,6 +49,7 @@ const Overlay = css`
   width: 100%;
   height: 100%;
   background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 20px;
   justify-content: center;
   align-items: center;
 `;

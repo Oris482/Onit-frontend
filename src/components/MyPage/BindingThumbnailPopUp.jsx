@@ -183,6 +183,7 @@ const Overlay = css`
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
   justify-content: center;
   align-items: center;
 `;

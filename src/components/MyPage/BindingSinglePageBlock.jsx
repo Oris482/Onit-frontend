@@ -70,10 +70,11 @@ const defaultPageOverlay = css`
 
 const selectedPageOverlay = css`
   position: absolute;
-  left: -1%;
-  top: -1%;
-  width: 98%;
-  height: 98%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
   border-radius: 9px;
   border: solid 2px #fc3f1d;
   /* background-color: rgba(85, 85, 85, 0.4); */
@@ -85,8 +86,8 @@ const selectedPageIndexText = css`
   box-sizing: border-box;
   width: 26px;
   height: 26px;
-  top: 50%;
-  left: 52%;
+  top: 85%;
+  left: 87%;
   transform: translate(-50%, -50%);
   text-align: center;
   font-size: 19px;
