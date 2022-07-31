@@ -2,10 +2,11 @@
 import { css } from '@emotion/react';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
-
+import { useDispatch } from 'react-redux';
 import { Header } from '../components';
 import AddPagePopUp from '../components/MyPage/AddPagePopUp';
 import EditPropfilePopUp from '../components/MyPage/EditProfilePopUp';
+import BindingPagePopUp from '../components/MyPage/BindingPopUp';
 import PageBlock from '../components/MyPage/PageBlock';
 import { useMyInfo } from '../hooks/myInfo';
 import { useRequest } from '../hooks/useRequest';
@@ -18,6 +19,8 @@ import {
 } from '../utils/util';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import ProfileBlock from '../components/MyPage/ProfileBlock';
+import { createReplacementSinglePagesAction } from '../redux/slice';
 import Azone from '../components/MyPage/Azone';
 
 function MyPage() {
@@ -30,6 +33,8 @@ function MyPage() {
   const [nickname, setNickname] = useState(null);
   const [popUp, setPopUp] = useState(false);
   const [profilePopUp, setProfilePopUp] = useState(false);
+  const [bindingPopUp, setBindingPopUp] = useState(false);
+  const dispatch = useDispatch();
 
   const { res: pageUserRes, request: requestPageUserInfo } = useRequest({
     endpoint: `${getApiEndpoint()}/url/${pageUrl}/user`,
@@ -42,6 +47,12 @@ function MyPage() {
     method: 'get',
   });
 
+  const { res: singlePagesData, request: requestSinglePagesData } = useRequest({
+    endpoint: `${getApiEndpoint()}/user/page/singles/${userSeq}`,
+
+    method: 'get',
+  });
+
   // 내 페이지인지 남의 페이지인지 확인 로직
   useEffect(() => {
     // 로그인 유무
@@ -50,8 +61,8 @@ function MyPage() {
       if (myInfo && urlMatched(myInfo.url, pageUrl)) {
         setUserMatched(true);
         setNickname(myInfo.nickname);
+
         setUserUrl(myInfo.url);
-        if (userSeq) requestBZoneData();
 
         // 다른 사람 페이지일 경우
       } else {
@@ -87,6 +98,13 @@ function MyPage() {
     };
   }, [pageUserRes, history]);
 
+  // 바인딩 페이지용 싱글페이지 목록 데이터 리덕스에 저장
+  useEffect(() => {
+    if (singlePagesData && singlePagesData.data) {
+      dispatch(createReplacementSinglePagesAction(singlePagesData.data));
+    }
+  }, [singlePagesData]);
+  
   function bzoneimage() {
     if (bZoneData && bZoneData.data.message === 'ok') {
       const usersb = bZoneData.data.data;
@@ -128,7 +146,15 @@ function MyPage() {
       />
 
       <div css={MyPageWrapper}>
+
         {AzoneComponent}
+                      <ProfileBlock
+                // 기존에 있던 버튼 컴포넌트 재활용_이름 변경 혹은 별도 컴포넌트로 분리 필요
+                addBlock
+                setPopUp={setBindingPopUp}
+                popUp={bindingPopUp}
+                buttonText='페이지 합치기'
+              />
         <hr css={[divLine]} />
 
         <div css={MyPageBZoneWrapper}>
@@ -153,6 +179,9 @@ function MyPage() {
           setPopUp={setProfilePopUp}
           popUp={profilePopUp}
         />
+      )}
+      {bindingPopUp && (
+        <BindingPagePopUp userSeq={userSeq} setPopUp={setBindingPopUp} />
       )}
       {popUp && (
         <AddPagePopUp userSeq={userSeq} setPopUp={setPopUp} popUp={popUp} />

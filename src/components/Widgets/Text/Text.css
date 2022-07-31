@@ -20,3 +20,7 @@
 .ck.ck-editor__editable {
   height: 100%;
 }
+
+.ck.ck-editor__editable_inline {
+  overflow-wrap: break-word;
+}

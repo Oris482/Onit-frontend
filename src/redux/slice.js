@@ -22,6 +22,9 @@ const slice = createSlice({
     newWidget: {
       list: [],
     },
+    singlePages: {
+      data: [],
+    },
   },
   reducers: {
     replacementUser(state, action) {
@@ -36,6 +39,9 @@ const slice = createSlice({
     replacementModal(state, action) {
       state.modal = action.payload;
     },
+    replacementSinglePages(state, action) {
+      state.singlePages = action.payload;
+    },
   },
 });
 
@@ -46,6 +52,7 @@ export const {
   replacementNewWidgets: createReplacementNewWidgetsAction,
   replacementModal: createReplacementModalAction,
   replacementUser: createReplacementUserAction,
+  replacementSinglePages: createReplacementSinglePagesAction,
 } = slice.actions;
 
 export const store = configureStore({

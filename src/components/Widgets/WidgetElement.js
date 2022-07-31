@@ -74,12 +74,13 @@ export function WidgetElement({
           popUpWindowType: stringType,
         })
       );
-    } else if (type === TYPE_TEXT) {
-      const changed = JSON.parse(JSON.stringify(widgets.list));
-      const targetItem = changed.find((widget) => widget.i === id);
-      // 임시로 getNewWidgetList 에서 처리. Redux 비동기 처리 적용하면 별도 훅으로 분리
-      // reverseStatic(id, !targetItem.static);
     }
+    // else if (type === TYPE_TEXT) {
+    // const changed = JSON.parse(JSON.stringify(widgets.list));
+    // const targetItem = changed.find((widget) => widget.i === id);
+    // 임시로 getNewWidgetList 에서 처리. Redux 비동기 처리 적용하면 별도 훅으로 분리
+    // reverseStatic(id, !targetItem.static);
+    // }
   };
 
   function getNewWidgetList(targetItemIndex, newAction) {
@@ -124,13 +125,13 @@ export function WidgetElement({
     }
   }
 
-  const newList = JSON.parse(JSON.stringify(widgets.list));
-  const targetId = modal.targetWidgetId;
-  const found = newList.find((widget) => widget.i === targetId);
-  let isPinned = false;
-  if (found?.static !== undefined) {
-    isPinned = found.static === true;
-  }
+  // const newList = JSON.parse(JSON.stringify(widgets.list));
+  // const targetId = modal.targetWidgetId;
+  // const found = newList.find((widget) => widget.i === targetId);
+  // let isPinned = false;
+  // if (found?.static !== undefined) {
+  //   isPinned = found.static === true;
+  // }
 
   const diameter = 44;
   const { btn, img } = getAbsoluteBtn(5, 33, diameter / 2);
@@ -138,18 +139,19 @@ export function WidgetElement({
     5,
     5,
     diameter / 2,
-    isPinned
+    false
+    // isPinned
   );
 
   return (
     <div
       key={layout.i}
       css={[widgetFrame]}
-      onClick={() => {
+      onMouseEnter={() => {
         setHover(true);
       }}
       onKeyDown={() => {
-        setHover(true);
+        setHover(false);
       }}
       onMouseLeave={() => {
         setHover(false);
