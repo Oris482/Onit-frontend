@@ -208,7 +208,7 @@ function MyPage() {
               `}
             />
 
-            {/* <hr css={[divLine]} /> */}
+            <hr css={[divLine]} />
             {singlePagesimage()}
             <PageBlock userUrl={userUrl} setPopUp={setPopUp} popUp={popUp} />
             <div css={[overFlowHidden]} />
@@ -246,7 +246,8 @@ const positionRelative = css`
 `;
 
 const MyPageWrapper = css`
-  width: ${PAGE_WIDTH};
+  min-width: ${PAGE_WIDTH};
+  width: 90vw;
   margin: ${PAGE_MARGIN};
   height: 100vh;
   display: flex;
@@ -254,8 +255,10 @@ const MyPageWrapper = css`
 `;
 
 const MyPageBZoneWrapper = css`
-  width: 100vw;
+  width: 90vw;
   height: 300px;
+  margin: ${PAGE_MARGIN};
+  margin-top: 20px;
   background-color: white;
 `;
 const MyPageBZone = css`
@@ -267,7 +270,6 @@ const MyPageBZone = css`
 const divLine = css`
   width: 100%;
   height: 1px;
-  border: none;
   background-color: lightgray;
 `;
 

@@ -79,7 +79,8 @@ function Azone({ myInfo, setPopUp, popUp }) {
 }
 
 const MyPageAZone = css`
-  width: ${PAGE_WIDTH};
+  min-width: ${PAGE_WIDTH};
+  width: 80vw;
   margin: ${PAGE_MARGIN};
   height: 120px;
   background-color: white;
