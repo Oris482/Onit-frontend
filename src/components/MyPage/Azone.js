@@ -2,7 +2,7 @@
 import { css } from '@emotion/react';
 import ProfileBlock from './ProfileBlock';
 
-function Azone({ myInfo, setPopUp, popUp, setBindingPopUp, bindingPopUp }) {
+function Azone({ myInfo, setPopUp, popUp, bindingPopUp }) {
   return (
     <div css={MyPageAZone}>
       <div
@@ -65,13 +65,6 @@ function Azone({ myInfo, setPopUp, popUp, setBindingPopUp, bindingPopUp }) {
             text-align: center;
           `}
         >
-          <ProfileBlock
-            // 기존에 있던 버튼 컴포넌트 재활용_이름 변경 혹은 별도 컴포넌트로 분리 필요
-            addBlock
-            setPopUp={setBindingPopUp}
-            popUp={bindingPopUp}
-            buttonText='페이지 합치기'
-          />
           <ProfileBlock
             addBlock
             setPopUp={setPopUp}

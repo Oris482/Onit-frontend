@@ -54,6 +54,7 @@ function PageBlock({ data, popUp, setPopUp, userUrl }) {
                 display: flex;
                 margin: auto;
                 margin-top: 20px;
+                overflow: hidden;
               `}
             >
               {data ? `${data.title}` : ''}

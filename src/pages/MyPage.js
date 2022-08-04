@@ -2,7 +2,7 @@
 import { css } from '@emotion/react';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Header } from '../components';
 import AddPagePopUp from '../components/MyPage/AddPagePopUp';
 import EditPropfilePopUp from '../components/MyPage/EditProfilePopUp';
@@ -19,7 +19,10 @@ import {
 } from '../utils/util';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { createReplacementSinglePagesAction } from '../redux/slice';
+import {
+  createReplacementSinglePagesAction,
+  createReplacementMultiPagesAction,
+} from '../redux/slice';
 import Azone from '../components/MyPage/Azone';
 
 function MyPage() {
@@ -33,6 +36,11 @@ function MyPage() {
   const [popUp, setPopUp] = useState(false);
   const [profilePopUp, setProfilePopUp] = useState(false);
   const [bindingPopUp, setBindingPopUp] = useState(false);
+
+  const { singlePagesState, multiPagesState } = useSelector((state) => ({
+    singlePagesState: state.info.singlePages,
+    multiPagesState: state.info.multiPages,
+  }));
   const dispatch = useDispatch();
 
   const { res: pageUserRes, request: requestPageUserInfo } = useRequest({
@@ -41,11 +49,6 @@ function MyPage() {
   });
 
   // eslint-disable-next-line no-unused-vars
-  const { res: bZoneData, request: requestBZoneData } = useRequest({
-    endpoint: `${getApiEndpoint()}/user/page/singles/${userSeq}`,
-    method: 'get',
-  });
-
   const { res: singlePagesData, request: requestSinglePagesData } = useRequest({
     endpoint: `${getApiEndpoint()}/user/page/singles/${userSeq}`,
     method: 'get',
@@ -68,7 +71,6 @@ function MyPage() {
         if (userSeq) {
           requestSinglePagesData();
           requestMultiPagesData();
-          requestBZoneData();
         }
         // 다른 사람 페이지일 경우
       } else {
@@ -81,7 +83,7 @@ function MyPage() {
       setUserMatched(null);
       setNickname(null);
     };
-  }, [pageUrl, myInfo, userSeq, requestPageUserInfo, requestBZoneData]);
+  }, [pageUrl, myInfo, userSeq, requestPageUserInfo]);
 
   // pageUserRes에 변화가 있으면 -> 데이터를 받아서 userseq, nickname 세팅.
   useEffect(() => {
@@ -109,7 +111,10 @@ function MyPage() {
     if (singlePagesData && singlePagesData.data) {
       dispatch(createReplacementSinglePagesAction(singlePagesData.data));
     }
-  }, [singlePagesData]);
+    if (multiPagesData && multiPagesData.data) {
+      dispatch(createReplacementMultiPagesAction(multiPagesData.data));
+    }
+  }, [singlePagesData, multiPagesData]);
 
   useEffect(() => {
     if (multiPagesData && multiPagesData.data) {
@@ -118,11 +123,36 @@ function MyPage() {
   }, [multiPagesData]);
 
   function singlePagesimage() {
-    if (bZoneData && bZoneData.data.message === 'ok') {
-      const usersb = bZoneData.data.data;
+    if (singlePagesState && singlePagesState.message === 'ok') {
+      const usersb = singlePagesState.data;
       return (
         <>
           {usersb.map((page, index) => {
+            const semiIndex = index + 1;
+
+            return (
+              <div key={semiIndex}>
+                <PageBlock
+                  userUrl={userUrl}
+                  data={page}
+                  setPopUp={setPopUp}
+                  popUp={popUp}
+                />
+              </div>
+            );
+          })}
+        </>
+      );
+    }
+    return <div>no data</div>;
+  }
+
+  function multiPagesimage() {
+    if (multiPagesState && multiPagesState.message === 'ok') {
+      const multiPages = multiPagesState.data;
+      return (
+        <>
+          {multiPages.map((page, index) => {
             const semiIndex = index + 1;
 
             return (
@@ -180,7 +210,6 @@ function MyPage() {
           myInfo={myInfo}
           setPopUp={setProfilePopUp}
           popUp={profilePopUp}
-          setBindingPopUp={setBindingPopUp}
           bindingPopUp={bindingPopUp}
         />
         <hr css={[divLine]} />
