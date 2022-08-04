@@ -210,7 +210,6 @@ function MyPage() {
           myInfo={myInfo}
           setPopUp={setProfilePopUp}
           popUp={profilePopUp}
-          setBindingPopUp={setBindingPopUp}
           bindingPopUp={bindingPopUp}
         />
         <hr css={[divLine]} />
