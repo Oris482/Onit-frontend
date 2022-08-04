@@ -49,13 +49,15 @@ const singlePageBox = css`
   width: 147px;
   height: 116px;
   margin: 0 0 15px 10px;
-  border-radius: 8px;
 `;
 
 const singlePageTitle = css`
+  position: relative;
+  top: 3%;
+  left: 8%;
+  width: 85%;
   box-sizing: border-box;
   font-size: 12px;
-  margin: 5px 10px 0 10px;
   overflow: hidden;
 `;
 
@@ -75,9 +77,9 @@ const selectedPageOverlay = css`
   transform: translate(-50%, -50%);
   width: 100%;
   height: 100%;
-  border-radius: 9px;
+  border-radius: 10px;
   border: solid 2px #fc3f1d;
-  /* background-color: rgba(85, 85, 85, 0.4); */
+  background-color: rgba(85, 85, 85, 0.6);
   z-index: 10;
 `;
 
@@ -86,14 +88,14 @@ const selectedPageIndexText = css`
   box-sizing: border-box;
   width: 26px;
   height: 26px;
+  line-height: 26px;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
+  font-family: 'SUIT';
   font-size: 19px;
   border-radius: 30px;
-  /* padding-top: 2px; */
-  /* padding-bottom: 1; */
   color: white;
   z-index: 11;
 `;
