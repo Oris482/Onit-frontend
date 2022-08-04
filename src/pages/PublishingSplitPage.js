@@ -14,6 +14,7 @@ function PublishingSplitPage() {
   const [userSeq, setUserSeq] = useState(null);
   const [pathname, setPathname] = useState(null);
   const [widgetList, setWdigetList] = useState(null);
+  const [multiData, setMultiData] = useState(null);
 
   const history = useHistory();
   const publishUrl = useGetPublishingUrl();
@@ -40,7 +41,7 @@ function PublishingSplitPage() {
     if (publishUrl && pageUrl && userSeq)
       setPathname(`${publishUrl}/${pageUrl}/${userSeq}`);
     else if (publishUrl && userSeq) setPathname(`${publishUrl}/${userSeq}`);
-  }, [userSeq]);
+  }, [userSeq, publishUrl, pageUrl]);
 
   // 유저 시퀀스가 있으면 -> 해당 유저의 위젯 데이터 받아오기
   useEffect(() => {
@@ -54,6 +55,7 @@ function PublishingSplitPage() {
 
   useEffect(() => {
     if (pagesData) {
+      console.log(pagesData);
       const { code, data, message } = pagesData.data;
 
       if (data) {
@@ -61,12 +63,11 @@ function PublishingSplitPage() {
         if (data?.isMultiPage === false) {
           setPageType('single');
           setWdigetList(data.widgets);
-          save(data.widgets);
         } else {
           setPageType('multi');
-          // 멀티페이지 - 위젯 저장
-          save(data.widgets);
+          setMultiData(data);
         }
+        save(data.widgets);
       } else if (isError(code) && urlOwnerNotFound(message)) {
         alert('페이지를 찾을 수 없습니다.');
         history.goBack();
@@ -81,10 +82,10 @@ function PublishingSplitPage() {
       // 싱글 -> 페이지 정보 받아서 띄워주기
       return <SinglePage widgetList={widgetList} />;
     } else if (pageType === 'multi') {
-      return <MultiPage widgetList={widgetList} />;
+      return <MultiPage multiData={multiData} pageUrl={pageUrl} />;
     }
     return <div>불러오는 중입니다</div>;
-  }, [pageType, widgetList]);
+  }, [pageType, widgetList, multiData, pageUrl]);
 
   return <>{publishingPage}</>;
 }

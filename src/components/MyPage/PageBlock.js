@@ -1,13 +1,22 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import React from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { InitButtonStyle } from '../../styles/GlobalStyles';
-import { useGetPersonalUrl } from '../../hooks/useParamsUrl';
 
 // eslint-disable-next-line no-unused-vars
 
 function PageBlock({ data, popUp, setPopUp, userUrl }) {
+  const [publishingPath, setPublishingPath] = useState(null);
+  const [editPath, setEditPath] = useState(null);
+
+  useEffect(() => {
+    if (data && userUrl) {
+      setEditPath(`/${userUrl}/${data.url}/edit`);
+      setPublishingPath(`/${userUrl}/${data.url}`);
+    }
+  }, [data, userUrl]);
+
   return (
     <>
       {!data ? (
@@ -22,7 +31,7 @@ function PageBlock({ data, popUp, setPopUp, userUrl }) {
         </>
       ) : (
         <div css={siteViewBZone}>
-          <Link to={data.url ? `${data.url}` : ''}>
+          <Link to={publishingPath}>
             <div
               css={css`
                 height: 70%;
@@ -50,7 +59,7 @@ function PageBlock({ data, popUp, setPopUp, userUrl }) {
             >
               {data ? `${data.title}` : ''}
             </div>
-            <Link to={data.url ? `heom/${data.url}/edit` : ''}>
+            <Link to={editPath}>
               <div
                 css={css`
                   font-size: 20px;

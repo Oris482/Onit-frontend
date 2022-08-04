@@ -51,7 +51,6 @@ function MyPage() {
   // eslint-disable-next-line no-unused-vars
   const { res: singlePagesData, request: requestSinglePagesData } = useRequest({
     endpoint: `${getApiEndpoint()}/user/page/singles/${userSeq}`,
-
     method: 'get',
   });
 
@@ -66,11 +65,7 @@ function MyPage() {
         setUserUrl(myInfo.url);
         if (userSeq) {
           requestSinglePagesData();
-<<<<<<< Updated upstream
-          requestBZoneData();
-=======
           requestMultiPagesData();
->>>>>>> Stashed changes
         }
         // 다른 사람 페이지일 경우
       } else {
@@ -116,13 +111,6 @@ function MyPage() {
     }
   }, [singlePagesData, multiPagesData]);
 
-<<<<<<< Updated upstream
-  function bzoneimage() {
-    // console.log(bZoneData);
-    if (bZoneData && bZoneData.data.message === 'ok') {
-      const usersb = bZoneData.data.data;
-
-=======
   useEffect(() => {
     if (multiPagesData && multiPagesData.data) {
       console.log(multiPagesData.data.data);
@@ -157,17 +145,16 @@ function MyPage() {
   function multiPagesimage() {
     if (multiPagesState && multiPagesState.message === 'ok') {
       const multiPages = multiPagesState.data;
->>>>>>> Stashed changes
       return (
         <>
           {usersb.map((page, index) => {
             const semiIndex = index + 1;
+            console.log(page);
             return (
               <div key={semiIndex}>
                 <PageBlock
                   userUrl={userUrl}
                   data={page}
-                  addBlock={false}
                   setPopUp={setPopUp}
                   popUp={popUp}
                 />
@@ -188,7 +175,6 @@ function MyPage() {
         pageUserName={nickname}
         pageType='normal'
       />
-
       <div css={MyPageWrapper}>
         <Azone
           myInfo={myInfo}
@@ -240,7 +226,6 @@ const positionRelative = css`
 const MyPageWrapper = css`
   width: 1470px;
   height: 100vh;
-
   margin: 0 auto;
   display: flex;
   flex-direction: column;

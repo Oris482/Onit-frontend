@@ -22,7 +22,7 @@ function Login() {
   const endpointLogin = `${getApiEndpoint()}/auth/login/local`;
   const { res, request } = useRequest({
     endpoint: endpointLogin,
-    method: 'get',
+    method: 'post',
     data: {
       email: emailValue,
       password: passwordValue,

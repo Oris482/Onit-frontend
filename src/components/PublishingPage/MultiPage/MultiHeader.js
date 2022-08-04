@@ -1,35 +1,39 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { useState } from 'react';
-import { useHistory } from 'react-router';
+import { useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useMyInfo } from '../../../hooks/myInfo';
 
-function MultiHeader({ pagesData }) {
+function MultiHeader({ multiData, pageUrl }) {
   const [selected, setSelected] = useState('');
   const { myInfo } = useMyInfo();
-  const history = useHistory();
 
-  const { singlePages: pages, title } = pagesData;
+  const { singlePages: pages, title, url } = multiData;
 
-  const navList = pages.map((page, i) => {
-    const selectPage = (index) => {
-      setSelected(index);
-      history.push(`/${myInfo.url}/aa/${page.singlePageUrl}`);
-    };
+  useEffect(() => {
+    setSelected(pageUrl);
+  }, [pageUrl]);
 
-    const key = i + 1;
-    return (
-      <li key={key} css={[pureList]}>
-        <button
-          type='button'
-          css={[pureButton, selected === i && underline]}
-          onClick={() => selectPage(i)}
-        >
-          {page.singlePageUrl}
-        </button>
-      </li>
-    );
-  });
+  console.log(pageUrl);
+  const navLists = useMemo(() => {
+    if (multiData && pages && myInfo) {
+      const navList = pages.map((page, i) => {
+        const key = i + 1;
+        return (
+          <li key={key} css={[pureList]}>
+            <Link
+              css={[pureButton, selected === page.singlePageUrl && underline]}
+              to={`/${myInfo.url}/${url}/${page.singlePageUrl}`}
+            >
+              {page.singlePageUrl}
+            </Link>
+          </li>
+        );
+      });
+      return navList;
+    }
+    return <></>;
+  }, [multiData, myInfo, pageUrl]);
 
   return (
     <header>
@@ -37,7 +41,7 @@ function MultiHeader({ pagesData }) {
         <h1>{title}</h1>
       </div>
       <div css={displayCenter}>
-        <ul>{navList}</ul>
+        <ul>{navLists}</ul>
       </div>
     </header>
   );

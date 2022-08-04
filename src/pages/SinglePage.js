@@ -4,7 +4,7 @@ import Mobile, {
   isMobile,
 } from '../components/PublishingPage/SinglePage/Mobile';
 
-function SinglePage({ theme, pageNow, widgetList }) {
+function SinglePage({ widgetList }) {
   const [width, setWidth] = useState(window.innerWidth);
 
   // resize 이벤트 받아서 width 변경
