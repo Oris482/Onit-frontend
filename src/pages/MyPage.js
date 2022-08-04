@@ -191,7 +191,6 @@ const positionRelative = css`
 const MyPageWrapper = css`
   width: 1470px;
   height: 100vh;
-
   margin: 0 auto;
   display: flex;
   flex-direction: column;
