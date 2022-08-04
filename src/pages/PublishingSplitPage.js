@@ -65,9 +65,6 @@ function PublishingSplitPage() {
           setWdigetList(data.widgets);
         } else {
           setPageType('multi');
-          console.log('---');
-          console.log(data);
-          console.log('---');
           setMultiData(data);
         }
         save(data.widgets);
