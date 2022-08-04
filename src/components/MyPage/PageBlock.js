@@ -66,6 +66,7 @@ function PageBlock({ data, popUp, setPopUp, userUrl }) {
                   display: flex;
                   margin: auto;
                   margin-top: 20px;
+                  margin-right: 20px;
                 `}
               >
                 수정
