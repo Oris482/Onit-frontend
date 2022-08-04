@@ -32,10 +32,12 @@ function TextEditor(props) {
     if (found?.static !== undefined) {
       isPinned = found.static;
     }
-    if (isPinned === true) {
-      editor.editor.disableReadOnlyMode(props.widgetId);
-    } else if (isPinned === false) {
-      editor.editor.enableReadOnlyMode(props.widgetId);
+    if (editor.editor) {
+      if (isPinned === true) {
+        editor.editor.disableReadOnlyMode(props.widgetId);
+      } else if (isPinned === false) {
+        editor.editor.enableReadOnlyMode(props.widgetId);
+      }
     }
   }, [widgets.list, props.widgetId]);
 
