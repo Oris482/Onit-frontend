@@ -10,3 +10,7 @@ export const GRID_MARGIN = [10, 10];
 export const GRID_COLS = 16;
 export const newWidgetWidth = 1;
 export const newWidgetHeight = 1;
+
+// 글로벌 width
+export const PAGE_WIDTH = 'calc(1124px - 10%)';
+export const PAGE_MARGIN = '0 5%';
