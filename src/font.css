@@ -63,46 +63,47 @@
 }
 /* noto-sans-kr-900 - latin_korean */
 @font-face {
-	font-family: 'SUIT';
-	font-weight: 100;
-	src: url('./asset/fonts/SUIT-Thin.woff2') format('woff2');
+  font-family: 'SUIT';
+  font-weight: 100;
+  src: url('./asset/fonts/SUIT-Thin.woff2') format('woff2');
 }
 @font-face {
-	font-family: 'SUIT';
-	font-weight: 200;
-	src: url('./asset/fonts/SUIT-ExtraLight.woff2') format('woff2');
+  font-family: 'SUIT';
+  font-weight: 200;
+  src: url('./asset/fonts/SUIT-ExtraLight.woff2') format('woff2');
 }
 @font-face {
-	font-family: 'SUIT';
-	font-weight: 300;
-	src: url('./asset/fonts/SUIT-Light.woff2') format('woff2');
+  font-family: 'SUIT';
+  font-weight: 300;
+  src: url('./asset/fonts/SUIT-Light.woff2') format('woff2');
 }
 @font-face {
-	font-family: 'SUIT';
-	font-weight: 400;
-	src: url('./asset/fonts/SUIT-Regular.woff2') format('woff2');
+  font-family: 'SUIT';
+  font-weight: 400;
+  src: url('./asset/fonts/SUIT-Regular.woff2') format('woff2');
 }
 @font-face {
-	font-family: 'SUIT';
-	font-weight: 500;
-	src: url('./asset/fonts/SUIT-Medium.woff2') format('woff2');
+  font-family: 'SUIT';
+  font-weight: 500;
+  src: url('./asset/fonts/SUIT-Medium.woff2') format('woff2');
 }
 @font-face {
-	font-family: 'SUIT';
-	font-weight: 600;
-	src: url('./asset/fonts/SUIT-SemiBold.woff2') format('woff2');
+  font-family: 'SUIT';
+  font-weight: 600;
+  src: url('./asset/fonts/SUIT-SemiBold.woff2') format('woff2');
 }
 @font-face {
-	font-family: 'SUIT';
-	font-weight: 700;
-	src: url('./asset/fonts/SUIT-Bold.woff2') format('woff2');
+  font-family: 'SUIT';
+  font-weight: 700;
+  src: url('./asset/fonts/SUIT-Bold.woff2') format('woff2');
 }
 @font-face {
-	font-family: 'SUIT';
-	font-weight: 800;
-	src: url('./asset/fonts/SUIT-ExtraBold.woff2') format('woff2');
+  font-family: 'SUIT';
+  font-weight: 800;
+  src: url('./asset/fonts/SUIT-ExtraBold.woff2') format('woff2');
 }
 @font-face {
-	font-family: 'SUIT';
-	font-weight: 900;
-	src: url('./asset/fonts/SUIT-Heavy.woff2') format('woff2');
+  font-family: 'SUIT';
+  font-weight: 900;
+  src: url('./asset/fonts/SUIT-Heavy.woff2') format('woff2');
+}
