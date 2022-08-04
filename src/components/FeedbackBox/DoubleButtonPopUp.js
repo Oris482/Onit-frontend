@@ -1,33 +1,40 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { BlockDrag } from '../../styles/GlobalStyles';
+import { BlockDrag, OrangeColorButton } from '../../styles/GlobalStyles';
 
-export function PlainPopUp(props) {
-  const { state, close, textObject, hasButton } = props;
+function DoubleButtonPopUp(props) {
+  const { confirmFunction, close, textObject } = props;
 
-  return state ? (
+  return (
     <div css={[Container]} aria-hidden='true'>
       <div css={[Overlay]} aria-hidden='true'>
         <div css={[PopUpBox]}>
           <div css={[TopText]}>{textObject.topText}</div>
           <div css={[MiddleText]}>{textObject.middleText}</div>
           <div css={[BottomText]}>{textObject.bottomText}</div>
-          {(hasButton === undefined || hasButton) && (
+          <div css={ButtonLayout}>
             <button
+              css={[ButtonForm, OrangeColorButton, BlockDrag]}
               type='button'
-              css={[ConfirmButtom, BlockDrag]}
-              onClick={close}
+              onClick={confirmFunction}
             >
               확인
             </button>
-          )}
+            <button
+              css={[ButtonForm, WhiteButtonColor, BlockDrag]}
+              type='button'
+              onClick={close}
+            >
+              취소
+            </button>
+          </div>
         </div>
       </div>
     </div>
-  ) : (
-    <></>
   );
 }
+
+export default DoubleButtonPopUp;
 
 const Container = css`
   position: fixed;
@@ -103,13 +110,17 @@ const BottomText = css`
   margin-bottom: 5px;
 `;
 
-const ConfirmButtom = css`
+const ButtonLayout = css`
+  display: flex;
+  width: 80%;
+  justify-content: space-evenly;
+`;
+
+const ButtonForm = css`
   width: 105px;
   height: 28px;
   font-size: 12px;
   text-align: center;
-  background-color: var(--red-orange, #ff3d00);
-  color: white;
   border: none;
   border-radius: 30px;
   margin-top: 20px;
@@ -118,5 +129,14 @@ const ConfirmButtom = css`
   :hover:enabled {
     opacity: 0.8;
     cursor: pointer;
+  }
+`;
+
+const WhiteButtonColor = css`
+  color: #707070;
+  border: solid 1px #707070;
+  background-color: white;
+  &:hover {
+    background-color: #eee;
   }
 `;

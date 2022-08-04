@@ -54,6 +54,7 @@ function MyPage() {
     method: 'get',
   });
 
+  // eslint-disable-next-line no-unused-vars
   const { res: multiPagesData, request: requestMultiPagesData } = useRequest({
     endpoint: `${getApiEndpoint()}/user/page/multies/${userSeq}`,
     method: 'get',
@@ -137,6 +138,7 @@ function MyPage() {
                   data={page}
                   setPopUp={setPopUp}
                   popUp={popUp}
+                  pageType='single'
                 />
               </div>
             );
@@ -162,31 +164,7 @@ function MyPage() {
                   data={page}
                   setPopUp={setPopUp}
                   popUp={popUp}
-                />
-              </div>
-            );
-          })}
-        </>
-      );
-    }
-    return <div>no data</div>;
-  }
-
-  function multiPagesimage() {
-    if (multiPagesData && multiPagesData.data.message === 'ok') {
-      const multiPages = multiPagesData.data.data;
-      return (
-        <>
-          {multiPages.map((page, index) => {
-            const semiIndex = index + 1;
-
-            return (
-              <div key={semiIndex}>
-                <PageBlock
-                  userUrl={userUrl}
-                  data={page}
-                  setPopUp={setPopUp}
-                  popUp={popUp}
+                  pageType='multi'
                 />
               </div>
             );

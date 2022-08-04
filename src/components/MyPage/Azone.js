@@ -1,8 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import ProfileBlock from './ProfileBlock';
+import { logoImg } from '../../asset';
 
-function Azone({ myInfo, setPopUp, popUp, bindingPopUp }) {
+function Azone({ myInfo, setPopUp, popUp }) {
   return (
     <div css={MyPageAZone}>
       <div
@@ -19,6 +20,7 @@ function Azone({ myInfo, setPopUp, popUp, bindingPopUp }) {
           `}
         >
           <div className='profileImage' css={ProfileAZone} />
+          <img src={logoImg} />
         </div>
         <div
           css={css`
@@ -85,9 +87,9 @@ const MyPageAZone = css`
 `;
 
 const ProfileAZone = css`
+  position: absolute;
   width: 100px;
   height: 100px;
-  background-color: lightgray;
   border-color: black;
 
   text-align: center;
