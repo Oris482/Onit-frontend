@@ -113,7 +113,7 @@ function MyPage() {
 
   useEffect(() => {
     if (multiPagesData && multiPagesData.data) {
-      console.log(multiPagesData.data.data);
+      // console.log(multiPagesData.data.data);
     }
   }, [multiPagesData]);
 
