@@ -12,7 +12,7 @@ const BindingInputBox = (props) => {
   const pageUrl = useGetPersonalUrl();
 
   useEffect(() => {
-    setPaddingSize(fixedTextRef.current.clientWidth + 16);
+    setPaddingSize(fixedTextRef.current.clientWidth + 20);
   }, []);
 
   const validateURL = useMemo(() => {
@@ -28,6 +28,15 @@ const BindingInputBox = (props) => {
 
   return (
     <div css={[VerticalLayout]}>
+      <div css={[pagePopUpBoxContents, BlockDrag]}>페이지 제목</div>
+      <input
+        css={[pagePopUpBoxInput]}
+        placeholder='제목을 입력해주세요! 최상단에 표시됩니다.'
+        name='title'
+        value={title}
+        autoComplete='off'
+        onChange={onChange}
+      />
       <div css={[pagePopUpBoxContents, BlockDrag]}>페이지 주소</div>
       <div css={[formText]}>
         <span css={[fixedText]} ref={fixedTextRef}>
@@ -52,15 +61,6 @@ const BindingInputBox = (props) => {
           <></>
         )}
       </div>
-      <div css={[pagePopUpBoxContents, BlockDrag]}>페이지 제목</div>
-      <input
-        css={[pagePopUpBoxInput]}
-        placeholder='제목을 입력해주세요! 최상단에 표시됩니다.'
-        name='title'
-        value={title}
-        autoComplete='off'
-        onChange={onChange}
-      />
     </div>
   );
 };
@@ -73,7 +73,7 @@ const VerticalLayout = css`
 `;
 
 const pagePopUpBoxContents = css`
-  font-size: 18px;
+  font-size: 16px;
   line-height: normal;
   font-weight: bold;
 `;
@@ -84,8 +84,9 @@ const formText = css`
 
 const fixedText = css`
   position: absolute;
-  left: 15px;
-  top: 25px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-87%, -95%);
   color: gray;
   z-index: 9;
 `;
@@ -97,7 +98,7 @@ const pagePopUpBoxInput = css`
   border-radius: 20px;
   border: none;
   background-color: white;
-  font-size: 15px;
+  font-size: 16px;
   margin-top: 15px;
   margin-bottom: 35px;
   padding-left: 15px;
