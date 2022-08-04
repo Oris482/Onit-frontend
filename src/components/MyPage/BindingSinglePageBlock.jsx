@@ -86,14 +86,14 @@ const selectedPageIndexText = css`
   box-sizing: border-box;
   width: 26px;
   height: 26px;
-  top: 85%;
-  left: 87%;
+  top: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
   font-size: 19px;
   border-radius: 30px;
-  padding-top: 2px;
-  padding-bottom: 1;
+  /* padding-top: 2px; */
+  /* padding-bottom: 1; */
   color: white;
   z-index: 11;
 `;

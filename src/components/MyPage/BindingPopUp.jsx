@@ -123,7 +123,7 @@ const pagePopUpBoxStyle = css`
   left: 50%;
   transform: translate(-50%, -50%);
   width: 872px;
-  min-height: 700px;
+  min-height: 720px;
   max-height: 800px;
   height: 85vh;
   padding-left: 96px;

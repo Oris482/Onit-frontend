@@ -25,6 +25,9 @@ const slice = createSlice({
     singlePages: {
       data: [],
     },
+    multiPages: {
+      data: [],
+    },
   },
   reducers: {
     replacementUser(state, action) {
@@ -42,6 +45,9 @@ const slice = createSlice({
     replacementSinglePages(state, action) {
       state.singlePages = action.payload;
     },
+    replacementMultiPages(state, action) {
+      state.multiPages = action.payload;
+    },
   },
 });
 
@@ -53,6 +59,7 @@ export const {
   replacementModal: createReplacementModalAction,
   replacementUser: createReplacementUserAction,
   replacementSinglePages: createReplacementSinglePagesAction,
+  replacementMultiPages: createReplacementMultiPagesAction,
 } = slice.actions;
 
 export const store = configureStore({
