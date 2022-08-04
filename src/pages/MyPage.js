@@ -54,6 +54,11 @@ function MyPage() {
     method: 'get',
   });
 
+  const { res: multiPagesData, request: requestMultiPagesData } = useRequest({
+    endpoint: `${getApiEndpoint()}/user/page/multies/${userSeq}`,
+    method: 'get',
+  });
+
   // 내 페이지인지 남의 페이지인지 확인 로직
   useEffect(() => {
     // 로그인 유무
@@ -147,9 +152,34 @@ function MyPage() {
       const multiPages = multiPagesState.data;
       return (
         <>
-          {usersb.map((page, index) => {
+          {multiPages.map((page, index) => {
             const semiIndex = index + 1;
-            console.log(page);
+
+            return (
+              <div key={semiIndex}>
+                <PageBlock
+                  userUrl={userUrl}
+                  data={page}
+                  setPopUp={setPopUp}
+                  popUp={popUp}
+                />
+              </div>
+            );
+          })}
+        </>
+      );
+    }
+    return <div>no data</div>;
+  }
+
+  function multiPagesimage() {
+    if (multiPagesData && multiPagesData.data.message === 'ok') {
+      const multiPages = multiPagesData.data.data;
+      return (
+        <>
+          {multiPages.map((page, index) => {
+            const semiIndex = index + 1;
+
             return (
               <div key={semiIndex}>
                 <PageBlock
@@ -186,9 +216,22 @@ function MyPage() {
         <hr css={[divLine]} />
         <div css={MyPageBZoneWrapper}>
           <div css={MyPageBZone}>
-            {bzoneimage()}
-            <PageBlock userUrl={userUrl} setPopUp={setPopUp} popUp={popUp} />
+            {multiPagesimage()}
+            <PageBlock
+              userUrl={userUrl}
+              setPopUp={setBindingPopUp}
+              popUp={bindingPopUp}
+            />
+            <div
+              css={css`
+                height: 20px;
+                width: 100vw;
+              `}
+            />
 
+            <hr css={[divLine]} />
+            {singlePagesimage()}
+            <PageBlock userUrl={userUrl} setPopUp={setPopUp} popUp={popUp} />
             <div css={[overFlowHidden]} />
           </div>
         </div>
