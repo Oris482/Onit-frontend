@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
+import { PAGE_MARGIN, PAGE_WIDTH } from '../../styles/style';
 import ProfileBlock from './ProfileBlock';
 import { logoImg } from '../../asset';
 
@@ -30,7 +31,6 @@ function Azone({ myInfo, setPopUp, popUp }) {
         >
           <div
             css={css`
-              width: 40%;
               height: 30px;
               margin: 15px;
               text-align: left;
@@ -49,7 +49,6 @@ function Azone({ myInfo, setPopUp, popUp }) {
           />
           <div
             css={css`
-              width: 40%;
               margin: 5px;
               text-align: left;
             `}
@@ -80,7 +79,8 @@ function Azone({ myInfo, setPopUp, popUp }) {
 }
 
 const MyPageAZone = css`
-  width: 1470px;
+  width: ${PAGE_WIDTH};
+  margin: ${PAGE_MARGIN};
   height: 120px;
   background-color: white;
   margin-top: 100px;
