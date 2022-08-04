@@ -1,12 +1,14 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { getApiEndpoint } from '../../utils/util';
 import useRequestAuth from '../../hooks/useRequestAuth';
 import { useRequest } from '../../hooks/useRequest';
 import BindingPreview from './BindingPreview';
 import { PlainPopUp } from '../FeedbackBox/PlainPopUp';
 import { BlockDrag } from '../../styles/GlobalStyles';
+import { createReplacementMultiPagesAction } from '../../redux/slice';
 
 const BindingButtonSet = (props) => {
   const { userSeq, inputs, setPopUp } = props;
@@ -27,8 +29,15 @@ const BindingButtonSet = (props) => {
     data: inputs,
   });
 
+  const dispatch = useDispatch();
+
   const { res: urlOverlapRes, request: requestUrlOverlap } = useRequest({
     endpoint: `${getApiEndpoint()}/user/page/overlap/${inputs.url}/${userSeq}`,
+    method: 'get',
+  });
+
+  const { res: multiPagesData, request: requestMultiPagesData } = useRequest({
+    endpoint: `${getApiEndpoint()}/user/page/multies/${userSeq}`,
     method: 'get',
   });
 
@@ -38,12 +47,19 @@ const BindingButtonSet = (props) => {
   const URL_FORMAT_ERROR = 3;
 
   useEffect(() => {
+    if (multiPagesData) {
+      dispatch(createReplacementMultiPagesAction(multiPagesData.data));
+      setPopUp(false);
+    }
+  }, [multiPagesData]);
+
+  useEffect(() => {
     // 마이페이지 업데이트를 위해 멀티페이지 GET 필요
     if (res) {
       setSendingPopUp(false);
-      console.log(res);
-      if (res.data.message === 'ok') setPopUp(false);
-      else setErrorRes(EXTRA_ERROR);
+      if (res.data.message === 'ok') {
+        requestMultiPagesData();
+      } else setErrorRes(EXTRA_ERROR);
     }
   }, [res]);
 
