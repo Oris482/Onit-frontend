@@ -1,22 +1,40 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import useRequestAuth from '../../hooks/useRequestAuth';
+import { useMyInfo } from '../../hooks/myInfo';
 import { getApiEndpoint } from '../../utils/util';
+import {
+  commonBtn,
+  BlockDrag,
+  getAbsoluteBtn,
+} from '../../styles/GlobalStyles';
+import { closeSet } from '../../asset';
+import ProfileImageBox from './ProfileImageBox';
+import BindingInputBox from './BindingInputBox';
 
 function EditProfilePopUP({ userSeq, popUp, setPopUp }) {
   const [inputs, setInputs] = useState({
     nickname: '',
     hashtag: '',
+    profileImage: ``,
   });
+  const [profileImage, setProfileImage] = useState('');
   const { nickname, hashtag } = inputs;
 
   const onChange = (e) => {
     const { name, value } = e.target;
-    setInputs({
-      ...inputs,
-      [name]: value,
-    });
+    if (name === 'title') {
+      setInputs({
+        ...inputs,
+        nickname: value,
+      });
+    } else if (name === 'url') {
+      setInputs({
+        ...inputs,
+        hashtag: value,
+      });
+    }
   };
 
   const endpoint = `${getApiEndpoint()}/profile/${userSeq}`;
@@ -24,71 +42,84 @@ function EditProfilePopUP({ userSeq, popUp, setPopUp }) {
   const { res, request } = useRequestAuth({
     endpoint: endpoint,
     method: 'patch',
-    data: {
-      nickname: 'dongslee_profile',
-    },
+    data: inputs,
   });
 
-  function onChangeForm(event) {
-    // eslint-disable-next-line no-unused-vars
-    const data = { nickname: { nickname }, hashtag: { hashtag } };
+  const { res: myInfoRes, request: myInfoRequest } = useMyInfo();
+
+  useEffect(() => {
     setInputs({
-      nickname: '',
-      hashtag: '',
+      ...inputs,
+      profileImage: profileImage,
     });
-    // if (data) console.log(data);
-    event.preventDefault();
-    // request(data);
-    setPopUp(!popUp);
+  }, [profileImage]);
+
+  useEffect(() => {
+    if (res && res.data.code === 'ok') {
+      console.log(res);
+      myInfoRequest();
+    }
+    // 닉네임 중복 등 검사 필요
+  }, [res]);
+
+  useEffect(() => {
+    if (myInfoRes && myInfoRes.data.user_seq !== -1) {
+      // eslint-disable-next-line no-restricted-globals
+      // location.reload();
+      console.log(myInfoRes);
+    }
+  }, [myInfoRes]);
+
+  function onSubmit() {
+    request();
   }
+
+  const { btn, img } = getAbsoluteBtn(25, 42, 25);
+  const firstInput = {
+    head: '닉네임',
+    placeholder: '변경하시려는 닉네임을 입력해주세요!',
+  };
+  const secondInput = {
+    head: '관심 분야',
+    placeholder: '관심분야를 입력주세요. ex) 순수미술',
+  };
 
   return (
     <div css={[backGroundPopStyle]}>
       <div css={[pagePopUpBoxStyle]}>
         <div css={[pagePopUpBoxTitle]}>프로필 수정</div>
-        <form css={[formWidth]} onSubmit={onChangeForm}>
+        <form css={[formWidth]} onSubmit={onSubmit}>
           <button
             type='button'
-            css={[pagePopUpBoxCloseButton]}
-            onClick={() => setPopUp(!popUp)}
+            css={[commonBtn, btn]}
+            onClick={() => {
+              setPopUp(false);
+            }}
           >
-            X{' '}
+            <div css={img}>
+              <img alt='img' height='50px' src={closeSet} />
+            </div>
           </button>
-          <div css={[pagePopUpBoxContentsWraper]}>
-            <div css={[pagePopUpBoxContents]}>닉네임</div>
-            <input
-              css={[pagePopUpBoxInput]}
-              name='nickname'
-              value={nickname}
-              placeholder='닉네임을 입력해주세요. 닉네임을 변경하면 URL도 변경됩니다.'
+          <div css={[HorizontalLayout, InputSection]}>
+            <ProfileImageBox
+              profileImage={profileImage}
+              setProfileImage={setProfileImage}
+            />
+            <BindingInputBox
+              url={hashtag}
+              title={nickname}
               onChange={onChange}
+              firstInput={firstInput}
+              secondInput={secondInput}
+              isUrl={false}
             />
           </div>
-          <div css={[pagePopUpBoxContentsWraper]}>
-            <div css={[pagePopUpBoxContents]}>관심 분야</div>
-            <input
-              css={[pagePopUpBoxInput]}
-              placeholder='관심분야를 입력주세요. ex) 순수미술'
-              name='hashtag'
-              value={hashtag}
-              onChange={onChange}
-            />
-          </div>
-          <div css={[pagePopUpBoxContentsWraper]}>
-            <div css={[pagePopUpBoxContents]}>프로필 이미지</div>
-            <input
-              css={[pagePopUpBoxInput]}
-              type='file'
-              placeholder='썸네일을 추가해주세요.'
-            />
-          </div>
-
           <button
             type='button'
             css={[commonLoginButtonStyle, LoginButtonColor]}
-            onClick={onChangeForm}
+            onClick={onSubmit}
           >
-            추가하기
+            변경하기
           </button>
         </form>
       </div>
@@ -115,8 +146,8 @@ const pagePopUpBoxStyle = css`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 980px;
-  height: 584px;
+  width: 780px;
+  height: 444px;
   background-color: #ffffff;
   box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, 0.16);
   border-radius: 20px;
@@ -178,7 +209,6 @@ const commonLoginButtonStyle = css`
   font-size: 20px;
   margin-bottom: 10px;
   margin-left: 35%;
-  margin-top: 10%;
 `;
 
 const pagePopUpBoxCloseButton = css`
@@ -203,4 +233,15 @@ const LoginButtonColor = css`
   &:hover {
     background-color: rgba(300, 100, 8, 1);
   }
+`;
+
+const HorizontalLayout = css`
+  display: flex;
+  flex-direction: row;
+`;
+
+const InputSection = css`
+  align-items: flex-start;
+  margin-top: 40px;
+  justify-content: center;
 `;

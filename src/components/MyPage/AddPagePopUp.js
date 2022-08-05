@@ -6,6 +6,14 @@ import { useRequest } from '../../hooks/useRequest';
 import useRequestAuth from '../../hooks/useRequestAuth';
 import { getApiEndpoint } from '../../utils/util';
 import { createReplacementSinglePagesAction } from '../../redux/slice';
+import {
+  commonBtn,
+  BlockDrag,
+  getAbsoluteBtn,
+} from '../../styles/GlobalStyles';
+import { closeSet } from '../../asset';
+import BindingThumbnailBox from './BindingThumbnailBox';
+import BindingInputBox from './BindingInputBox';
 
 function AddPagePopUp({ userSeq, popUp, setPopUp }) {
   const [inputs, setInputs] = useState({
@@ -13,6 +21,7 @@ function AddPagePopUp({ userSeq, popUp, setPopUp }) {
     url: '',
     thumbnail: '',
   });
+  const [thumbnail, setThumbnail] = useState('');
   const { title, url } = inputs;
 
   const onChange = useCallback(
@@ -25,8 +34,12 @@ function AddPagePopUp({ userSeq, popUp, setPopUp }) {
     [inputs]
   );
 
-  // eslint-disable-next-line no-unused-vars
-  const [test, setTest] = useState({ title: '', url: '' });
+  useEffect(() => {
+    setInputs({
+      ...inputs,
+      thumbnail: thumbnail,
+    });
+  }, [thumbnail]);
 
   const dispatch = useDispatch();
   // eslint-disable-next-line no-unused-vars
@@ -70,6 +83,13 @@ function AddPagePopUp({ userSeq, popUp, setPopUp }) {
     }
   }, [singlePagesData]);
 
+  const { btn, img } = getAbsoluteBtn(25, 42, 25);
+  const firstInput = {
+    head: '페이지 제목',
+    placeholder: '제목을 입력해주세요!',
+  };
+  const secondInput = { head: '페이지 주소', placeholder: '' };
+
   return (
     <div css={[backGroundPopStyle]}>
       <div css={[pagePopUpBoxStyle]}>
@@ -77,40 +97,29 @@ function AddPagePopUp({ userSeq, popUp, setPopUp }) {
         <form css={[formWidth]}>
           <button
             type='button'
-            css={[pagePopUpBoxCloseButton]}
-            onClick={() => setPopUp(!popUp)}
+            css={[commonBtn, btn]}
+            onClick={() => {
+              setPopUp(false);
+            }}
           >
-            X
+            <div css={img}>
+              <img alt='img' height='50px' src={closeSet} />
+            </div>
           </button>
-          <div css={[pagePopUpBoxContentsWraper]}>
-            <div css={[pagePopUpBoxContents]}>페이지 이름</div>
-            <input
-              name='title'
-              value={title}
-              css={[pagePopUpBoxInput]}
-              placeholder='페이지 이름을 입력해주세요.'
+          <div css={[HorizontalLayout, InputSection]}>
+            <BindingThumbnailBox
+              thumbnail={thumbnail}
+              setThumbnail={setThumbnail}
+            />
+            <BindingInputBox
+              url={url}
+              title={title}
               onChange={onChange}
+              firstInput={firstInput}
+              secondInput={secondInput}
+              isUrl
             />
           </div>
-          <div css={[pagePopUpBoxContentsWraper]}>
-            <div css={[pagePopUpBoxContents]}>페이지 URL</div>
-            <input
-              css={[pagePopUpBoxInput]}
-              name='url'
-              value={url}
-              placeholder='영문과 숫자 조합으로 설정해주세요.'
-              onChange={onChange}
-            />
-          </div>
-          <div css={[pagePopUpBoxContentsWraper]}>
-            <div css={[pagePopUpBoxContents]}>페이지 썸네일</div>
-            <input
-              css={[pagePopUpBoxInput]}
-              type='file'
-              placeholder='썸네일을 추가해주세요.'
-            />
-          </div>
-
           <button
             type='button'
             css={[commonLoginButtonStyle, LoginButtonColor]}
@@ -143,8 +152,8 @@ const pagePopUpBoxStyle = css`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 980px;
-  height: 584px;
+  width: 780px;
+  height: 444px;
   background-color: #ffffff;
   box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, 0.16);
   border-radius: 20px;
@@ -206,7 +215,6 @@ const commonLoginButtonStyle = css`
   font-size: 20px;
   margin-bottom: 10px;
   margin-left: 35%;
-  margin-top: 10%;
 `;
 
 const pagePopUpBoxCloseButton = css`
@@ -231,4 +239,20 @@ const LoginButtonColor = css`
   &:hover {
     background-color: rgba(300, 100, 8, 1);
   }
+`;
+
+const VerticalLayout = css`
+  display: flex;
+  flex-direction: column;
+`;
+
+const HorizontalLayout = css`
+  display: flex;
+  flex-direction: row;
+`;
+
+const InputSection = css`
+  align-items: flex-start;
+  margin-top: 40px;
+  justify-content: center;
 `;

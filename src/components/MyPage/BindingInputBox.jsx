@@ -6,7 +6,7 @@ import { isURL } from '../../utils/util';
 import { useGetPersonalUrl } from '../../hooks/useParamsUrl';
 
 const BindingInputBox = (props) => {
-  const { url, title, onChange } = props;
+  const { url, title, onChange, firstInput, secondInput, isUrl } = props;
   const [paddingSize, setPaddingSize] = useState(0);
   const fixedTextRef = useRef(null);
   const pageUrl = useGetPersonalUrl();
@@ -16,7 +16,7 @@ const BindingInputBox = (props) => {
   }, []);
 
   const validateURL = useMemo(() => {
-    if (url === '') return '';
+    if (url === '' || !isUrl) return '';
     if (!isURL(url)) return '숫자와 영어만 사용하실 수 있습니다!';
     else if (url.length < 4) return '4글자 이상 입력해주세요.';
     else if (url.length > 20) return '16글자 이하로 입력해주세요';
@@ -28,19 +28,21 @@ const BindingInputBox = (props) => {
 
   return (
     <div css={[VerticalLayout]}>
-      <div css={[pagePopUpBoxContents, BlockDrag]}>페이지 제목</div>
+      <div css={[pagePopUpBoxContents, BlockDrag]}>{firstInput.head}</div>
       <input
         css={[pagePopUpBoxInput]}
-        placeholder='제목을 입력해주세요! 최상단에 표시됩니다.'
+        placeholder={firstInput.placeholder}
         name='title'
         value={title}
         autoComplete='off'
         onChange={onChange}
       />
-      <div css={[pagePopUpBoxContents, BlockDrag]}>페이지 주소</div>
+      <div css={[pagePopUpBoxContents, BlockDrag]}>{secondInput.head}</div>
       <div css={[formText]}>
         <span css={[fixedText]} ref={fixedTextRef}>
-          https://iamonit.kr/{pageUrl}/
+          {secondInput.placeholder === ''
+            ? `https://iamonit.kr/${pageUrl}/`
+            : ''}
         </span>
         <input
           css={[
@@ -51,6 +53,7 @@ const BindingInputBox = (props) => {
           ]}
           name='url'
           value={url}
+          placeholder={secondInput.placeholder}
           maxLength='24'
           autoComplete='off'
           onChange={onChange}

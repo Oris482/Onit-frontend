@@ -21,8 +21,8 @@ import DoubleButtonPopUp from '../FeedbackBox/DoubleButtonPopUp';
 // eslint-disable-next-line no-unused-vars
 
 function PageBlock({ data, popUp, setPopUp, userUrl, pageType }) {
-  const [publishingPath, setPublishingPath] = useState(null);
-  const [editPath, setEditPath] = useState(null);
+  const [publishingPath, setPublishingPath] = useState('');
+  const [editPath, setEditPath] = useState('');
   const [pageUrl, setPageUrl] = useState('');
   const [hover, setHover] = useState(false);
   const [deletePopUp, setDeletePopUp] = useState(false);
@@ -141,6 +141,7 @@ function PageBlock({ data, popUp, setPopUp, userUrl, pageType }) {
             css={css`
               display: flex;
               align-items: center;
+              margin-top: 5%;
             `}
           >
             <div
@@ -149,7 +150,6 @@ function PageBlock({ data, popUp, setPopUp, userUrl, pageType }) {
                 width: 70%;
                 display: flex;
                 margin: auto;
-                margin-top: 20px;
                 white-space: nowrap;
                 overflow: hidden;
               `}
@@ -163,7 +163,6 @@ function PageBlock({ data, popUp, setPopUp, userUrl, pageType }) {
                   display: flex;
                   display: flex;
                   margin: auto;
-                  margin-top: 20px;
                   margin-right: 20px;
                 `}
               >
@@ -188,8 +187,12 @@ export default PageBlock;
 
 const siteViewBZone = css`
   position: relative;
-  width: 320px;
-  height: 230px;
+  width: 17vw;
+  min-width: 240px;
+  max-width: 320px;
+  height: 12vw;
+  min-height: 173px;
+  max-height: 230px;
   margin-top: 30px;
   margin-bottom: 10px;
   margin-left: 23.75px;
