@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import FeedbackList from '../components/FeedbackBox/FeedbackList';
 import FeedbackInputBox from '../components/FeedbackBox/FeedbackInputBox';
 import MainSentence from '../components/FeedbackBox/MainSentence';
@@ -29,14 +29,14 @@ function FeedbackPage() {
     method: 'get',
   });
 
-  const sendReloadSignal = () => {
+  const sendReloadSignal = useCallback(() => {
     setNeedReload(!needReload);
-  };
+  }, [needReload]);
 
   useEffect(() => {
     if (loggedIn === false) requestFeedbacks();
     else if (loggedIn === true) requestMyFeedbacks();
-  }, [loggedIn, needReload]);
+  }, [loggedIn, needReload, requestFeedbacks, requestMyFeedbacks]);
   useEffect(() => {
     if (feedbacksRes && feedbacksRes.data) {
       const { code, data, message } = feedbacksRes.data;
@@ -70,7 +70,7 @@ function FeedbackPage() {
   useEffect(() => {
     if (loggedIn === true && myFeedbacks !== null) setLoading('loggedIn');
     else if (loggedIn !== null && myFeedbacks !== null) setLoading('guest');
-  });
+  }, [loggedIn, myFeedbacks, setLoading]);
 
   return (
     <div css={[pageBox, paddingBottom]}>

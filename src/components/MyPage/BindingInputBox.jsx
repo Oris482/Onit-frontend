@@ -12,8 +12,10 @@ const BindingInputBox = (props) => {
   const pageUrl = useGetPersonalUrl();
 
   useEffect(() => {
-    setPaddingSize(fixedTextRef.current.clientWidth + 20);
-  }, []);
+    if (secondInput) {
+      setPaddingSize(fixedTextRef.current.clientWidth + 20);
+    }
+  }, [secondInput]);
 
   const validateURL = useMemo(() => {
     if (url === '' || !isUrl) return '';
@@ -24,7 +26,7 @@ const BindingInputBox = (props) => {
       // 중복 체크 API 들어갈 부분
       return 'ok';
     }
-  }, [url]);
+  }, [url, isUrl]);
 
   return (
     <div css={[VerticalLayout]}>
@@ -37,33 +39,37 @@ const BindingInputBox = (props) => {
         autoComplete='off'
         onChange={onChange}
       />
-      <div css={[pagePopUpBoxContents, BlockDrag]}>{secondInput.head}</div>
-      <div css={[formText]}>
-        <span css={[fixedText]} ref={fixedTextRef}>
-          {secondInput.placeholder === ''
-            ? `https://iamonit.kr/${pageUrl}/`
-            : ''}
-        </span>
-        <input
-          css={[
-            pagePopUpBoxInput,
-            css`
-              padding-left: ${paddingSize}px;
-            `,
-          ]}
-          name='url'
-          value={url}
-          placeholder={secondInput.placeholder}
-          maxLength='24'
-          autoComplete='off'
-          onChange={onChange}
-        />
-        {validateURL !== 'ok' ? (
-          <span css={[checkURLMsg]}>{validateURL}</span>
-        ) : (
-          <></>
-        )}
-      </div>
+      {secondInput && (
+        <>
+          <div css={[pagePopUpBoxContents, BlockDrag]}>{secondInput.head}</div>
+          <div css={[formText]}>
+            <span css={[fixedText]} ref={fixedTextRef}>
+              {secondInput.placeholder === ''
+                ? `https://iamonit.kr/${pageUrl}/`
+                : ''}
+            </span>
+            <input
+              css={[
+                pagePopUpBoxInput,
+                css`
+                  padding-left: ${paddingSize}px;
+                `,
+              ]}
+              name='url'
+              value={url}
+              placeholder={secondInput.placeholder}
+              maxLength='24'
+              autoComplete='off'
+              onChange={onChange}
+            />
+            {validateURL !== 'ok' ? (
+              <span css={[checkURLMsg]}>{validateURL}</span>
+            ) : (
+              <></>
+            )}
+          </div>
+        </>
+      )}
     </div>
   );
 };

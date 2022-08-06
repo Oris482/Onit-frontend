@@ -68,7 +68,7 @@ function MyPage() {
     if (pageUrl) {
       requestPageUserInfo();
     }
-  }, [pageUrl]);
+  }, [pageUrl, requestPageUserInfo]);
 
   // 데이터를 받아서 userSeq, nickname, userUrl, profileImage 세팅
   useEffect(() => {
@@ -115,7 +115,7 @@ function MyPage() {
       requestSinglePagesData();
       requestMultiPagesData();
     }
-  }, [userSeq]);
+  }, [userSeq, requestSinglePagesData, requestMultiPagesData]);
 
   // 싱글, 멀티페이지 데이터 리덕스에 저장
   useEffect(() => {
@@ -247,9 +247,7 @@ function MyPage() {
       {bindingPopUp && (
         <BindingPagePopUp userSeq={userSeq} setPopUp={setBindingPopUp} />
       )}
-      {popUp && (
-        <AddPagePopUp userSeq={userSeq} setPopUp={setPopUp} popUp={popUp} />
-      )}
+      {popUp && <AddPagePopUp userSeq={userSeq} setPopUp={setPopUp} />}
     </div>
   );
 }

@@ -11,14 +11,13 @@ import { closeSet } from '../../asset';
 import BindingThumbnailBox from './BindingThumbnailBox';
 import BindingInputBox from './BindingInputBox';
 
-function AddPagePopUp({ userSeq, setPopUp }) {
+function ModifyPageInfoPopUp({ userSeq, data, setPopUp }) {
   const [inputs, setInputs] = useState({
-    title: '',
-    url: '',
+    title: data.title,
     thumbnail: '',
   });
   const [thumbnail, setThumbnail] = useState('');
-  const { title, url } = inputs;
+  const { title } = inputs;
 
   const onChange = useCallback(
     (e) => {
@@ -39,32 +38,30 @@ function AddPagePopUp({ userSeq, setPopUp }) {
   }, [thumbnail]);
 
   const dispatch = useDispatch();
-  // eslint-disable-next-line no-unused-vars
   const { res: singlePagesData, request: requestSinglePagesData } = useRequest({
     endpoint: `${getApiEndpoint()}/user/page/singles/${userSeq}`,
     method: 'get',
   });
 
-  const endpoint = `${getApiEndpoint()}/user/page/single/${userSeq}`;
+  const endpoint = `${getApiEndpoint()}/user/page/single/${
+    data.url
+  }/${userSeq}`;
 
   // eslint-disable-next-line no-unused-vars
   const { res, request } = useRequestAuth({
     endpoint: endpoint,
-    method: 'post',
+    method: 'patch',
     data: inputs,
   });
 
   const onSubmit = useCallback(
     (target) => {
       // eslint-disable-next-line no-unused-vars
-      // setTest(1); // 이유가뭐지, test에 의존성이 걸려있는 애들을 업데이트하겠다., 페이지를 넘긴다는 의미, 그다음단계에서는 테스트가 1위 됏으니깐
-      // // component안에서 함수 만들때는 무조건 useCallback을 써라?
-      // // 관리하기 편해짐
       target.setAttribute('disabled', true);
       target.textContent = '전송 중...';
       request();
     },
-    [request] // 의존성을 넣는 이유, 리랜더링 하는 시점에서 목록안에 있는것들이 이전의 값들과 바꼇는지 안바꼇는지를 테스트한다음에 바꼇으면 함수를 다시만듬
+    [request]
   );
 
   useEffect(() => {
@@ -83,14 +80,13 @@ function AddPagePopUp({ userSeq, setPopUp }) {
   const { btn, img } = getAbsoluteBtn(25, 42, 25);
   const firstInput = {
     head: '페이지 제목',
-    placeholder: '제목을 입력해주세요!',
+    placeholder: data.title,
   };
-  const secondInput = { head: '페이지 주소', placeholder: '' };
 
   return (
     <div css={[backGroundPopStyle]}>
       <div css={[pagePopUpBoxStyle]}>
-        <div css={[pagePopUpBoxTitle]}>페이지 추가</div>
+        <div css={[pagePopUpBoxTitle]}>페이지 수정</div>
         <form css={[formWidth]}>
           <button
             type='button'
@@ -109,11 +105,10 @@ function AddPagePopUp({ userSeq, setPopUp }) {
               setThumbnail={setThumbnail}
             />
             <BindingInputBox
-              url={url}
+              url=''
               title={title}
               onChange={onChange}
               firstInput={firstInput}
-              secondInput={secondInput}
               isUrl
             />
           </div>
@@ -122,7 +117,7 @@ function AddPagePopUp({ userSeq, setPopUp }) {
             css={[commonLoginButtonStyle, LoginButtonColor]}
             onClick={(e) => onSubmit(e.target)}
           >
-            추가하기
+            변경하기
           </button>
         </form>
       </div>
@@ -130,7 +125,7 @@ function AddPagePopUp({ userSeq, setPopUp }) {
   );
 }
 
-export default AddPagePopUp;
+export default ModifyPageInfoPopUp;
 
 const backGroundPopStyle = css`
   position: fixed;
@@ -142,6 +137,7 @@ const backGroundPopStyle = css`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  z-index: 11;
 `;
 
 const pagePopUpBoxStyle = css`
@@ -199,4 +195,6 @@ const InputSection = css`
   align-items: flex-start;
   margin-top: 40px;
   justify-content: center;
+  align-items: center;
+  margin-bottom: 5%;
 `;
