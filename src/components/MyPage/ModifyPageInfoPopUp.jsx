@@ -5,18 +5,21 @@ import { useDispatch } from 'react-redux';
 import { useRequest } from '../../hooks/useRequest';
 import useRequestAuth from '../../hooks/useRequestAuth';
 import { getApiEndpoint } from '../../utils/util';
-import { createReplacementSinglePagesAction } from '../../redux/slice';
+import {
+  createReplacementSinglePagesAction,
+  createReplacementMultiPagesAction,
+} from '../../redux/slice';
 import { commonBtn, getAbsoluteBtn } from '../../styles/GlobalStyles';
 import { closeSet } from '../../asset';
 import BindingThumbnailBox from './BindingThumbnailBox';
 import BindingInputBox from './BindingInputBox';
 
-function ModifyPageInfoPopUp({ userSeq, data, setPopUp }) {
+function ModifyPageInfoPopUp({ pageType, userSeq, data, setPopUp }) {
   const [inputs, setInputs] = useState({
     title: data.title,
     thumbnail: '',
   });
-  const [thumbnail, setThumbnail] = useState('');
+  const [thumbnail, setThumbnail] = useState(data.thumbnail);
   const { title } = inputs;
 
   const onChange = useCallback(
@@ -38,14 +41,24 @@ function ModifyPageInfoPopUp({ userSeq, data, setPopUp }) {
   }, [thumbnail]);
 
   const dispatch = useDispatch();
+
+  const getEndpoint = () => {
+    if (pageType === 'single')
+      return `${getApiEndpoint()}/user/page/single/${data.url}/${userSeq}`;
+    else return `${getApiEndpoint()}/user/page/multi/${data.url}/${userSeq}`;
+  };
+
   const { res: singlePagesData, request: requestSinglePagesData } = useRequest({
     endpoint: `${getApiEndpoint()}/user/page/singles/${userSeq}`,
     method: 'get',
   });
 
-  const endpoint = `${getApiEndpoint()}/user/page/single/${
-    data.url
-  }/${userSeq}`;
+  const { res: multiPagesData, request: requestMultiPagesData } = useRequest({
+    endpoint: `${getApiEndpoint()}/user/page/multies/${userSeq}`,
+    method: 'get',
+  });
+
+  const endpoint = getEndpoint();
 
   // eslint-disable-next-line no-unused-vars
   const { res, request } = useRequestAuth({
@@ -66,16 +79,20 @@ function ModifyPageInfoPopUp({ userSeq, data, setPopUp }) {
 
   useEffect(() => {
     if (res && res.data.code === 'ok') {
-      requestSinglePagesData();
+      if (pageType === 'single') requestSinglePagesData();
+      else requestMultiPagesData();
     }
-  }, [res, requestSinglePagesData]);
+  }, [res, pageType, requestSinglePagesData, requestMultiPagesData]);
 
   useEffect(() => {
     if (singlePagesData && singlePagesData.data) {
       dispatch(createReplacementSinglePagesAction(singlePagesData.data));
       setPopUp(false);
+    } else if (multiPagesData && multiPagesData.data) {
+      dispatch(createReplacementMultiPagesAction(multiPagesData.data));
+      setPopUp(false);
     }
-  }, [singlePagesData, dispatch, setPopUp]);
+  }, [singlePagesData, multiPagesData, dispatch, setPopUp]);
 
   const { btn, img } = getAbsoluteBtn(25, 42, 25);
   const firstInput = {

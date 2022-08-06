@@ -26,7 +26,10 @@ function Azone({ profileImage, nickname, userSeq, setPopUp, popUp }) {
           `}
         >
           <div className='profileImage' css={ProfileAZone} />
-          <img css={profileImg} src={profileImage ?? logoImg} />
+          <img
+            css={profileImg}
+            src={profileImage !== '' ? profileImage : logoImg}
+          />
         </div>
         <div
           css={css`
@@ -107,8 +110,8 @@ const ProfileAZone = css`
 `;
 
 const profileImg = css`
-  width: 100%;
-  height: 100%;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   object-fit: cover;
 `;

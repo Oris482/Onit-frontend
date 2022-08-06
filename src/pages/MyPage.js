@@ -51,13 +51,11 @@ function MyPage() {
     method: 'get',
   });
 
-  // eslint-disable-next-line no-unused-vars
   const { res: singlePagesData, request: requestSinglePagesData } = useRequest({
     endpoint: `${getApiEndpoint()}/user/page/singles/${userSeq}`,
     method: 'get',
   });
 
-  // eslint-disable-next-line no-unused-vars
   const { res: multiPagesData, request: requestMultiPagesData } = useRequest({
     endpoint: `${getApiEndpoint()}/user/page/multies/${userSeq}`,
     method: 'get',
@@ -169,7 +167,7 @@ function MyPage() {
             return (
               <div key={semiIndex}>
                 <PageBlock
-                  userMatch={userMatched}
+                  userMatched={userMatched}
                   userUrl={userUrl}
                   data={page}
                   setPopUp={setPopUp}
@@ -188,6 +186,7 @@ function MyPage() {
       <div>No Data</div>
     );
   }
+
   return (
     <div css={[positionRelative]}>
       <Header
@@ -242,7 +241,12 @@ function MyPage() {
         />
       </div>
       {profilePopUp && (
-        <EditPropfilePopUp userSeq={userSeq} setPopUp={setProfilePopUp} />
+        <EditPropfilePopUp
+          prevNickname={nickname}
+          prevProfileImage={profileImage}
+          userSeq={userSeq}
+          setPopUp={setProfilePopUp}
+        />
       )}
       {bindingPopUp && (
         <BindingPagePopUp userSeq={userSeq} setPopUp={setBindingPopUp} />

@@ -2,20 +2,24 @@
 import { css } from '@emotion/react';
 import React, { useState, useEffect, useCallback } from 'react';
 import useRequestAuth from '../../hooks/useRequestAuth';
-import { useMyInfo } from '../../hooks/myInfo';
 import { getApiEndpoint } from '../../utils/util';
 import { commonBtn, getAbsoluteBtn } from '../../styles/GlobalStyles';
 import { closeSet } from '../../asset';
 import ProfileImageBox from './ProfileImageBox';
 import BindingInputBox from './BindingInputBox';
 
-function EditProfilePopUP({ userSeq, setPopUp }) {
+function EditProfilePopUP({
+  prevNickname,
+  prevProfileImage,
+  userSeq,
+  setPopUp,
+}) {
   const [inputs, setInputs] = useState({
-    nickname: '',
+    nickname: prevNickname,
     hashtag: '',
-    profileImage: ``,
+    profileImage: prevProfileImage,
   });
-  const [profileImage, setProfileImage] = useState('');
+  const [profileImage, setProfileImage] = useState(prevProfileImage);
   const { nickname, hashtag } = inputs;
 
   const onChange = useCallback(
@@ -44,8 +48,6 @@ function EditProfilePopUP({ userSeq, setPopUp }) {
     data: inputs,
   });
 
-  const { res: myInfoRes, request: myInfoRequest } = useMyInfo();
-
   useEffect(() => {
     setInputs({
       ...inputs,
@@ -56,17 +58,11 @@ function EditProfilePopUP({ userSeq, setPopUp }) {
 
   useEffect(() => {
     if (res && res.data.code === 'ok') {
-      myInfoRequest();
-    }
-    // 닉네임 중복 등 검사 필요
-  }, [res, myInfoRequest]);
-
-  useEffect(() => {
-    if (myInfoRes && myInfoRes.data.user_seq !== -1) {
       // eslint-disable-next-line no-restricted-globals
       location.reload();
     }
-  }, [myInfoRes]);
+    // 닉네임 중복 등 검사 필요
+  }, [res]);
 
   const onSubmit = useCallback(
     (target) => {
@@ -120,7 +116,7 @@ function EditProfilePopUP({ userSeq, setPopUp }) {
           <button
             type='button'
             css={[commonLoginButtonStyle, LoginButtonColor]}
-            onClick={onSubmit}
+            onClick={(e) => onSubmit(e.target)}
           >
             변경하기
           </button>
