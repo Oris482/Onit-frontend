@@ -230,10 +230,6 @@ const siteViewBZone = css`
   min-height: 173px;
   max-width: 320px;
   max-height: 230px;
-  margin-top: 30px;
-  margin-bottom: 10px;
-  margin-left: 1.5vw;
-  margin-right: 1.5vw;
   border-radius: 20px 20px 20px 20px;
   background-color: white;
   display: inline-block;

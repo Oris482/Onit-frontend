@@ -7,7 +7,6 @@ import { Header } from '../components';
 import AddPagePopUp from '../components/MyPage/AddPagePopUp';
 import EditPropfilePopUp from '../components/MyPage/EditProfilePopUp';
 import BindingPagePopUp from '../components/MyPage/BindingPopUp';
-import PageBlock from '../components/MyPage/PageBlock';
 import { useRequest } from '../hooks/useRequest';
 import { useGetPersonalUrl } from '../hooks/useParamsUrl';
 import {
@@ -24,6 +23,7 @@ import {
 } from '../redux/slice';
 import Azone from '../components/MyPage/Azone';
 import { PAGE_MARGIN, PAGE_WIDTH } from '../styles/style';
+import Bzone from '../components/MyPage/Bzone';
 
 function MyPage() {
   const history = useHistory();
@@ -125,68 +125,6 @@ function MyPage() {
     }
   }, [singlePagesData, multiPagesData, dispatch]);
 
-  function singlePagesimage() {
-    if (singlePagesState && singlePagesState.data.length !== 0) {
-      const usersb = singlePagesState.data;
-      return (
-        <>
-          {usersb.map((page, index) => {
-            const semiIndex = index + 1;
-
-            return (
-              <div key={semiIndex}>
-                <PageBlock
-                  userMatched={userMatched}
-                  userUrl={userUrl}
-                  data={page}
-                  setPopUp={setPopUp}
-                  popUp={popUp}
-                  pageType='single'
-                />
-              </div>
-            );
-          })}
-        </>
-      );
-    }
-    return !userMatched ? (
-      <div css={noPageMsg}>만들어진 페이지가 없어요!</div>
-    ) : (
-      <div>No Data</div>
-    );
-  }
-
-  function multiPagesimage() {
-    if (multiPagesState && multiPagesState.data.length !== 0) {
-      const multiPages = multiPagesState.data;
-      return (
-        <>
-          {multiPages.map((page, index) => {
-            const semiIndex = index + 1;
-
-            return (
-              <div key={semiIndex}>
-                <PageBlock
-                  userMatched={userMatched}
-                  userUrl={userUrl}
-                  data={page}
-                  setPopUp={setPopUp}
-                  popUp={popUp}
-                  pageType='multi'
-                />
-              </div>
-            );
-          })}
-        </>
-      );
-    }
-    return !userMatched ? (
-      <div css={noPageMsg}>만들어진 페이지가 없어요!</div>
-    ) : (
-      <div>No Data</div>
-    );
-  }
-
   return (
     <div css={[positionRelative]}>
       <Header
@@ -204,40 +142,15 @@ function MyPage() {
           popUp={profilePopUp}
           bindingPopUp={bindingPopUp}
         />
-        {/* <hr css={[divLine]} /> */}
-        <div css={MyPageBZoneWrapper}>
-          <div css={MyPageBZone}>
-            {multiPagesimage()}
-            <PageBlock
-              userMatched={userMatched}
-              userUrl={userUrl}
-              setPopUp={setBindingPopUp}
-              popUp={bindingPopUp}
-            />
-            <div
-              css={css`
-                height: 20px;
-                width: 100vw;
-              `}
-            />
-
-            <hr css={[divLine]} />
-            {singlePagesimage()}
-            <PageBlock
-              userMatched={userMatched}
-              userUrl={userUrl}
-              setPopUp={setPopUp}
-              popUp={popUp}
-            />
-            <div css={[overFlowHidden]} />
-          </div>
-        </div>
-        <div
-          css={css`
-            width: 100vw;
-            display: flex;
-            justify-content: center;
-          `}
+        <Bzone
+          singlePagesState={singlePagesState}
+          multiPagesState={multiPagesState}
+          userMatched={userMatched}
+          userUrl={userUrl}
+          setPopUp={setPopUp}
+          popUp={popUp}
+          setBindingPopUp={setBindingPopUp}
+          bindingPopUp={bindingPopUp}
         />
       </div>
       {profilePopUp && (
@@ -269,37 +182,4 @@ const MyPageWrapper = css`
   height: 100vh;
   display: flex;
   flex-direction: column;
-`;
-
-const MyPageBZoneWrapper = css`
-  min-width: ${PAGE_WIDTH};
-  width: 80vw;
-  margin: ${PAGE_MARGIN};
-  margin-top: 20px;
-  background-color: white;
-`;
-const MyPageBZone = css`
-  width: 100%;
-  flex-wrap: wrap;
-  display: flex;
-`;
-
-const divLine = css`
-  width: inherit;
-  height: 1px;
-  background-color: lightgray;
-`;
-
-const overFlowHidden = css`
-  overflow: hidden;
-`;
-
-const noPageMsg = css`
-  display: flex;
-  width: 100%;
-  height: 60px;
-  justify-content: center;
-  align-items: center;
-  color: gray;
-  font-size: 25px;
 `;
