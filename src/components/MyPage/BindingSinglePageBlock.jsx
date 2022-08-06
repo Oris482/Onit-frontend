@@ -1,13 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import React from 'react';
+import { logo } from '../../asset';
 
 const BindingSinglePageBlock = (props) => {
   const { data, selectedPages, handleSelect } = props;
-  const thumbnailUrl =
-    data.thumbnail !== ''
-      ? data.thumbnail
-      : 'https://mblogthumb-phinf.pstatic.net/MjAxNzA2MjNfNDEg/MDAxNDk4MjExMTE1OTYy.RGjgC51-8rYSISInewpiERaIWLuYkk6h8-DHImZWlNog.6nJ1cYNwJuFRBYbzuXIlfFC2vAz9SSYihxEpnVX2ttUg.PNG.kkp0079/1.PNG?type=w800';
+  const thumbnailUrl = data.thumbnail !== '' ? data.thumbnail : logo;
   const selectedIndex =
     selectedPages.findIndex((element) => element.singlePageUrl === data.url) +
     1;
@@ -41,7 +39,7 @@ const thumbnailImg = css`
   width: 100%;
   height: 70%;
   border-radius: 8px 8px 0px 0px;
-  object-fit: cover;
+  object-fit: contain;
 `;
 
 const singlePageBox = css`

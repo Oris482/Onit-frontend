@@ -42,7 +42,7 @@ const ProfileAZoneInputButton = css`
   margin: 5px;
   background-color: #f5f5f5;
   border-radius: 20px;
-  width: 100px;
+  width: 150px;
   height: 45px;
   justify-content: center;
   line-height: 45px;

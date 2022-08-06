@@ -1,8 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { useRequest } from '../../hooks/useRequest';
 import useRequestAuth from '../../hooks/useRequestAuth';
 import { getApiEndpoint } from '../../utils/util';
+import { createReplacementSinglePagesAction } from '../../redux/slice';
 
 function AddPagePopUp({ userSeq, popUp, setPopUp }) {
   const [inputs, setInputs] = useState({
@@ -25,6 +28,13 @@ function AddPagePopUp({ userSeq, popUp, setPopUp }) {
   // eslint-disable-next-line no-unused-vars
   const [test, setTest] = useState({ title: '', url: '' });
 
+  const dispatch = useDispatch();
+  // eslint-disable-next-line no-unused-vars
+  const { res: singlePagesData, request: requestSinglePagesData } = useRequest({
+    endpoint: `${getApiEndpoint()}/user/page/singles/${userSeq}`,
+    method: 'get',
+  });
+
   const endpoint = `${getApiEndpoint()}/user/page/single/${userSeq}`;
 
   // eslint-disable-next-line no-unused-vars
@@ -43,10 +53,22 @@ function AddPagePopUp({ userSeq, popUp, setPopUp }) {
       // // 관리하기 편해짐
       event.preventDefault();
       request();
-      setPopUp(!popUp);
     },
-    [inputs, request, setPopUp, popUp] // 의존성을 넣는 이유, 리랜더링 하는 시점에서 목록안에 있는것들이 이전의 값들과 바꼇는지 안바꼇는지를 테스트한다음에 바꼇으면 함수를 다시만듬
+    [inputs, request] // 의존성을 넣는 이유, 리랜더링 하는 시점에서 목록안에 있는것들이 이전의 값들과 바꼇는지 안바꼇는지를 테스트한다음에 바꼇으면 함수를 다시만듬
   );
+
+  useEffect(() => {
+    if (res && res.data.code === 'ok') {
+      requestSinglePagesData();
+    }
+  }, [res]);
+
+  useEffect(() => {
+    if (singlePagesData && singlePagesData.data) {
+      dispatch(createReplacementSinglePagesAction(singlePagesData.data));
+      setPopUp(!popUp);
+    }
+  }, [singlePagesData]);
 
   return (
     <div css={[backGroundPopStyle]}>

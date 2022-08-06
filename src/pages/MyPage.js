@@ -24,6 +24,7 @@ import {
   createReplacementMultiPagesAction,
 } from '../redux/slice';
 import Azone from '../components/MyPage/Azone';
+import { PAGE_MARGIN, PAGE_WIDTH } from '../styles/style';
 
 function MyPage() {
   const { myInfo } = useMyInfo();
@@ -54,6 +55,7 @@ function MyPage() {
     method: 'get',
   });
 
+  // eslint-disable-next-line no-unused-vars
   const { res: multiPagesData, request: requestMultiPagesData } = useRequest({
     endpoint: `${getApiEndpoint()}/user/page/multies/${userSeq}`,
     method: 'get',
@@ -83,7 +85,14 @@ function MyPage() {
       setUserMatched(null);
       setNickname(null);
     };
-  }, [pageUrl, myInfo, userSeq, requestPageUserInfo]);
+  }, [
+    pageUrl,
+    myInfo,
+    userSeq,
+    requestPageUserInfo,
+    requestSinglePagesData,
+    requestMultiPagesData,
+  ]);
 
   // pageUserRes에 변화가 있으면 -> 데이터를 받아서 userseq, nickname 세팅.
   useEffect(() => {
@@ -114,13 +123,7 @@ function MyPage() {
     if (multiPagesData && multiPagesData.data) {
       dispatch(createReplacementMultiPagesAction(multiPagesData.data));
     }
-  }, [singlePagesData, multiPagesData]);
-
-  useEffect(() => {
-    if (multiPagesData && multiPagesData.data) {
-      // console.log(multiPagesData.data.data);
-    }
-  }, [multiPagesData]);
+  }, [singlePagesData, multiPagesData, dispatch]);
 
   function singlePagesimage() {
     if (singlePagesState && singlePagesState.message === 'ok') {
@@ -137,6 +140,7 @@ function MyPage() {
                   data={page}
                   setPopUp={setPopUp}
                   popUp={popUp}
+                  pageType='single'
                 />
               </div>
             );
@@ -162,31 +166,7 @@ function MyPage() {
                   data={page}
                   setPopUp={setPopUp}
                   popUp={popUp}
-                />
-              </div>
-            );
-          })}
-        </>
-      );
-    }
-    return <div>no data</div>;
-  }
-
-  function multiPagesimage() {
-    if (multiPagesData && multiPagesData.data.message === 'ok') {
-      const multiPages = multiPagesData.data.data;
-      return (
-        <>
-          {multiPages.map((page, index) => {
-            const semiIndex = index + 1;
-
-            return (
-              <div key={semiIndex}>
-                <PageBlock
-                  userUrl={userUrl}
-                  data={page}
-                  setPopUp={setPopUp}
-                  popUp={popUp}
+                  pageType='multi'
                 />
               </div>
             );
@@ -212,7 +192,7 @@ function MyPage() {
           popUp={profilePopUp}
           bindingPopUp={bindingPopUp}
         />
-        <hr css={[divLine]} />
+        {/* <hr css={[divLine]} /> */}
         <div css={MyPageBZoneWrapper}>
           <div css={MyPageBZone}>
             {multiPagesimage()}
@@ -266,20 +246,23 @@ const positionRelative = css`
 `;
 
 const MyPageWrapper = css`
-  width: 1470px;
+  min-width: ${PAGE_WIDTH};
+  width: 90vw;
+  margin: ${PAGE_MARGIN};
   height: 100vh;
-  margin: 0 auto;
   display: flex;
   flex-direction: column;
 `;
 
 const MyPageBZoneWrapper = css`
-  width: 100vw;
+  width: 90vw;
   height: 300px;
+  margin: ${PAGE_MARGIN};
+  margin-top: 20px;
   background-color: white;
 `;
 const MyPageBZone = css`
-  width: 1470px;
+  width: 100%;
   flex-wrap: wrap;
   display: flex;
 `;
@@ -287,7 +270,6 @@ const MyPageBZone = css`
 const divLine = css`
   width: 100%;
   height: 1px;
-  border: none;
   background-color: lightgray;
 `;
 

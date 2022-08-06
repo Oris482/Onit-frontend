@@ -43,6 +43,14 @@ function useRequestAuth({ endpoint, method, data, contentType }) {
       axiosPromise = axios.patch(endpoint, data, {
         headers,
       });
+    } else if (method === 'delete') {
+      axiosPromise = axios.delete(
+        endpoint,
+        {
+          headers,
+        },
+        data
+      );
     }
 
     axiosPromise

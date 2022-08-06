@@ -1,8 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
+import { PAGE_MARGIN, PAGE_WIDTH } from '../../styles/style';
 import ProfileBlock from './ProfileBlock';
+import { logoImg } from '../../asset';
 
-function Azone({ myInfo, setPopUp, popUp, bindingPopUp }) {
+function Azone({ myInfo, setPopUp, popUp }) {
   return (
     <div css={MyPageAZone}>
       <div
@@ -19,6 +21,7 @@ function Azone({ myInfo, setPopUp, popUp, bindingPopUp }) {
           `}
         >
           <div className='profileImage' css={ProfileAZone} />
+          <img src={logoImg} />
         </div>
         <div
           css={css`
@@ -28,7 +31,6 @@ function Azone({ myInfo, setPopUp, popUp, bindingPopUp }) {
         >
           <div
             css={css`
-              width: 40%;
               height: 30px;
               margin: 15px;
               text-align: left;
@@ -47,7 +49,6 @@ function Azone({ myInfo, setPopUp, popUp, bindingPopUp }) {
           />
           <div
             css={css`
-              width: 40%;
               margin: 5px;
               text-align: left;
             `}
@@ -78,16 +79,18 @@ function Azone({ myInfo, setPopUp, popUp, bindingPopUp }) {
 }
 
 const MyPageAZone = css`
-  width: 1470px;
+  min-width: ${PAGE_WIDTH};
+  width: 80vw;
+  margin: ${PAGE_MARGIN};
   height: 120px;
   background-color: white;
   margin-top: 100px;
 `;
 
 const ProfileAZone = css`
+  position: absolute;
   width: 100px;
   height: 100px;
-  background-color: lightgray;
   border-color: black;
 
   text-align: center;
