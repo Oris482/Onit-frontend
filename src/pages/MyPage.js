@@ -8,7 +8,6 @@ import AddPagePopUp from '../components/MyPage/AddPagePopUp';
 import EditPropfilePopUp from '../components/MyPage/EditProfilePopUp';
 import BindingPagePopUp from '../components/MyPage/BindingPopUp';
 import PageBlock from '../components/MyPage/PageBlock';
-import { useMyInfo } from '../hooks/myInfo';
 import { useRequest } from '../hooks/useRequest';
 import { useGetPersonalUrl } from '../hooks/useParamsUrl';
 import {
@@ -27,21 +26,24 @@ import Azone from '../components/MyPage/Azone';
 import { PAGE_MARGIN, PAGE_WIDTH } from '../styles/style';
 
 function MyPage() {
-  const { myInfo } = useMyInfo();
   const history = useHistory();
   const pageUrl = useGetPersonalUrl();
   const [userSeq, setUserSeq] = useState(null);
   const [userMatched, setUserMatched] = useState(null);
   const [userUrl, setUserUrl] = useState(null);
   const [nickname, setNickname] = useState(null);
+  const [profileImage, setprofileImage] = useState(null);
   const [popUp, setPopUp] = useState(false);
   const [profilePopUp, setProfilePopUp] = useState(false);
   const [bindingPopUp, setBindingPopUp] = useState(false);
 
-  const { singlePagesState, multiPagesState } = useSelector((state) => ({
-    singlePagesState: state.info.singlePages,
-    multiPagesState: state.info.multiPages,
-  }));
+  const { myInfoState, singlePagesState, multiPagesState } = useSelector(
+    (state) => ({
+      myInfoState: state.info.user,
+      singlePagesState: state.info.singlePages,
+      multiPagesState: state.info.multiPages,
+    })
+  );
   const dispatch = useDispatch();
 
   const { res: pageUserRes, request: requestPageUserInfo } = useRequest({
@@ -61,40 +63,14 @@ function MyPage() {
     method: 'get',
   });
 
-  // 내 페이지인지 남의 페이지인지 확인 로직
+  // 해당 페이지 정보 가져옴
   useEffect(() => {
-    // 로그인 유무
     if (pageUrl) {
-      // 내 페이지일 경우
-      if (myInfo && urlMatched(myInfo.url, pageUrl)) {
-        setUserMatched(true);
-        setNickname(myInfo.nickname);
-        setUserUrl(myInfo.url);
-        if (userSeq) {
-          requestSinglePagesData();
-          requestMultiPagesData();
-        }
-        // 다른 사람 페이지일 경우
-      } else {
-        setUserMatched(false);
-        // 해당 페이지 정보 가져옴 -> pageUserRes에 변화
-        requestPageUserInfo();
-      }
+      requestPageUserInfo();
     }
-    return () => {
-      setUserMatched(null);
-      setNickname(null);
-    };
-  }, [
-    pageUrl,
-    myInfo,
-    userSeq,
-    requestPageUserInfo,
-    requestSinglePagesData,
-    requestMultiPagesData,
-  ]);
+  }, [pageUrl]);
 
-  // pageUserRes에 변화가 있으면 -> 데이터를 받아서 userseq, nickname 세팅.
+  // 데이터를 받아서 userSeq, nickname, userUrl, profileImage 세팅
   useEffect(() => {
     if (pageUserRes && pageUserRes.data) {
       const { code, data, message } = pageUserRes.data;
@@ -107,15 +83,41 @@ function MyPage() {
       if (data) {
         setUserSeq(data.user_seq);
         setNickname(data.nickname);
+        setUserUrl(data.url);
+        setprofileImage(data.profileImage);
       }
     }
     return () => {
       setUserSeq(null);
       setNickname(null);
+      setUserUrl(null);
+      setprofileImage(null);
     };
   }, [pageUserRes, history]);
 
-  // 바인딩 페이지용 싱글페이지 목록 데이터 리덕스에 저장
+  // 내 페이지인지 남의 페이지인지 확인 로직
+  useEffect(() => {
+    // 내 페이지일 경우
+    if (myInfoState && urlMatched(myInfoState.url, pageUrl)) {
+      setUserMatched(true);
+      // 다른 사람 페이지일 경우
+    } else {
+      setUserMatched(false);
+    }
+    return () => {
+      setUserMatched(null);
+    };
+  }, [pageUrl, myInfoState]);
+
+  // 해당 유저의 싱글, 멀티 페이지 받아옴
+  useEffect(() => {
+    if (userSeq) {
+      requestSinglePagesData();
+      requestMultiPagesData();
+    }
+  }, [userSeq]);
+
+  // 싱글, 멀티페이지 데이터 리덕스에 저장
   useEffect(() => {
     if (singlePagesData && singlePagesData.data) {
       dispatch(createReplacementSinglePagesAction(singlePagesData.data));
@@ -126,7 +128,7 @@ function MyPage() {
   }, [singlePagesData, multiPagesData, dispatch]);
 
   function singlePagesimage() {
-    if (singlePagesState && singlePagesState.message === 'ok') {
+    if (singlePagesState && singlePagesState.data.length !== 0) {
       const usersb = singlePagesState.data;
       return (
         <>
@@ -136,6 +138,7 @@ function MyPage() {
             return (
               <div key={semiIndex}>
                 <PageBlock
+                  userMatched={userMatched}
                   userUrl={userUrl}
                   data={page}
                   setPopUp={setPopUp}
@@ -148,11 +151,15 @@ function MyPage() {
         </>
       );
     }
-    return <div>no data</div>;
+    return !userMatched ? (
+      <div css={noPageMsg}>만들어진 페이지가 없어요!</div>
+    ) : (
+      <div>No Data</div>
+    );
   }
 
   function multiPagesimage() {
-    if (multiPagesState && multiPagesState.message === 'ok') {
+    if (multiPagesState && multiPagesState.data.length !== 0) {
       const multiPages = multiPagesState.data;
       return (
         <>
@@ -162,6 +169,7 @@ function MyPage() {
             return (
               <div key={semiIndex}>
                 <PageBlock
+                  userMatch={userMatched}
                   userUrl={userUrl}
                   data={page}
                   setPopUp={setPopUp}
@@ -174,20 +182,25 @@ function MyPage() {
         </>
       );
     }
-    return <div>no data</div>;
+    return !userMatched ? (
+      <div css={noPageMsg}>만들어진 페이지가 없어요!</div>
+    ) : (
+      <div>No Data</div>
+    );
   }
-
   return (
     <div css={[positionRelative]}>
       <Header
-        userMatch={userMatched}
+        userMatched={userMatched}
         pageUrl={pageUrl}
         pageUserName={nickname}
         pageType='normal'
       />
       <div css={MyPageWrapper}>
         <Azone
-          myInfo={myInfo}
+          profileImage={profileImage}
+          nickname={nickname}
+          userSeq={userSeq}
           setPopUp={setProfilePopUp}
           popUp={profilePopUp}
           bindingPopUp={bindingPopUp}
@@ -197,6 +210,7 @@ function MyPage() {
           <div css={MyPageBZone}>
             {multiPagesimage()}
             <PageBlock
+              userMatched={userMatched}
               userUrl={userUrl}
               setPopUp={setBindingPopUp}
               popUp={bindingPopUp}
@@ -210,7 +224,12 @@ function MyPage() {
 
             <hr css={[divLine]} />
             {singlePagesimage()}
-            <PageBlock userUrl={userUrl} setPopUp={setPopUp} popUp={popUp} />
+            <PageBlock
+              userMatched={userMatched}
+              userUrl={userUrl}
+              setPopUp={setPopUp}
+              popUp={popUp}
+            />
             <div css={[overFlowHidden]} />
           </div>
         </div>
@@ -223,11 +242,7 @@ function MyPage() {
         />
       </div>
       {profilePopUp && (
-        <EditPropfilePopUp
-          userSeq={userSeq}
-          setPopUp={setProfilePopUp}
-          popUp={profilePopUp}
-        />
+        <EditPropfilePopUp userSeq={userSeq} setPopUp={setProfilePopUp} />
       )}
       {bindingPopUp && (
         <BindingPagePopUp userSeq={userSeq} setPopUp={setBindingPopUp} />
@@ -255,8 +270,8 @@ const MyPageWrapper = css`
 `;
 
 const MyPageBZoneWrapper = css`
-  width: 90vw;
-  height: 300px;
+  min-width: ${PAGE_WIDTH};
+  width: 80vw;
   margin: ${PAGE_MARGIN};
   margin-top: 20px;
   background-color: white;
@@ -268,11 +283,21 @@ const MyPageBZone = css`
 `;
 
 const divLine = css`
-  width: 100%;
+  width: inherit;
   height: 1px;
   background-color: lightgray;
 `;
 
 const overFlowHidden = css`
   overflow: hidden;
+`;
+
+const noPageMsg = css`
+  display: flex;
+  width: 100%;
+  height: 60px;
+  justify-content: center;
+  align-items: center;
+  color: gray;
+  font-size: 25px;
 `;
