@@ -8,13 +8,16 @@ function Bzone({
   multiPagesState,
   userMatched,
   userUrl,
-  setPopUp,
-  popUp,
+  setAddSinglePagePopUp,
+  addSinglePagepopUp,
   setBindingPopUp,
   bindingPopUp,
 }) {
   function pageList(title, pageType, state) {
     let userPageBlock = <></>;
+    const setPopUp =
+      pageType === 'single' ? setAddSinglePagePopUp : setBindingPopUp;
+    const popUp = pageType === 'single' ? addSinglePagepopUp : bindingPopUp;
     if (state && state.data.length !== 0) {
       const usersb = state.data;
       userPageBlock = usersb.map((page, index) => {
@@ -51,8 +54,8 @@ function Bzone({
           <PageBlock
             userMatched={userMatched}
             userUrl={userUrl}
-            setPopUp={setBindingPopUp}
-            popUp={bindingPopUp}
+            setPopUp={setPopUp}
+            popUp={popUp}
           />
         </div>
       </div>

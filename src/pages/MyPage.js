@@ -33,7 +33,7 @@ function MyPage() {
   const [userUrl, setUserUrl] = useState(null);
   const [nickname, setNickname] = useState(null);
   const [profileImage, setprofileImage] = useState(null);
-  const [popUp, setPopUp] = useState(false);
+  const [addSinglePagePopUp, setAddSinglePagePopUp] = useState(false);
   const [profilePopUp, setProfilePopUp] = useState(false);
   const [bindingPopUp, setBindingPopUp] = useState(false);
 
@@ -147,8 +147,8 @@ function MyPage() {
           multiPagesState={multiPagesState}
           userMatched={userMatched}
           userUrl={userUrl}
-          setPopUp={setPopUp}
-          popUp={popUp}
+          setAddSinglePagePopUp={setAddSinglePagePopUp}
+          addSinglePagepopUp={addSinglePagePopUp}
           setBindingPopUp={setBindingPopUp}
           bindingPopUp={bindingPopUp}
         />
@@ -164,7 +164,9 @@ function MyPage() {
       {bindingPopUp && (
         <BindingPagePopUp userSeq={userSeq} setPopUp={setBindingPopUp} />
       )}
-      {popUp && <AddPagePopUp userSeq={userSeq} setPopUp={setPopUp} />}
+      {addSinglePagePopUp && (
+        <AddPagePopUp userSeq={userSeq} setPopUp={setAddSinglePagePopUp} />
+      )}
     </div>
   );
 }

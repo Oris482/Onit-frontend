@@ -43,7 +43,7 @@ const BindingInputBox = (props) => {
       {secondInput && (
         <>
           <div css={[pagePopUpBoxContents, BlockDrag]}>{secondInput.head}</div>
-          <form css={[formText]}>
+          <div css={[formText]}>
             <input
               css={[
                 pagePopUpBoxInput,
@@ -69,7 +69,7 @@ const BindingInputBox = (props) => {
             ) : (
               <></>
             )}
-          </form>
+          </div>
         </>
       )}
     </div>
