@@ -14,7 +14,6 @@ function MultiHeader({ multiData, pageUrl }) {
     setSelected(pageUrl);
   }, [pageUrl]);
 
-  console.log(pageUrl);
   const navLists = useMemo(() => {
     if (multiData && pages && myInfo) {
       const navList = pages.map((page, i) => {

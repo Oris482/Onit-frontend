@@ -55,11 +55,9 @@ function PublishingSplitPage() {
 
   useEffect(() => {
     if (pagesData) {
-      console.log(pagesData);
       const { code, data, message } = pagesData.data;
 
       if (data) {
-        console.log(data);
         if (data?.isMultiPage === false) {
           setPageType('single');
           setWdigetList(data.widgets);

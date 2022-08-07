@@ -39,7 +39,8 @@ const thumbnailImg = css`
   width: 100%;
   height: 70%;
   border-radius: 8px 8px 0px 0px;
-  object-fit: contain;
+  box-shadow: 0 1.5px 0 0 rgba(0, 0, 0, 0.2);
+  object-fit: cover;
 `;
 
 const singlePageBox = css`

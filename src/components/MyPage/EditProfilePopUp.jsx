@@ -1,12 +1,13 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import useRequestAuth from '../../hooks/useRequestAuth';
 import { getApiEndpoint } from '../../utils/util';
 import { commonBtn, getAbsoluteBtn } from '../../styles/GlobalStyles';
 import { closeSet } from '../../asset';
 import ProfileImageBox from './ProfileImageBox';
 import BindingInputBox from './BindingInputBox';
+import { PlainPopUp } from '../FeedbackBox/PlainPopUp';
 
 function EditProfilePopUP({
   prevNickname,
@@ -20,7 +21,14 @@ function EditProfilePopUP({
     profileImage: prevProfileImage,
   });
   const [profileImage, setProfileImage] = useState(prevProfileImage);
+  const [popUpText, setPopUpText] = useState({
+    topText: '',
+    middleText: '',
+    bottomText: '',
+  });
+  const [sendingPopUp, setSendingPopUp] = useState(false);
   const { nickname, hashtag } = inputs;
+  const buttonRef = useRef(null);
 
   const onChange = useCallback(
     (e) => {
@@ -60,6 +68,16 @@ function EditProfilePopUP({
     if (res && res.data.code === 'ok') {
       // eslint-disable-next-line no-restricted-globals
       location.reload();
+    } else if (res && res.data.code === 'invalid_schema') {
+      setPopUpText({
+        topText: '전송 실패',
+        middleText: '입력하신 내용이 양식에 맞지 않아요.',
+        bottomText:
+          '닉네임은 한글, 영어, 숫자만 가능하답니다.\n공백과 특수문자는 사용하실 수 없으니 다시 한 번 확인해주세요!',
+      });
+      setSendingPopUp(true);
+      buttonRef.current.removeAttribute('disabled');
+      buttonRef.current.textContent = '변경 하기';
     }
     // 닉네임 중복 등 검사 필요
   }, [res]);
@@ -76,12 +94,16 @@ function EditProfilePopUP({
   const { btn, img } = getAbsoluteBtn(25, 42, 25);
   const firstInput = {
     head: '닉네임',
-    placeholder: '변경하시려는 닉네임을 입력해주세요!',
+    placeholder: '한글, 영어, 숫자만 가능합니다!(공백 및 특수문자 불가능)',
   };
   const secondInput = {
     head: '관심 분야',
     placeholder: '관심분야를 입력주세요. ex) 순수미술',
   };
+
+  function closeSendingPopUp() {
+    setSendingPopUp(false);
+  }
 
   return (
     <div css={[backGroundPopStyle]}>
@@ -115,6 +137,7 @@ function EditProfilePopUP({
           </div>
           <button
             type='button'
+            ref={buttonRef}
             css={[commonLoginButtonStyle, LoginButtonColor]}
             onClick={(e) => onSubmit(e.target)}
           >
@@ -122,6 +145,12 @@ function EditProfilePopUP({
           </button>
         </form>
       </div>
+      <PlainPopUp
+        state={sendingPopUp}
+        close={closeSendingPopUp}
+        textObject={popUpText}
+        hasButton
+      />
     </div>
   );
 }
