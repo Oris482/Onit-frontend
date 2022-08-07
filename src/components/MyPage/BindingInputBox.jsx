@@ -13,7 +13,7 @@ const BindingInputBox = (props) => {
 
   useEffect(() => {
     if (secondInput) {
-      setPaddingSize(fixedTextRef.current.clientWidth + 20);
+      setPaddingSize(fixedTextRef.current.clientWidth + 17);
     }
   }, [secondInput]);
 
@@ -37,17 +37,13 @@ const BindingInputBox = (props) => {
         name='title'
         value={title}
         autoComplete='off'
+        spellCheck={false}
         onChange={onChange}
       />
       {secondInput && (
         <>
           <div css={[pagePopUpBoxContents, BlockDrag]}>{secondInput.head}</div>
           <div css={[formText]}>
-            <span css={[fixedText]} ref={fixedTextRef}>
-              {secondInput.placeholder === ''
-                ? `https://iamonit.kr/${pageUrl}/`
-                : ''}
-            </span>
             <input
               css={[
                 pagePopUpBoxInput,
@@ -60,8 +56,14 @@ const BindingInputBox = (props) => {
               placeholder={secondInput.placeholder}
               maxLength='24'
               autoComplete='off'
+              spellCheck={false}
               onChange={onChange}
             />
+            <span css={[fixedText]} ref={fixedTextRef}>
+              {secondInput.placeholder === ''
+                ? `https://iamonit.kr/${pageUrl}/`
+                : ''}
+            </span>
             {validateURL !== 'ok' ? (
               <span css={[checkURLMsg]}>{validateURL}</span>
             ) : (
@@ -93,9 +95,8 @@ const formText = css`
 
 const fixedText = css`
   position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-87%, -95%);
+  left: 4%;
+  top: 25%;
   color: gray;
   z-index: 9;
 `;
@@ -110,6 +111,7 @@ const pagePopUpBoxInput = css`
   font-size: 16px;
   margin-top: 15px;
   margin-bottom: 35px;
+  line-height: 40px;
   padding-left: 15px;
   padding-right: 15px;
   box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.1);

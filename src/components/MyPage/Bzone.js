@@ -8,13 +8,18 @@ function Bzone({
   multiPagesState,
   userMatched,
   userUrl,
-  setPopUp,
-  popUp,
+
+  setAddSinglePagePopUp,
+  addSinglePagepopUp,
   setBindingPopUp,
   bindingPopUp,
 }) {
   function pageList(title, pageType, state) {
     let userPageBlock = <></>;
+
+    const setPopUp =
+      pageType === 'single' ? setAddSinglePagePopUp : setBindingPopUp;
+    const popUp = pageType === 'single' ? addSinglePagepopUp : bindingPopUp;
     if (state && state.data.length !== 0) {
       const usersb = state.data;
       userPageBlock = usersb.map((page, index) => {
@@ -35,6 +40,7 @@ function Bzone({
       });
     } else return <div css={noPageMsg}>현재 만들어진 페이지가 없어요!</div>;
 
+
     return (
       <div>
         <div>
@@ -47,6 +53,7 @@ function Bzone({
             userUrl={userUrl}
             setPopUp={setBindingPopUp}
             popUp={bindingPopUp}
+
           />
         </div>
       </div>

@@ -3,18 +3,16 @@ import { useCallback, useMemo, useState } from 'react';
 import { css } from '@emotion/react';
 import { useHistory } from 'react-router';
 import { HeaderWrapper } from '..';
-import { logo } from '../../asset';
+import { logoImg } from '../../asset';
 import { getApiEndpoint, logout } from '../../utils/util';
 import { useMyInfo } from '../../hooks/myInfo';
 import Login from '../Login';
 
-function Header({ userMatch, pageUrl, pageUserName, pageType }) {
+function Header({ userMatched, pageUrl, pageType }) {
   const history = useHistory();
-
   const [popUpLogin, setPopUpLogin] = useState(false);
 
   const { loggedIn, myInfo } = useMyInfo();
-
   const feedbackBtn = (
     <button
       type='button'
@@ -32,6 +30,16 @@ function Header({ userMatch, pageUrl, pageUserName, pageType }) {
       onClick={() => history.push(`/${myInfo.url}/`)}
     >
       내 페이지
+    </button>
+  );
+
+  const mainBtn = (
+    <button
+      type='button'
+      css={[commonButtonStyle, confirmButtonWidth, marginRight40]}
+      onClick={() => history.push(`/`)}
+    >
+      메인으로
     </button>
   );
 
@@ -74,19 +82,9 @@ function Header({ userMatch, pageUrl, pageUserName, pageType }) {
     </button>
   );
 
-  const pageEditBtn = (
-    <button
-      type='button'
-      css={[commonButtonStyle, confirmButtonWidth, marginRight40]}
-      onClick={() => history.push(`/${pageUrl}/edit`)}
-    >
-      페이지 수정
-    </button>
-  );
-
   const logoBtn = (
     <a href='/main' css={[marginLeft17, height21]}>
-      <img alt='img' src={logo} css={hieght100p} />
+      <img alt='img' src={logoImg} css={hieght100p} />
     </a>
   );
 
@@ -150,17 +148,15 @@ function Header({ userMatch, pageUrl, pageUserName, pageType }) {
       <div css={[flex, flexBtw]}>
         {logoBtn}
         <div>
-          {userMatch && (
+          {userMatched && (
             <>
+              {mainBtn}
+              {feedbackBtn}
               {logOutBtn}
-              {pageEditBtn}
             </>
           )}
-          {!userMatch && loggedIn && goToMyPage}
+          {!userMatched && loggedIn && goToMyPage}
         </div>
-      </div>
-      <div css={[abosulteCenter, flex, height21]}>
-        <p css={fontStyle}>{pageUserName}님의 온잇</p>
       </div>
     </>
   );
@@ -168,8 +164,8 @@ function Header({ userMatch, pageUrl, pageUserName, pageType }) {
   function chooseFitHeader() {
     if (pageType === 'main') {
       return headerForm(
-        feedbackBtn,
         myPageBtn,
+        feedbackBtn,
         logOutBtn,
         feedbackBtn,
         logInBtn,
@@ -179,9 +175,9 @@ function Header({ userMatch, pageUrl, pageUserName, pageType }) {
       return normalHeader;
     } else if (pageType === 'feedback') {
       return headerForm(
-        logOutBtn,
         myPageBtn,
-        noBtn,
+        mainBtn,
+        logOutBtn,
         noBtn,
         logInBtn,
         joinPageBtn
@@ -202,20 +198,8 @@ const hieght100p = css`
   height: 100%;
 `;
 
-const fontStyle = css`
-  font-size: 16.5px;
-  font-weight: 500;
-  line-height: 26px;
-  height: 26px;
-  font-stretch: normal;
-  font-style: normal;
-  letter-spacing: normal;
-  text-align: center;
-  color: #000;
-`;
-
 const marginLeft17 = css`
-  margin-left: 25px;
+  margin-left: 17px;
 `;
 
 const marginRight40 = css`
@@ -230,13 +214,6 @@ const flex = css`
 const flexBtw = css`
   justify-content: space-between;
   align-items: center;
-`;
-
-const abosulteCenter = css`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
 `;
 
 const confirmButtonWidth = css`
