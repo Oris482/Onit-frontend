@@ -15,6 +15,7 @@ function Bzone({
 }) {
   function pageList(title, pageType, state) {
     let userPageBlock = <></>;
+
     const setPopUp =
       pageType === 'single' ? setAddSinglePagePopUp : setBindingPopUp;
     const popUp = pageType === 'single' ? addSinglePagepopUp : bindingPopUp;
@@ -37,6 +38,7 @@ function Bzone({
         );
       });
     } else userPageBlock = null;
+
 
     return (
       <div>
