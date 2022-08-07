@@ -15,6 +15,7 @@ function Bzone({
 }) {
   function pageList(title, pageType, state) {
     let userPageBlock = <></>;
+
     const setPopUp =
       pageType === 'single' ? setAddSinglePagePopUp : setBindingPopUp;
     const popUp = pageType === 'single' ? addSinglePagepopUp : bindingPopUp;
@@ -36,12 +37,8 @@ function Bzone({
           </div>
         );
       });
-    }
-    const noDataComponent = !userMatched ? (
-      <div css={noPageMsg}>현재 만들어진 페이지가 없어요!</div>
-    ) : (
-      <></>
-    );
+    } else userPageBlock = null;
+
 
     return (
       <div>
@@ -49,14 +46,17 @@ function Bzone({
           <p css={[titleFont]}>{title}</p>
         </div>
         <div css={[flexWrap]}>
-          {userPageBlock}
-          {noDataComponent}
-          <PageBlock
-            userMatched={userMatched}
-            userUrl={userUrl}
-            setPopUp={setPopUp}
-            popUp={popUp}
-          />
+          {userPageBlock ?? (
+            <div css={noPageMsg}>현재 만들어진 페이지가 없어요!</div>
+          )}
+          {userPageBlock && (
+            <PageBlock
+              userMatched={userMatched}
+              userUrl={userUrl}
+              setPopUp={setPopUp}
+              popUp={popUp}
+            />
+          )}
         </div>
       </div>
     );
