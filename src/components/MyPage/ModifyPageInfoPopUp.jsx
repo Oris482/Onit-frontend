@@ -1,46 +1,65 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { useRequest } from '../../hooks/useRequest';
 import useRequestAuth from '../../hooks/useRequestAuth';
 import { getApiEndpoint } from '../../utils/util';
+import {
+  createReplacementSinglePagesAction,
+  createReplacementMultiPagesAction,
+} from '../../redux/slice';
 import { commonBtn, getAbsoluteBtn } from '../../styles/GlobalStyles';
 import { closeSet } from '../../asset';
-import ProfileImageBox from './ProfileImageBox';
+import BindingThumbnailBox from './BindingThumbnailBox';
 import BindingInputBox from './BindingInputBox';
 
-function EditProfilePopUP({
-  prevNickname,
-  prevProfileImage,
-  userSeq,
-  setPopUp,
-}) {
+function ModifyPageInfoPopUp({ pageType, userSeq, data, setPopUp }) {
   const [inputs, setInputs] = useState({
-    nickname: prevNickname,
-    hashtag: '',
-    profileImage: prevProfileImage,
+    title: data.title,
+    thumbnail: '',
   });
-  const [profileImage, setProfileImage] = useState(prevProfileImage);
-  const { nickname, hashtag } = inputs;
+  const [thumbnail, setThumbnail] = useState(data.thumbnail);
+  const { title } = inputs;
 
   const onChange = useCallback(
     (e) => {
-      const { name, value } = e.target;
-      if (name === 'title') {
-        setInputs({
-          ...inputs,
-          nickname: value,
-        });
-      } else if (name === 'url') {
-        setInputs({
-          ...inputs,
-          hashtag: value,
-        });
-      }
+      setInputs({
+        ...inputs,
+        [e.target.name]: e.target.value,
+      });
     },
     [inputs]
   );
 
-  const endpoint = `${getApiEndpoint()}/profile/${userSeq}`;
+  useEffect(() => {
+    setInputs({
+      ...inputs,
+      thumbnail: thumbnail,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [thumbnail]);
+
+  const dispatch = useDispatch();
+
+  const getEndpoint = () => {
+    if (pageType === 'single')
+      return `${getApiEndpoint()}/user/page/single/${data.url}/${userSeq}`;
+    else return `${getApiEndpoint()}/user/page/multi/${data.url}/${userSeq}`;
+  };
+
+  const { res: singlePagesData, request: requestSinglePagesData } = useRequest({
+    endpoint: `${getApiEndpoint()}/user/page/singles/${userSeq}`,
+    method: 'get',
+  });
+
+  const { res: multiPagesData, request: requestMultiPagesData } = useRequest({
+    endpoint: `${getApiEndpoint()}/user/page/multies/${userSeq}`,
+    method: 'get',
+  });
+
+  const endpoint = getEndpoint();
+
   // eslint-disable-next-line no-unused-vars
   const { res, request } = useRequestAuth({
     endpoint: endpoint,
@@ -48,24 +67,9 @@ function EditProfilePopUP({
     data: inputs,
   });
 
-  useEffect(() => {
-    setInputs({
-      ...inputs,
-      profileImage: profileImage,
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [profileImage]);
-
-  useEffect(() => {
-    if (res && res.data.code === 'ok') {
-      // eslint-disable-next-line no-restricted-globals
-      location.reload();
-    }
-    // 닉네임 중복 등 검사 필요
-  }, [res]);
-
   const onSubmit = useCallback(
     (target) => {
+      // eslint-disable-next-line no-unused-vars
       target.setAttribute('disabled', true);
       target.textContent = '전송 중...';
       request();
@@ -73,21 +77,34 @@ function EditProfilePopUP({
     [request]
   );
 
+  useEffect(() => {
+    if (res && res.data.code === 'ok') {
+      if (pageType === 'single') requestSinglePagesData();
+      else requestMultiPagesData();
+    }
+  }, [res, pageType, requestSinglePagesData, requestMultiPagesData]);
+
+  useEffect(() => {
+    if (singlePagesData && singlePagesData.data) {
+      dispatch(createReplacementSinglePagesAction(singlePagesData.data));
+      setPopUp(false);
+    } else if (multiPagesData && multiPagesData.data) {
+      dispatch(createReplacementMultiPagesAction(multiPagesData.data));
+      setPopUp(false);
+    }
+  }, [singlePagesData, multiPagesData, dispatch, setPopUp]);
+
   const { btn, img } = getAbsoluteBtn(25, 42, 25);
   const firstInput = {
-    head: '닉네임',
-    placeholder: '변경하시려는 닉네임을 입력해주세요!',
-  };
-  const secondInput = {
-    head: '관심 분야',
-    placeholder: '관심분야를 입력주세요. ex) 순수미술',
+    head: '페이지 제목',
+    placeholder: data.title,
   };
 
   return (
     <div css={[backGroundPopStyle]}>
       <div css={[pagePopUpBoxStyle]}>
-        <div css={[pagePopUpBoxTitle]}>프로필 수정</div>
-        <form css={[formWidth]} onSubmit={onSubmit}>
+        <div css={[pagePopUpBoxTitle]}>페이지 수정</div>
+        <form css={[formWidth]}>
           <button
             type='button'
             css={[commonBtn, btn]}
@@ -100,17 +117,16 @@ function EditProfilePopUP({
             </div>
           </button>
           <div css={[HorizontalLayout, InputSection]}>
-            <ProfileImageBox
-              profileImage={profileImage}
-              setProfileImage={setProfileImage}
+            <BindingThumbnailBox
+              thumbnail={thumbnail}
+              setThumbnail={setThumbnail}
             />
             <BindingInputBox
-              url={hashtag}
-              title={nickname}
+              url=''
+              title={title}
               onChange={onChange}
               firstInput={firstInput}
-              secondInput={secondInput}
-              isUrl={false}
+              isUrl
             />
           </div>
           <button
@@ -126,7 +142,7 @@ function EditProfilePopUP({
   );
 }
 
-export default EditProfilePopUP;
+export default ModifyPageInfoPopUp;
 
 const backGroundPopStyle = css`
   position: fixed;
@@ -138,6 +154,7 @@ const backGroundPopStyle = css`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  z-index: 11;
 `;
 
 const pagePopUpBoxStyle = css`
@@ -195,4 +212,6 @@ const InputSection = css`
   align-items: flex-start;
   margin-top: 40px;
   justify-content: center;
+  align-items: center;
+  margin-bottom: 5%;
 `;

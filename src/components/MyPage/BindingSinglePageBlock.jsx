@@ -56,6 +56,7 @@ const singlePageTitle = css`
   width: 85%;
   box-sizing: border-box;
   font-size: 12px;
+  white-space: nowrap;
   overflow: hidden;
 `;
 

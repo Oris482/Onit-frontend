@@ -96,7 +96,7 @@ function FeedbackInputBox(props) {
       // window.location.reload();
       sendReloadSignal();
     }
-  }, [res]);
+  }, [res, sendReloadSignal]);
 
   const handleMessageChange = ({ target: { value } }) => {
     setInputmessage(value);
@@ -146,8 +146,8 @@ const container = css`
 `;
 
 const removeButtonCss = css`
-    border: 0;
-    outline 0;
+  border: 0;
+  outline: 0;
 `;
 
 const buttonBox = css`
