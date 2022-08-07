@@ -47,12 +47,14 @@ function Bzone({
           {userPageBlock ?? (
             <div css={noPageMsg}>현재 만들어진 페이지가 없어요!</div>
           )}
-          <PageBlock
-            userMatched={userMatched}
-            userUrl={userUrl}
-            setPopUp={setPopUp}
-            popUp={popUp}
-          />
+          {userPageBlock && (
+            <PageBlock
+              userMatched={userMatched}
+              userUrl={userUrl}
+              setPopUp={setPopUp}
+              popUp={popUp}
+            />
+          )}
         </div>
       </div>
     );
