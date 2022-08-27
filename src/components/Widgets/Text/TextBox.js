@@ -5,6 +5,7 @@ function TextBox({ element, mode }) {
     return (
       <div
         className='ck-content'
+        // eslint-disable-next-line
         dangerouslySetInnerHTML={{ __html: content }}
       />
     );
