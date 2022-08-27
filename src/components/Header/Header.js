@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { css } from '@emotion/react';
 import { useHistory } from 'react-router';
 import { HeaderWrapper } from '..';
@@ -8,7 +8,7 @@ import { getApiEndpoint, logout } from '../../utils/util';
 import { useMyInfo } from '../../hooks/myInfo';
 import Login from '../Login';
 
-function Header({ userMatched, pageUrl, pageType }) {
+function Header({ userMatched, pageType }) {
   const history = useHistory();
   const [popUpLogin, setPopUpLogin] = useState(false);
 
@@ -90,11 +90,6 @@ function Header({ userMatched, pageUrl, pageType }) {
 
   const noBtn = <></>;
 
-  const goToMyPage = useMemo(() => {
-    if (myInfo) return myPageBtn;
-    return null;
-  }, [myInfo]);
-
   const loginPopupWindow = (
     <div css={[loginPosition]}>
       <div css={[loginWindowCSS]}>
@@ -143,21 +138,19 @@ function Header({ userMatched, pageUrl, pageType }) {
     [loggedIn, popUpLogin]
   );
 
-  const normalHeader = (
+  const myPageHeader = (
     <>
-      <div css={[flex, flexBtw]}>
-        {logoBtn}
-        <div>
-          {userMatched && (
-            <>
-              {mainBtn}
-              {feedbackBtn}
-              {logOutBtn}
-            </>
-          )}
-          {!userMatched && loggedIn && goToMyPage}
-        </div>
-      </div>
+      {userMatched &&
+        headerForm(mainBtn, feedbackBtn, logOutBtn, noBtn, noBtn, noBtn)}
+      {!userMatched &&
+        headerForm(
+          mainBtn,
+          feedbackBtn,
+          myPageBtn,
+          mainBtn,
+          feedbackBtn,
+          logInBtn
+        )}
     </>
   );
 
@@ -171,8 +164,8 @@ function Header({ userMatched, pageUrl, pageType }) {
         logInBtn,
         joinPageBtn
       );
-    } else if (pageType === 'normal') {
-      return normalHeader;
+    } else if (pageType === 'myPage') {
+      return myPageHeader;
     } else if (pageType === 'feedback') {
       return headerForm(
         myPageBtn,

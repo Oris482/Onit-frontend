@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { PAGE_MARGIN, PAGE_WIDTH } from '../../styles/style';
-import PageBlock from './PageBlock';
+import PageList from './PageList';
 
 function Bzone({
   singlePagesState,
@@ -13,59 +13,31 @@ function Bzone({
   setBindingPopUp,
   bindingPopUp,
 }) {
-  function pageList(title, pageType, state) {
-    let userPageBlock = <></>;
-
-    const setPopUp =
-      pageType === 'single' ? setAddSinglePagePopUp : setBindingPopUp;
-    const popUp = pageType === 'single' ? addSinglePagepopUp : bindingPopUp;
-    if (state && state.data.length !== 0) {
-      const usersb = state.data;
-      userPageBlock = usersb.map((page, index) => {
-        const semiIndex = index + 1;
-
-        return (
-          <div key={semiIndex}>
-            <PageBlock
-              userMatched={userMatched}
-              userUrl={userUrl}
-              data={page}
-              setPopUp={setPopUp}
-              popUp={popUp}
-              pageType={pageType}
-            />
-          </div>
-        );
-      });
-    } else userPageBlock = null;
-
-    return (
-      <div>
-        <div>
-          <p css={[titleFont]}>{title}</p>
-        </div>
-        <div css={[flexWrap]}>
-          {userPageBlock ?? (
-            <div css={noPageMsg}>현재 만들어진 페이지가 없어요!</div>
-          )}
-          {userPageBlock && (
-            <PageBlock
-              userMatched={userMatched}
-              userUrl={userUrl}
-              setPopUp={setPopUp}
-              popUp={popUp}
-            />
-          )}
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div css={MyPageBZoneWrapper}>
       <div css={MyPageBZone}>
-        {pageList('Book', 'muliti', multiPagesState)}
-        {pageList('Paper', 'single', singlePagesState)}
+        <PageList
+          title='Book'
+          pageType='muliti'
+          state={multiPagesState}
+          userMatched={userMatched}
+          userUrl={userUrl}
+          setAddSinglePagePopUp={setAddSinglePagePopUp}
+          addSinglePagepopUp={addSinglePagepopUp}
+          setBindingPopUp={setBindingPopUp}
+          bindingPopUp={bindingPopUp}
+        />
+        <PageList
+          title='Paper'
+          pageType='single'
+          state={singlePagesState}
+          userMatched={userMatched}
+          userUrl={userUrl}
+          setAddSinglePagePopUp={setAddSinglePagePopUp}
+          addSinglePagepopUp={addSinglePagepopUp}
+          setBindingPopUp={setBindingPopUp}
+          bindingPopUp={bindingPopUp}
+        />
         <div css={[overFlowHidden]} />
       </div>
     </div>
@@ -86,36 +58,8 @@ const MyPageBZone = css`
   flex-direction: column;
 `;
 
-const titleFont = css`
-  font-size: 16px;
-  font-weight: 500;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
-  letter-spacing: normal;
-  text-align: left;
-  color: #5d5d5d;
-`;
-
-const flexWrap = css`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 3vw;
-  padding: 20px 0;
-`;
-
 const overFlowHidden = css`
   overflow: hidden;
-`;
-
-const noPageMsg = css`
-  display: flex;
-  width: 100%;
-  height: 60px;
-  justify-content: center;
-  align-items: center;
-  color: gray;
-  font-size: 25px;
 `;
 
 export default Bzone;
