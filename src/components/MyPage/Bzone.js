@@ -39,7 +39,6 @@ function Bzone({
       });
     } else userPageBlock = null;
 
-
     return (
       <div>
         <div>

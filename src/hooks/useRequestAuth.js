@@ -8,16 +8,6 @@ import {
   isOk,
 } from '../utils/util';
 
-/**
- * @typedef {Object} UseRequestAuthProps
- * @property {string} endpoint 필수
- * @property {'get'|'post'} method 필수
- * @property {any} [data] 선택
- */
-
-/**
- * @param {UseRequestAuthProps} props
- */
 function useRequestAuth({ endpoint, method, data, contentType }) {
   const [firstRes, setFirstRes] = useState(null);
   const [secondRes, setSecondRes] = useState(null);
