@@ -56,6 +56,11 @@ function BindingPopUp({ userSeq, setPopUp }) {
   };
 
   const { btn, img } = getAbsoluteBtn(25, 42, 25);
+  const firstInput = {
+    head: '페이지 제목',
+    placeholder: '제목을 입력해주세요! 최상단에 표시됩니다.',
+  };
+  const secondInput = { head: '페이지 주소', placeholder: '' };
 
   return (
     <div css={[backGroundPopStyle]}>
@@ -79,7 +84,14 @@ function BindingPopUp({ userSeq, setPopUp }) {
                 thumbnail={thumbnail}
                 setThumbnail={setThumbnail}
               />
-              <BindingInputBox url={url} title={title} onChange={onChange} />
+              <BindingInputBox
+                url={url}
+                title={title}
+                onChange={onChange}
+                firstInput={firstInput}
+                secondInput={secondInput}
+                isUrl
+              />
             </div>
             <div>
               <div css={[VerticalLayout]}>
@@ -149,22 +161,6 @@ const pagePopUpBoxContents = css`
 const formWidth = css`
   width: 100%;
   height: 85%;
-`;
-
-const pagePopUpBoxCloseButton = css`
-  width: 25px;
-  height: 25px;
-  border-radius: 30px;
-  border: 0;
-  position: absolute;
-  left: 95%;
-  top: 3%;
-  font-size: 15px;
-  margin-bottom: 10px;
-  background-color: lightgray;
-  &:hover {
-    background-color: darkgray;
-  }
 `;
 
 const VerticalLayout = css`
