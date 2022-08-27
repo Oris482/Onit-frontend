@@ -7,7 +7,7 @@ import PageBlock from './PageBlock';
 function PageList({
   title,
   pageType,
-  state,
+  pagesInfo,
   userMatched,
   userUrl,
   setAddSinglePagePopUp,
@@ -21,11 +21,10 @@ function PageList({
     pageType === 'single' ? setAddSinglePagePopUp : setBindingPopUp;
   const popUp = pageType === 'single' ? addSinglePagepopUp : bindingPopUp;
   useEffect(() => {
-    if (state && state.data.length !== 0) {
-      const usersb = state.data;
+    if (pagesInfo && pagesInfo.data.length !== 0) {
+      const usersb = pagesInfo.data;
       const userData = usersb.map((page, index) => {
         const semiIndex = index + 1;
-
         return (
           <div key={semiIndex}>
             <PageBlock
@@ -41,7 +40,7 @@ function PageList({
       });
       setUserPageBlock(userData);
     } else setUserPageBlock(null);
-  }, [state]);
+  }, [pagesInfo]);
 
   return (
     <div>
@@ -49,13 +48,12 @@ function PageList({
         <p css={[titleFont]}>{title}</p>
       </div>
       <div css={[flexWrap]}>
-        {userPageBlock && (
-          <PageBlock userMatched={userMatched} userUrl={userUrl} />
-        )}
+        {userPageBlock}
         <AddPageBlock
           userMatched={userMatched}
           setPopUp={setPopUp}
           popUp={popUp}
+          pagesInfo={pagesInfo}
         />
       </div>
     </div>

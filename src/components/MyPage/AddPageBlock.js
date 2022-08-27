@@ -2,7 +2,7 @@
 import { css } from '@emotion/react';
 import { InitButtonStyle } from '../../styles/GlobalStyles';
 
-function AddPageBlock({ userMatched, setPopUp, popUp }) {
+function AddPageBlock({ userMatched, setPopUp, popUp, pagesInfo }) {
   if (userMatched) {
     return (
       <>
@@ -15,9 +15,10 @@ function AddPageBlock({ userMatched, setPopUp, popUp }) {
         </button>
       </>
     );
-  } else {
+  } else if (pagesInfo.data.length === 0) {
     return <div css={noPageMsg}>현재 만들어진 페이지가 없어요!</div>;
   }
+  return <></>;
 }
 
 export default AddPageBlock;
