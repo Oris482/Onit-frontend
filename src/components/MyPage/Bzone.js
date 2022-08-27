@@ -19,7 +19,7 @@ function Bzone({
         <PageList
           title='Book'
           pageType='muliti'
-          state={multiPagesState}
+          pagesInfo={multiPagesState}
           userMatched={userMatched}
           userUrl={userUrl}
           setAddSinglePagePopUp={setAddSinglePagePopUp}
@@ -30,7 +30,7 @@ function Bzone({
         <PageList
           title='Paper'
           pageType='single'
-          state={singlePagesState}
+          pagesInfo={singlePagesState}
           userMatched={userMatched}
           userUrl={userUrl}
           setAddSinglePagePopUp={setAddSinglePagePopUp}
