@@ -7,6 +7,7 @@ const slice = createSlice({
       nickname: '',
       user_seq: -1,
       url: '',
+      profileImage: '',
       field: [],
     },
     modal: {

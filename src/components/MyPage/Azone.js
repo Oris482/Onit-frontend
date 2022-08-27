@@ -1,10 +1,15 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
+import { useSelector } from 'react-redux';
 import { PAGE_MARGIN, PAGE_WIDTH } from '../../styles/style';
 import ProfileBlock from './ProfileBlock';
 import { logoImg } from '../../asset';
 
-function Azone({ myInfo, setPopUp, popUp }) {
+function Azone({ profileImage, nickname, userSeq, setPopUp, popUp }) {
+  const { myInfoState } = useSelector((state) => ({
+    myInfoState: state.info.user,
+  }));
+
   return (
     <div css={MyPageAZone}>
       <div
@@ -21,7 +26,10 @@ function Azone({ myInfo, setPopUp, popUp }) {
           `}
         >
           <div className='profileImage' css={ProfileAZone} />
-          <img src={logoImg} />
+          <img
+            css={profileImg}
+            src={profileImage !== '' ? profileImage : logoImg}
+          />
         </div>
         <div
           css={css`
@@ -37,7 +45,7 @@ function Azone({ myInfo, setPopUp, popUp }) {
               font-size: 30px;
             `}
           >
-            {myInfo ? myInfo.nickname : ''}
+            {nickname ?? ''}
           </div>
 
           <div
@@ -66,12 +74,14 @@ function Azone({ myInfo, setPopUp, popUp }) {
             text-align: center;
           `}
         >
-          <ProfileBlock
-            addBlock
-            setPopUp={setPopUp}
-            popUp={popUp}
-            buttonText='프로필 수정'
-          />
+          {myInfoState && myInfoState.user_seq === userSeq && (
+            <ProfileBlock
+              addBlock
+              setPopUp={setPopUp}
+              popUp={popUp}
+              buttonText='프로필 수정'
+            />
+          )}
         </div>
       </div>
     </div>
@@ -97,6 +107,13 @@ const ProfileAZone = css`
   justify-content: center;
   border-radius: 50%;
   display: flex;
+`;
+
+const profileImg = css`
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
 `;
 
 const ProfileAZoneTagButton = css`

@@ -15,21 +15,25 @@ import {
   commonBtn,
   getAbsoluteBtn,
 } from '../../styles/GlobalStyles';
-import { closeSet, logo } from '../../asset';
+import { closeSet, settingSet, logo } from '../../asset';
 import DoubleButtonPopUp from '../FeedbackBox/DoubleButtonPopUp';
+import ModifyPageInfoPopUp from './ModifyPageInfoPopUp';
 
 // eslint-disable-next-line no-unused-vars
 
-function PageBlock({ data, popUp, setPopUp, userUrl, pageType }) {
-  const [publishingPath, setPublishingPath] = useState(null);
-  const [editPath, setEditPath] = useState(null);
+function PageBlock(props) {
+  const [publishingPath, setPublishingPath] = useState('');
+  const [editPath, setEditPath] = useState('');
   const [pageUrl, setPageUrl] = useState('');
   const [hover, setHover] = useState(false);
   const [deletePopUp, setDeletePopUp] = useState(false);
+  const [modifyPopUp, setModifyPopUp] = useState(false);
 
   const { userInfo } = useSelector((state) => ({
     userInfo: state.info.user,
   }));
+
+  const { userMatched, data, popUp, setPopUp, userUrl, pageType } = props;
 
   const { res: deleteRes, request: DeleteRequest } = useRequestAuth({
     endpoint: `${getApiEndpoint()}/user/page/single/${pageUrl}/${
@@ -65,7 +69,7 @@ function PageBlock({ data, popUp, setPopUp, userUrl, pageType }) {
       if (pageType === 'single') requestSinglePagesData();
       else requestMultiPagesData();
     }
-  }, [deleteRes]);
+  }, [deleteRes, pageType, requestSinglePagesData, requestMultiPagesData]);
 
   useEffect(() => {
     if (singlePagesData && singlePagesData.data) {
@@ -74,7 +78,7 @@ function PageBlock({ data, popUp, setPopUp, userUrl, pageType }) {
     if (multiPagesData && multiPagesData.data) {
       dispatch(createReplacementMultiPagesAction(multiPagesData.data));
     }
-  }, [singlePagesData, multiPagesData]);
+  }, [singlePagesData, multiPagesData, dispatch]);
 
   const CloseModal = () => {
     setDeletePopUp(false);
@@ -87,11 +91,18 @@ function PageBlock({ data, popUp, setPopUp, userUrl, pageType }) {
   };
 
   const diameter = 44;
-  const { btn, img } = getAbsoluteBtn(10, 10, diameter / 2, false);
+  const { btn, img } = getAbsoluteBtn(5, 33, diameter / 2);
+  const { btn: settingBtn, img: settingBtnImg } = getAbsoluteBtn(
+    5,
+    5,
+    diameter / 2,
+    false
+    // isPinned
+  );
 
-  return (
-    <>
-      {!data ? (
+  const AddPageBox = () => {
+    if (userMatched) {
+      return (
         <>
           <button
             type='button'
@@ -101,32 +112,49 @@ function PageBlock({ data, popUp, setPopUp, userUrl, pageType }) {
             +
           </button>
         </>
+      );
+    } else {
+      return <></>;
+    }
+  };
+
+  return (
+    <>
+      {!data ? (
+        <AddPageBox />
       ) : (
         <div
           css={siteViewBZone}
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}
         >
-          {hover && (
-            <button
-              type='button'
-              css={[commonBtn, btn, deleteButtonOrder]}
-              onClick={() => setDeletePopUp(true)}
-            >
-              <div css={img}>
-                <img alt='img' height={diameter} src={closeSet} />
-              </div>
-            </button>
+          {userMatched && hover && (
+            <>
+              <button
+                type='button'
+                css={[commonBtn, btn, hoverButtonOrder]}
+                onClick={() => setDeletePopUp(true)}
+              >
+                <div css={img}>
+                  <img alt='img' height={diameter} src={closeSet} />
+                </div>
+              </button>
+              <button
+                type='button'
+                css={[commonBtn, settingBtn, hoverButtonOrder]}
+                onClick={() => setModifyPopUp(true)}
+              >
+                <div css={settingBtnImg}>
+                  <img alt='img' height={diameter} src={settingSet} />
+                </div>
+              </button>
+            </>
           )}
           <Link to={publishingPath}>
             <div
               css={css`
                 position: relative;
                 height: 70%;
-                /* background-image: url('https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F5b23a21e-5242-473e-91a3-34939a806247%2F%25E1%2584%2589%25E1%2585%25B3%25E1%2584%258F%25E1%2585%25B3%25E1%2584%2585%25E1%2585%25B5%25E1%2586%25AB%25E1%2584%2589%25E1%2585%25A3%25E1%2586%25BA_2022-08-04_%25E1%2584%258B%25E1%2585%25A9%25E1%2584%2592%25E1%2585%25AE_4.39.14.png?table=block&id=193b2ef6-f9ec-4339-8719-3a996f31b4b0&spaceId=39262b28-deb0-4e99-938a-d51f7073ff6f&width=2000&userId=119b3bb9-3f60-4f5b-b981-5795a1cc6cde&cache=v2');
-                background-size: 100px;
-                background-position: center center;
-                background-repeat: no-repeat; */
                 border-radius: 20px 20px 0px 0px;
                 box-shadow: 0 1.5px 0 0 rgba(0, 0, 0, 0.2);
               `}
@@ -140,6 +168,7 @@ function PageBlock({ data, popUp, setPopUp, userUrl, pageType }) {
           <div
             css={css`
               display: flex;
+              height: 30%;
               align-items: center;
             `}
           >
@@ -148,28 +177,27 @@ function PageBlock({ data, popUp, setPopUp, userUrl, pageType }) {
                 font-size: 20px;
                 width: 70%;
                 display: flex;
-                margin: auto;
-                margin-top: 20px;
+                margin-left: 5%;
                 white-space: nowrap;
                 overflow: hidden;
               `}
             >
               {data ? `${data.title}` : ''}
             </div>
-            <Link to={editPath}>
-              <div
-                css={css`
-                  font-size: 20px;
-                  display: flex;
-                  display: flex;
-                  margin: auto;
-                  margin-top: 20px;
-                  margin-right: 20px;
-                `}
-              >
-                수정
-              </div>
-            </Link>
+            {pageType === 'single' && userMatched && (
+              <Link to={editPath}>
+                <div
+                  css={css`
+                    font-size: 20px;
+                    display: flex;
+                    margin-right: 5%;
+                    white-space: nowrap;
+                  `}
+                >
+                  수정
+                </div>
+              </Link>
+            )}
           </div>
         </div>
       )}
@@ -180,6 +208,14 @@ function PageBlock({ data, popUp, setPopUp, userUrl, pageType }) {
           textObject={deletePopUpText}
         />
       )}
+      {modifyPopUp && (
+        <ModifyPageInfoPopUp
+          pageType={pageType}
+          userSeq={userInfo.user_seq}
+          data={data}
+          setPopUp={setModifyPopUp}
+        />
+      )}
     </>
   );
 }
@@ -188,12 +224,12 @@ export default PageBlock;
 
 const siteViewBZone = css`
   position: relative;
-  width: 320px;
-  height: 230px;
-  margin-top: 30px;
-  margin-bottom: 10px;
-  margin-left: 23.75px;
-  margin-right: 23.75px;
+  width: 17vw;
+  height: 12vw;
+  min-width: 240px;
+  min-height: 173px;
+  max-width: 320px;
+  max-height: 230px;
   border-radius: 20px 20px 20px 20px;
   background-color: white;
   display: inline-block;
@@ -212,6 +248,6 @@ const imgLayout = css`
   object-fit: contain;
 `;
 
-const deleteButtonOrder = css`
+const hoverButtonOrder = css`
   z-index: 5;
 `;

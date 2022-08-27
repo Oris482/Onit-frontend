@@ -51,7 +51,7 @@ const BindingButtonSet = (props) => {
       dispatch(createReplacementMultiPagesAction(multiPagesData.data));
       setPopUp(false);
     }
-  }, [multiPagesData]);
+  }, [multiPagesData, dispatch, setPopUp]);
 
   useEffect(() => {
     // 마이페이지 업데이트를 위해 멀티페이지 GET 필요
@@ -61,7 +61,7 @@ const BindingButtonSet = (props) => {
         requestMultiPagesData();
       } else setErrorRes(EXTRA_ERROR);
     }
-  }, [res]);
+  }, [res, requestMultiPagesData]);
 
   useEffect(() => {
     // 서버 응답 에러 시 메시지 출력 부분
@@ -108,7 +108,7 @@ const BindingButtonSet = (props) => {
         setErrorRes(1);
       }
     }
-  }, [urlOverlapRes]);
+  }, [urlOverlapRes, request]);
 
   function submitMultiPageForm() {
     // eslint-disable-next-line no-unused-vars
