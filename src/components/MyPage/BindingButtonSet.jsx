@@ -108,7 +108,7 @@ const BindingButtonSet = (props) => {
         setErrorRes(1);
       }
     }
-  }, [urlOverlapRes, request]);
+  }, [urlOverlapRes]);
 
   function submitMultiPageForm() {
     // eslint-disable-next-line no-unused-vars
