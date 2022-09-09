@@ -144,7 +144,7 @@ function MyPage() {
         userMatched={userMatched}
         pageUrl={pageUrl}
         pageUserName={nickname}
-        pageType='normal'
+        pageType='myPage'
       />
       <div css={MyPageWrapper}>
         <Azone

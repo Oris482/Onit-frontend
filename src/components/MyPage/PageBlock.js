@@ -10,18 +10,14 @@ import {
 import { useRequest } from '../../hooks/useRequest';
 import useRequestAuth from '../../hooks/useRequestAuth';
 import { getApiEndpoint } from '../../utils/util';
-import {
-  InitButtonStyle,
-  commonBtn,
-  getAbsoluteBtn,
-} from '../../styles/GlobalStyles';
+import { commonBtn, getAbsoluteBtn } from '../../styles/GlobalStyles';
 import { closeSet, settingSet, logo } from '../../asset';
 import DoubleButtonPopUp from '../FeedbackBox/DoubleButtonPopUp';
 import ModifyPageInfoPopUp from './ModifyPageInfoPopUp';
 
 // eslint-disable-next-line no-unused-vars
 
-function PageBlock(props) {
+function PageBlock({ userMatched, data, userUrl, pageType }) {
   const [publishingPath, setPublishingPath] = useState('');
   const [editPath, setEditPath] = useState('');
   const [pageUrl, setPageUrl] = useState('');
@@ -32,8 +28,6 @@ function PageBlock(props) {
   const { userInfo } = useSelector((state) => ({
     userInfo: state.info.user,
   }));
-
-  const { userMatched, data, popUp, setPopUp, userUrl, pageType } = props;
 
   const { res: deleteRes, request: DeleteRequest } = useRequestAuth({
     endpoint: `${getApiEndpoint()}/user/page/single/${pageUrl}/${
@@ -102,28 +96,10 @@ function PageBlock(props) {
     // isPinned
   );
 
-  const AddPageBox = () => {
-    if (userMatched) {
-      return (
-        <>
-          <button
-            type='button'
-            css={[InitButtonStyle, siteViewBZone]}
-            onClick={() => setPopUp(!popUp)}
-          >
-            +
-          </button>
-        </>
-      );
-    } else {
-      return <></>;
-    }
-  };
-
   return (
     <>
       {!data ? (
-        <AddPageBox />
+        <></>
       ) : (
         <div
           css={siteViewBZone}

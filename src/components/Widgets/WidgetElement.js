@@ -26,7 +26,6 @@ import { WIDGET_COMMON_RADIUS } from '../../styles/style';
 import { convertType2String, isNewWidget } from '../../utils/util';
 import { commonBtn, getAbsoluteBtn } from '../../styles/GlobalStyles';
 import TextBox from './Text/TextBox';
-import { useReverseStaticWidget } from '../../hooks/widget';
 
 export function WidgetElement({
   element,
@@ -60,8 +59,6 @@ export function WidgetElement({
       })
     );
   };
-
-  const { reverseStatic } = useReverseStaticWidget();
 
   const openEditModalByType = (id, type) => {
     const stringType = convertType2String(type);
