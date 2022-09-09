@@ -75,10 +75,12 @@ function PageBlock(props) {
     if (singlePagesData && singlePagesData.data) {
       dispatch(createReplacementSinglePagesAction(singlePagesData.data));
     }
+  }, [singlePagesData, dispatch]);
+  useEffect(() => {
     if (multiPagesData && multiPagesData.data) {
       dispatch(createReplacementMultiPagesAction(multiPagesData.data));
     }
-  }, [singlePagesData, multiPagesData, dispatch]);
+  }, [multiPagesData, dispatch]);
 
   const CloseModal = () => {
     setDeletePopUp(false);

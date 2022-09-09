@@ -36,6 +36,7 @@ function MyPage() {
   const [addSinglePagePopUp, setAddSinglePagePopUp] = useState(false);
   const [profilePopUp, setProfilePopUp] = useState(false);
   const [bindingPopUp, setBindingPopUp] = useState(false);
+  const [singlePageCounter, setSinglePageCounter] = useState(0);
 
   const { myInfoState, singlePagesState, multiPagesState } = useSelector(
     (state) => ({
@@ -120,10 +121,22 @@ function MyPage() {
     if (singlePagesData && singlePagesData.data) {
       dispatch(createReplacementSinglePagesAction(singlePagesData.data));
     }
+  }, [singlePagesData, dispatch]);
+  useEffect(() => {
     if (multiPagesData && multiPagesData.data) {
       dispatch(createReplacementMultiPagesAction(multiPagesData.data));
     }
-  }, [singlePagesData, multiPagesData, dispatch]);
+  }, [multiPagesData, dispatch]);
+
+  useEffect(() => {
+    const currentSinglePagesLength = singlePagesState.data.length;
+    if (currentSinglePagesLength > singlePageCounter) {
+      setSinglePageCounter(currentSinglePagesLength);
+    } else if (currentSinglePagesLength < singlePageCounter) {
+      requestMultiPagesData();
+      setSinglePageCounter(currentSinglePagesLength);
+    }
+  }, [singlePagesState, singlePageCounter, requestMultiPagesData]);
 
   return (
     <div css={[positionRelative]}>

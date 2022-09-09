@@ -88,11 +88,14 @@ function ModifyPageInfoPopUp({ pageType, userSeq, data, setPopUp }) {
     if (singlePagesData && singlePagesData.data) {
       dispatch(createReplacementSinglePagesAction(singlePagesData.data));
       setPopUp(false);
-    } else if (multiPagesData && multiPagesData.data) {
+    }
+  }, [singlePagesData, dispatch, setPopUp]);
+  useEffect(() => {
+    if (multiPagesData && multiPagesData.data) {
       dispatch(createReplacementMultiPagesAction(multiPagesData.data));
       setPopUp(false);
     }
-  }, [singlePagesData, multiPagesData, dispatch, setPopUp]);
+  }, [multiPagesData, dispatch, setPopUp]);
 
   const { btn, img } = getAbsoluteBtn(25, 42, 25);
   const firstInput = {
