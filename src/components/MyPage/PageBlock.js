@@ -69,10 +69,12 @@ function PageBlock({ userMatched, data, userUrl, pageType }) {
     if (singlePagesData && singlePagesData.data) {
       dispatch(createReplacementSinglePagesAction(singlePagesData.data));
     }
+  }, [singlePagesData, dispatch]);
+  useEffect(() => {
     if (multiPagesData && multiPagesData.data) {
       dispatch(createReplacementMultiPagesAction(multiPagesData.data));
     }
-  }, [singlePagesData, multiPagesData, dispatch]);
+  }, [multiPagesData, dispatch]);
 
   const CloseModal = () => {
     setDeletePopUp(false);
@@ -221,7 +223,8 @@ const imgLayout = css`
   width: 100%;
   height: 100%;
   transform: translate(-50%, -50%);
-  object-fit: contain;
+  border-radius: 20px 20px 0 0;
+  object-fit: cover;
 `;
 
 const hoverButtonOrder = css`

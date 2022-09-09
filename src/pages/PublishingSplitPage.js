@@ -2,14 +2,17 @@ import { useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router';
 import MultiPage from './MultiPage';
 import SinglePage from './SinglePage';
-import { useMyInfo } from '../hooks/myInfo';
 import { getApiEndpoint, isError, urlOwnerNotFound } from '../utils/util';
 import { useSaveWidgetsFromServer } from '../hooks/widget';
 import { useRequest } from '../hooks/useRequest';
-import { useGetPageUrl, useGetPublishingUrl } from '../hooks/useParamsUrl';
+import {
+  useGetPageUrl,
+  useGetPublishingUrl,
+  useGetPersonalUrl,
+} from '../hooks/useParamsUrl';
 
 function PublishingSplitPage() {
-  const { myInfo } = useMyInfo();
+  // const { myInfo } = useMyInfo();
   const [pageType, setPageType] = useState(null);
   const [userSeq, setUserSeq] = useState(null);
   const [pathname, setPathname] = useState(null);
@@ -19,6 +22,7 @@ function PublishingSplitPage() {
   const history = useHistory();
   const publishUrl = useGetPublishingUrl();
   const pageUrl = useGetPageUrl();
+  const personalUrl = useGetPersonalUrl();
 
   // 위젯 데이터 받아올 준비
   const { res: pagesData, request: requestPagesData } = useRequest({
@@ -27,14 +31,16 @@ function PublishingSplitPage() {
   });
 
   // 유저 데이터를 받아서 userseq 세팅.
+  const { res: userSeqData, request: requestUserSeqData } = useRequest({
+    endpoint: `${getApiEndpoint()}/url/${personalUrl}/user`,
+    method: 'get',
+  });
+
   useEffect(() => {
-    if (myInfo?.user_seq) {
-      setUserSeq(myInfo.user_seq);
+    if (userSeqData) {
+      setUserSeq(userSeqData.data.data.user_seq);
     }
-    return () => {
-      setUserSeq(null);
-    };
-  }, [myInfo]);
+  }, [userSeqData]);
 
   // 요청 보낼 path 설정
   useEffect(() => {
@@ -45,6 +51,7 @@ function PublishingSplitPage() {
 
   // 유저 시퀀스가 있으면 -> 해당 유저의 위젯 데이터 받아오기
   useEffect(() => {
+    requestUserSeqData();
     if (userSeq && publishUrl) {
       requestPagesData();
     }
