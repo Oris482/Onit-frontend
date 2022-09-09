@@ -31,7 +31,7 @@ const BindingSelectSinglePages = ({ selectedPages, setSelectedPages }) => {
   }
 
   return singlePages.data.length !== 0 ? (
-    <div css={[siteViewBZone, BlockDrag]}>
+    <div css={[siteViewBZone, noneScrollBar, BlockDrag]}>
       {singlePagesInfo.map((page, index) => {
         const semiIndex = index + 1;
         return (
@@ -46,7 +46,7 @@ const BindingSelectSinglePages = ({ selectedPages, setSelectedPages }) => {
       })}
     </div>
   ) : (
-    <div css={siteViewBZone}>
+    <div css={[siteViewBZone, noneScrollBar]}>
       <div css={[noneSinglePageMsg]}>합칠 수 있는 페이지가 없어요!</div>
     </div>
   );
@@ -75,6 +75,13 @@ const siteViewBZone = css`
   border-radius: 20px;
   box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.1);
   background-color: white;
+`;
+
+const noneScrollBar = css`
+  -ms-overflow-style: none;
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const noneSinglePageMsg = css`
