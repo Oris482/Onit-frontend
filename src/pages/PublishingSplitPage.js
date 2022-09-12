@@ -2,7 +2,12 @@ import { useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router';
 import MultiPage from './MultiPage';
 import SinglePage from './SinglePage';
-import { getApiEndpoint, isError, urlOwnerNotFound } from '../utils/util';
+import {
+  getApiEndpoint,
+  isError,
+  urlOwnerNotFound,
+  useIsPathExist,
+} from '../utils/util';
 import { useSaveWidgetsFromServer } from '../hooks/widget';
 import { useRequest } from '../hooks/useRequest';
 import {
@@ -12,7 +17,6 @@ import {
 } from '../hooks/useParamsUrl';
 
 function PublishingSplitPage() {
-  // const { myInfo } = useMyInfo();
   const [pageType, setPageType] = useState(null);
   const [userSeq, setUserSeq] = useState(null);
   const [pathname, setPathname] = useState(null);
@@ -23,6 +27,7 @@ function PublishingSplitPage() {
   const publishUrl = useGetPublishingUrl();
   const pageUrl = useGetPageUrl();
   const personalUrl = useGetPersonalUrl();
+  const errorCode = useIsPathExist();
 
   // 위젯 데이터 받아올 준비
   const { res: pagesData, request: requestPagesData } = useRequest({
@@ -36,9 +41,28 @@ function PublishingSplitPage() {
     method: 'get',
   });
 
+  // 임시 코드
+  useEffect(() => {
+    if (errorCode && errorCode !== 'ok') {
+      if (errorCode === 'user_error') alert('유저를 찾을 수 없습니다.');
+      else if (errorCode === 'page_error') alert('페이지를 찾을 수 없습니다.');
+      history.goBack();
+    }
+  }, [errorCode]);
+
   useEffect(() => {
     if (userSeqData) {
-      setUserSeq(userSeqData.data.data.user_seq);
+      const { code, data, message } = userSeqData.data;
+      // if (isError(code) && urlOwnerNotFound(message)) {
+      //   alert('유저를 찾을 수 없습니다.');
+      //   history.goBack();
+      // }
+      if (isError(code)) {
+        alert('데이터 베이스 에러입니다.');
+      }
+      if (data) {
+        setUserSeq(data.user_seq);
+      }
     }
   }, [userSeqData]);
 

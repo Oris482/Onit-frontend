@@ -1,4 +1,10 @@
-import { useGetPersonalUrl } from '../hooks/useParamsUrl';
+import { useEffect, useState } from 'react';
+import { useRequest } from '../hooks/useRequest';
+import {
+  useGetPageUrl,
+  useGetPersonalUrl,
+  useGetPublishingUrl,
+} from '../hooks/useParamsUrl';
 import { TYPE_IMAGE, TYPE_NEW, TYPE_TEXT, TYPE_VIDEO } from './constantValue';
 
 export function getApiEndpoint() {
@@ -124,4 +130,66 @@ export function convertType2Label(type) {
   if (type === 'image' || type === TYPE_IMAGE) return '이미지';
   else if (type === 'video' || type === TYPE_VIDEO) return '영상';
   else return '';
+}
+
+// 임시 코드
+export function useIsPathExist() {
+  const [userSeq, setUserSeq] = useState(null);
+  const [errorCode, setErrorCode] = useState(null);
+  const [isMultiPage, setIsMultiPage] = useState(false);
+  const pageUrl = useGetPageUrl();
+  const personalUrl = useGetPersonalUrl();
+  const publishingUrl = useGetPublishingUrl();
+  const { res: userRes, request: requestUserInfo } = useRequest({
+    endpoint: `${getApiEndpoint()}/url/${personalUrl}/user`,
+    method: 'get',
+  });
+  const { res: publishPageRes, request: requestPageInfo } = useRequest({
+    endpoint: `${getApiEndpoint()}/user/page/${publishingUrl}/${userSeq}`,
+    method: 'get',
+  });
+
+  const { res: singlePageRes, request: requestSinglePageInfo } = useRequest({
+    endpoint: `${getApiEndpoint()}/user/page/${pageUrl}/${userSeq}`,
+    method: 'get',
+  });
+
+  useEffect(() => {
+    requestUserInfo();
+  }, [personalUrl]);
+
+  useEffect(() => {
+    if (userRes && userRes.data) {
+      if (userRes.data.code !== 'ok') setErrorCode('user_error');
+      else setUserSeq(userRes.data.data.user_seq);
+    }
+  }, [userRes]);
+
+  useEffect(() => {
+    if (userSeq && publishingUrl) {
+      requestPageInfo();
+    }
+  }, [userSeq, publishingUrl]);
+
+  useEffect(() => {
+    if (publishPageRes && publishPageRes.data) {
+      if (publishPageRes.data.code !== 'ok') setErrorCode('page_error');
+      else if (publishPageRes.data.data.isMultiPage === true)
+        setIsMultiPage(true);
+      else setErrorCode('ok');
+    }
+  }, [publishPageRes]);
+
+  useEffect(() => {
+    if (isMultiPage && pageUrl) requestSinglePageInfo();
+  }, [isMultiPage, pageUrl]);
+
+  useEffect(() => {
+    if (singlePageRes && singlePageRes.data) {
+      if (singlePageRes.data.code !== 'ok') setErrorCode('page_error');
+      else setErrorCode('ok');
+    }
+  }, [singlePageRes]);
+
+  return errorCode;
 }

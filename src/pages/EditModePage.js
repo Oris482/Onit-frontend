@@ -5,7 +5,8 @@ import { useHistory } from 'react-router';
 import { useSelector } from 'react-redux';
 import PopWidgets from '../components/Widgets/Pop/PopWidgets';
 import { PageWrapper, EditModeGrid, EditWrapper } from '../components';
-import { getApiEndpoint, urlMatched } from '../utils/util';
+import { getApiEndpoint, urlMatched, useIsPathExist } from '../utils/util';
+import { useRequest } from '../hooks/useRequest';
 import useRequestAuth from '../hooks/useRequestAuth';
 import { usePostData, useSaveWidgetsFromServer } from '../hooks/widget';
 import { useGetPersonalUrl, useGetPublishingUrl } from '../hooks/useParamsUrl';
@@ -18,8 +19,9 @@ function EditMode() {
     widgets: state.info.widgets,
     modal: state.info.modal,
   }));
-  const pageUrl = useGetPersonalUrl();
+  const personalUrl = useGetPersonalUrl();
   const publishingUrl = useGetPublishingUrl();
+  const errorCode = useIsPathExist();
   const [userSeq, setUserSeq] = useState(null);
   const [userMatched, setUserMatched] = useState(null);
   const history = useHistory();
@@ -30,32 +32,57 @@ function EditMode() {
   const [isAnimationEnd, setIsAnimationEnd] = useState(false);
   const [timeoutId, setTimeoutId] = useState(0);
 
+  // 임시 코드
   useEffect(() => {
-    if (pageUrl && myInfo) {
-      if (myInfo && urlMatched(myInfo.url, pageUrl)) {
+    if (errorCode && errorCode !== 'ok') {
+      if (errorCode === 'user_error') alert('유저를 찾을 수 없습니다.');
+      else if (errorCode === 'page_error') alert('페이지를 찾을 수 없습니다.');
+      history.goBack();
+    }
+  }, [errorCode]);
+
+  useEffect(() => {
+    if (personalUrl && myInfo) {
+      if (myInfo && urlMatched(myInfo.url, personalUrl)) {
         setUserMatched(true);
         setUserSeq(myInfo.user_seq);
       } else {
-        setUserMatched(false);
-        history.push(`/${pageUrl}`);
+        alert('내 페이지가 아닙니다.');
+        history.push(`/${personalUrl}/${publishingUrl}`);
       }
     }
     return () => {
       setUserMatched(null);
       setUserSeq(null);
     };
-  }, [pageUrl, myInfo]);
+  }, [personalUrl, myInfo]);
 
   const { res: widgetRes, request: requestWidgetData } = useRequestAuth({
     endpoint: `${getApiEndpoint()}/user/${userSeq}/widgets/${publishingUrl}`,
     method: 'get',
   });
 
+  const { res: pageRes, request: requestPageData } = useRequest({
+    endpoint: `${getApiEndpoint()}/user/page/${publishingUrl}/${userSeq}`,
+    method: 'get',
+  });
+
+  // 임시 코드
   useEffect(() => {
     if (userSeq && publishingUrl) {
-      requestWidgetData();
+      requestPageData();
     }
-  }, [userSeq, requestWidgetData]);
+  }, [userSeq, publishingUrl, requestPageData]);
+
+  useEffect(() => {
+    if (pageRes) {
+      if (pageRes.data.data.isMultiPage === false) requestWidgetData();
+      else {
+        alert('싱글페이지만 위젯 수정이 가능합니다.');
+        history.goBack();
+      }
+    }
+  }, [pageRes, requestWidgetData]);
 
   const { save } = useSaveWidgetsFromServer();
 
@@ -114,7 +141,7 @@ function EditMode() {
                   type='button'
                   css={[commonButtonStyle, moveHidden]}
                   onClick={() => {
-                    history.push(`/${pageUrl}`);
+                    history.push(`/${personalUrl}`);
                   }}
                 >
                   변경 취소
@@ -144,12 +171,12 @@ function EditMode() {
               <img src={edit_toggle} css={[toggle]} />
             </button>
           </div>
+          <EditWrapper>
+            {modal.popUpWindow && <PopWidgets />}
+            <EditModeGrid />
+          </EditWrapper>
         </>
       )}
-      <EditWrapper>
-        {modal.popUpWindow && <PopWidgets />}
-        <EditModeGrid />
-      </EditWrapper>
     </PageWrapper>
   );
 }
