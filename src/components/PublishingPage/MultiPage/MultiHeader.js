@@ -2,11 +2,11 @@
 import { css } from '@emotion/react';
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useMyInfo } from '../../../hooks/myInfo';
+import { useGetPersonalUrl } from '../../../hooks/useParamsUrl';
 
 function MultiHeader({ multiData, pageUrl }) {
   const [selected, setSelected] = useState('');
-  const { myInfo } = useMyInfo();
+  const personalUrl = useGetPersonalUrl();
 
   const { singlePages: pages, title, url } = multiData;
 
@@ -15,14 +15,14 @@ function MultiHeader({ multiData, pageUrl }) {
   }, [pageUrl]);
 
   const navLists = useMemo(() => {
-    if (multiData && pages && myInfo) {
+    if (multiData && pages && personalUrl) {
       const navList = pages.map((page, i) => {
         const key = i + 1;
         return (
           <li key={key} css={[pureList, navListStyles]}>
             <Link
               css={[pureButton, selected === page.singlePageUrl && underline]}
-              to={`/${myInfo.url}/${url}/${page.singlePageUrl}`}
+              to={`/${personalUrl}/${url}/${page.singlePageUrl}`}
             >
               {page.singlePageUrl}
             </Link>
@@ -32,7 +32,7 @@ function MultiHeader({ multiData, pageUrl }) {
       return navList;
     }
     return <></>;
-  }, [multiData, myInfo, pageUrl]);
+  }, [multiData, personalUrl, pageUrl]);
 
   return (
     <header>
