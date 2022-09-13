@@ -9,7 +9,7 @@ import { PlainPopUp } from './PlainPopUp';
 
 const inputColor = '#fff';
 
-function FeedbackInputBox(props) {
+function FeedbackInputBox({ sendReloadSignal }) {
   const [inputmessage, setInputmessage] = useState('');
   const [showPopUp, setShowPopUp] = useState(false);
   const [popUpText, setPopUpText] = useState({
@@ -30,8 +30,6 @@ function FeedbackInputBox(props) {
       content: inputmessage,
     },
   });
-
-  const { sendReloadSignal } = props;
 
   function closePopUp() {
     setShowPopUp(false);
