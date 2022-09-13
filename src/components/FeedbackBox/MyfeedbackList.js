@@ -6,48 +6,14 @@ import { FeedbackContentsBox, randomColor } from './FeedbackContentsBox';
 
 function MyfeedbackList({ myFeedbacks, myInfo }) {
   let prevColorIndex = null;
-  function SampleNextArrow({ onClick }) {
-    return (
-      <button
-        type='button'
-        style={{
-          position: 'absolute',
-          top: 'calc(50% - 10px)',
-          right: '5.5px',
-          zIndex: 2,
-          display: 'block',
-          width: '11px',
-          height: '20px',
-          outline: '0px',
-          border: '0px',
-        }}
-        onClick={onClick}
-        onKeyUp={() => {}}
-      >
-        <img alt='pass button' src={feedbackPass} style={{ width: '11px' }} />
-      </button>
-    );
-  }
-
-  function SamplePrevArrow() {
-    return <></>;
-  }
-  const settings = {
-    dots: false,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    nextArrow: <SampleNextArrow />,
-    prevArrow: <SamplePrevArrow />,
-  };
 
   return (
     <div css={[ContentBox]}>
       <p css={[nicknameBox]}>{myInfo.nickname}님의 의견</p>
       <div css={[listBox]}>
-        <Slider {...settings}>
-          {myFeedbacks ? (
+        <Slider {...settings(myFeedbacks?.length)}>
+          {myFeedbacks &&
+            myFeedbacks.length > 0 &&
             myFeedbacks.map((Feedback) => {
               prevColorIndex = randomColor(prevColorIndex);
               return (
@@ -59,15 +25,61 @@ function MyfeedbackList({ myFeedbacks, myInfo }) {
                   />
                 </div>
               );
-            })
-          ) : (
-            <p>{myInfo.nickname}님의 의견을 불러오는 중입니다.</p>
-          )}
+            })}
         </Slider>
+        {myFeedbacks && myFeedbacks.length === 0 && (
+          <p css={[slidPtag]}>
+            {myInfo.nickname}님의 소중한 의견을 온잇은 기다리고 있어요!.
+          </p>
+        )}
+        {!myFeedbacks && (
+          <p css={[slidPtag]}>
+            {myInfo.nickname}님의 의견을 불러오는 중이에요!
+          </p>
+        )}
       </div>
     </div>
   );
 }
+function SampleNextArrow({ onClick }) {
+  return (
+    <button
+      type='button'
+      style={{
+        position: 'absolute',
+        top: 'calc(50% - 10px)',
+        right: '5.5px',
+        zIndex: 2,
+        display: 'block',
+        width: '11px',
+        height: '20px',
+        outline: '0px',
+        border: '0px',
+      }}
+      onClick={onClick}
+      onKeyUp={() => {}}
+    >
+      <img alt='pass button' src={feedbackPass} style={{ width: '11px' }} />
+    </button>
+  );
+}
+
+function SamplePrevArrow() {
+  return <></>;
+}
+
+const settings = (length) => {
+  if (!length) return { infinite: false, centerMode: true };
+  return {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: length < 3 ? length : 3,
+    slidesToScroll: 3,
+    nextArrow: <SampleNextArrow />,
+    prevArrow: <SamplePrevArrow />,
+  };
+};
 
 const ContentBox = css`
   display: flex;
@@ -102,6 +114,14 @@ const listItem = css`
   height: 135.52px;
   width: calc(100% - 15.4px) !important;
   overflow: hidden;
+`;
+
+const slidPtag = css`
+  width: 100%;
+  height: 100%;
+  padding-top: 50px;
+  text-align: center;
+  font-weight: 500;
 `;
 
 export default MyfeedbackList;
