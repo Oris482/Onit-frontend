@@ -24,6 +24,11 @@ function App() {
         <Route exact path='/join' component={JoinPage} />
         <Route exact path='/feedback' component={FeedbackPage} />
         <Route exact path='/callback/kakao' component={HandleKakaoLogin} />
+        <Route
+          exact
+          path='/certificate/:email/:code'
+          component={EmailCertPage}
+        />
         <Route exact path='/:personalUrl/' component={MyPage} />
         {/* 나중에 pageUrl로 바껴야 됨 */}
         <Route
@@ -40,11 +45,6 @@ function App() {
           exact
           path='/:personalUrl/:publishingUrl/:pageUrl'
           component={PublishingSplitPage}
-        />
-        <Route
-          exact
-          path='/certificate/:email/:code'
-          component={EmailCertPage}
         />
         <Route path='/'>
           <div> 존재하지 않는 페이지입니다. </div>
