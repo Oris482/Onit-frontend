@@ -31,7 +31,7 @@ function FeedbackPage() {
 
   const sendReloadSignal = useCallback(() => {
     setNeedReload(!needReload);
-  }, [needReload]);
+  }, []);
 
   useEffect(() => {
     if (loggedIn === false) requestFeedbacks();
