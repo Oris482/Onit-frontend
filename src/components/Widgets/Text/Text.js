@@ -13,6 +13,7 @@ function TextEditor(props) {
   }));
 
   const editorRef = useRef(null);
+  const controlEditor = editorRef.current;
 
   const dispatch = useDispatch();
   const setEditorWidgetId = (id) => {
@@ -25,69 +26,20 @@ function TextEditor(props) {
   };
 
   useEffect(() => {
-    const editor = editorRef.current;
-    // const newList = JSON.parse(JSON.stringify(widgets.list));
-    // const found = newList.find((widget) => widget.i === props.widgetId);
-    // let isPinned = false;
-    // if (found?.static !== undefined) {
-    //   isPinned = found.static;
-    // }
-    if (editor.editor) {
+    if (controlEditor && controlEditor.editor) {
       if (props.isStatic === true) {
-        editor.editor.disableReadOnlyMode(props.widgetId);
-        editor.editor.focus();
-      } else if (props.isStatic === false) {
-        editor.editor.enableReadOnlyMode(props.widgetId);
-      }
+        controlEditor.editor.disableReadOnlyMode(props.widgetId);
+        controlEditor.editor.focus();
+      } else controlEditor.editor.enableReadOnlyMode(props.widgetId);
     }
-  }, [props.isStatic]);
-
-  // const handleClick = useCallback(() => {
-  //   const editor = editorRef.current;
-  //   // const newList = JSON.parse(JSON.stringify(widgets.list));
-  //   // const targetId = modal.targetWidgetId;
-  //   // const found = newList.find((widget) => widget.i === targetId);
-  //   // let isPinned = false;
-  //   // console.log(found);
-  //   // if (found?.static !== undefined) {
-  //   //   isPinned = found.static;
-  //   // }
-  //   console.log(props.isPinned);
-  //   if (props.isPinned === true) {
-  //     editor.editor.disableReadOnlyMode(props.widgetId);
-  //   }
-  // }, [props.isPinned]);
-
-  // useEffect(() => {
-  //   const editor = editorRef.current;
-  //   editor.domContainer.current.addEventListener('click', handleClick);
-
-  //   return () => {
-  //     editor.domContainer.current.removeEventListener('click', handleClick);
-  //   };
-  // }, []);
-
-  // const [thumbnail, setThumbnail] = useState('');
+  }, [controlEditor, props.isStatic]);
 
   const { updateTextData } = useUpdateTextWidgetData();
-
-  // const handleSubmit = useCallback(() => {
-  //   if (modal.targetWidgetId !== '-1') {
-  //     updateTextData(thumbnail);
-  //   }
-  // }, [thumbnail]);
 
   const originText = widgets.list.find(
     (element) => element.i === props.widgetId
   ).widget_data.thumbnail;
 
-  // useEffect(() => {
-  //   console.log(originText);
-  //   console.log(thumbnail);
-  //   if (originText !== thumbnail) {
-  //     handleSubmit();
-  //   }
-  // }, [thumbnail, handleSubmit]);
   return (
     <div className='TextEditor'>
       <div className='Textbox'>
