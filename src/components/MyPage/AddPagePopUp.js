@@ -11,6 +11,7 @@ import { closeSet } from '../../asset';
 import { PlainPopUp } from '../FeedbackBox/PlainPopUp';
 import BindingThumbnailBox from './BindingThumbnailBox';
 import BindingInputBox from './BindingInputBox';
+import { mainColor, subColor } from '../../styles/color';
 
 function AddPagePopUp({ userSeq, setPopUp }) {
   const [inputs, setInputs] = useState({
@@ -269,9 +270,9 @@ const commonLoginButtonStyle = css`
 
 const LoginButtonColor = css`
   color: rgba(255, 255, 255, 1);
-  background-color: rgba(239, 100, 8, 1);
+  background-color: ${subColor};
   &:hover {
-    background-color: rgba(300, 100, 8, 1);
+    background-color: ${mainColor};
   }
   &:disabled {
     pointer-events: none;

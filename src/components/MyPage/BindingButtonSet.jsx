@@ -9,6 +9,7 @@ import BindingPreview from './BindingPreview';
 import { PlainPopUp } from '../FeedbackBox/PlainPopUp';
 import { BlockDrag } from '../../styles/GlobalStyles';
 import { createReplacementMultiPagesAction } from '../../redux/slice';
+import { mainColor, subColor } from '../../styles/color';
 
 const BindingButtonSet = (props) => {
   const { userSeq, inputs, setPopUp } = props;
@@ -238,9 +239,9 @@ const GreyButtonColor = css`
 
 const LoginButtonColor = css`
   color: rgba(255, 255, 255, 1);
-  background-color: rgba(239, 100, 8, 1);
+  background-color: ${subColor};
   border: none;
   &:hover {
-    background-color: rgba(300, 100, 8, 1);
+    background-color: ${mainColor};
   }
 `;
