@@ -30,8 +30,7 @@ function getOrderedWidgetList(arr) {
 function Mobile({ widgetList }) {
   function mobileWidget() {
     if (widgetList) {
-      const { widget_list } = widgetList.data;
-      const filtered = widget_list.filter(
+      const filtered = widgetList.filter(
         (element) => element.widget_data !== {} && element.widget_data.thumbnail
       );
       const ordered = getOrderedWidgetList(filtered);
