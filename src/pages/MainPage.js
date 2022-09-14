@@ -1,12 +1,5 @@
-import {
-  Header,
-  NormalWrapper,
-  PageWrapper,
-  YoutubeVideo,
-} from '../components';
+import { Header, NormalWrapper, PageWrapper } from '../components';
 import MainContents from '../components/Main/MainContents';
-import YoutubeWrapper from '../components/Wrapper/YoutubeWrapper';
-// 주소, basic svg, hover svg
 
 function MainPage() {
   return (
@@ -14,9 +7,6 @@ function MainPage() {
       <NormalWrapper>
         <Header pageType='main' />
         <MainContents />
-        <YoutubeWrapper>
-          <YoutubeVideo embedId='HED9JQWI_M8' />
-        </YoutubeWrapper>
       </NormalWrapper>
     </PageWrapper>
   );
