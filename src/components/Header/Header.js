@@ -7,6 +7,7 @@ import { logoImg } from '../../asset';
 import { logout } from '../../utils/util';
 import { useMyInfo } from '../../hooks/myInfo';
 import Login from '../Login';
+import { subColor } from '../../styles/color';
 
 function Header({ userMatched, pageType }) {
   const history = useHistory();
@@ -214,7 +215,7 @@ const commonButtonStyle = css`
   color: #000;
   padding: 0px;
   &:hover {
-    color: #ef6408;
+    color: ${subColor};
   }
 `;
 

@@ -25,8 +25,6 @@ export default AddPageBlock;
 
 const siteViewBZone = css`
   position: relative;
-  width: 17vw;
-  height: 12vw;
   min-width: 240px;
   min-height: 173px;
   max-width: 320px;

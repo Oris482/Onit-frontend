@@ -39,10 +39,16 @@ function Azone({ profileImage, nickname, userSeq, setPopUp, popUp }) {
         >
           <div
             css={css`
-              height: 30px;
-              margin: 15px;
+              height: 41.25px;
+              margin: 0 15px 11.25px;
               text-align: left;
               font-size: 30px;
+              font-weight: bold;
+              font-stretch: normal;
+              font-style: normal;
+              line-height: normal;
+              letter-spacing: normal;
+              text-align: left;
             `}
           >
             {nickname ?? ''}
@@ -61,9 +67,7 @@ function Azone({ profileImage, nickname, userSeq, setPopUp, popUp }) {
               text-align: left;
             `}
           >
-            <div css={ProfileAZoneTagButton}>일러스트레이션</div>
-            <div css={ProfileAZoneTagButton}>포토그래퍼</div>
-            <div css={ProfileAZoneTagButton}>현대미술</div>
+            <div css={ProfileAZoneTagButton}>온잇은 지금 베타버전입니다</div>
           </div>
         </div>
         <div
@@ -76,7 +80,6 @@ function Azone({ profileImage, nickname, userSeq, setPopUp, popUp }) {
         >
           {myInfoState && myInfoState.user_seq === userSeq && (
             <ProfileBlock
-              addBlock
               setPopUp={setPopUp}
               popUp={popUp}
               buttonText='프로필 수정'
@@ -119,13 +122,17 @@ const profileImg = css`
 const ProfileAZoneTagButton = css`
   display: inline-block;
   margin: 5px;
+  height: 30px;
   background-color: white;
   border-radius: 20px;
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.15);
   justify-content: center;
   text-align: center;
-  font-size: 13px;
-  padding: 10px 20px 10px 20px;
+  font-size: 12px;
+  line-height: 14px;
+  padding: 7.5px 12.75px;
+  color: #888;
+  box-sizing: border-box;
 `;
 
 export default Azone;

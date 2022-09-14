@@ -193,14 +193,15 @@ const formWidth = css`
 `;
 
 const commonLoginButtonStyle = css`
-  width: 30%;
-  height: 60px;
+  width: 140px;
+  height: 45px;
   border-radius: 30px;
   border: 0;
   font-weight: bold;
-  font-size: 20px;
+  font-size: 15px;
+  margin-left: 50%;
+  transform: translate(-50%, 0);
   margin-bottom: 10px;
-  margin-left: 35%;
 `;
 
 const LoginButtonColor = css`

@@ -14,6 +14,7 @@ import { commonBtn, getAbsoluteBtn } from '../../styles/GlobalStyles';
 import { closeSet, settingSet, logo } from '../../asset';
 import DoubleButtonPopUp from '../FeedbackBox/DoubleButtonPopUp';
 import ModifyPageInfoPopUp from './ModifyPageInfoPopUp';
+import { mainColor } from '../../styles/color';
 
 // eslint-disable-next-line no-unused-vars
 
@@ -132,48 +133,33 @@ function PageBlock({ userMatched, data, userUrl, pageType }) {
             <div
               css={css`
                 position: relative;
-                height: 70%;
+                height: 82.5%;
                 border-radius: 20px 20px 0px 0px;
-                box-shadow: 0 1.5px 0 0 rgba(0, 0, 0, 0.2);
+                box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.1);
               `}
             >
-              <img
-                css={imgLayout}
-                src={data.thumbnail !== '' ? data.thumbnail : logo}
-              />
+              {data.thumbnail !== '' ? (
+                <img css={imgLayout('thumb')} src={data.thumbnail} />
+              ) : (
+                <img css={imgLayout('none')} src={logo} />
+              )}
             </div>
           </Link>
           <div
             css={css`
               display: flex;
-              height: 30%;
+              justify-content: space-between;
+              padding: 0 15px;
+              box-sizing: border-box;
+              height: 17.5%;
+              width: 100%;
               align-items: center;
             `}
           >
-            <div
-              css={css`
-                font-size: 20px;
-                width: 70%;
-                display: flex;
-                margin-left: 5%;
-                white-space: nowrap;
-                overflow: hidden;
-              `}
-            >
-              {data ? `${data.title}` : ''}
-            </div>
+            <div css={[titleBox, titleFont]}>{data ? `${data.title}` : ''}</div>
             {pageType === 'single' && userMatched && (
               <Link to={editPath}>
-                <div
-                  css={css`
-                    font-size: 20px;
-                    display: flex;
-                    margin-right: 5%;
-                    white-space: nowrap;
-                  `}
-                >
-                  편집
-                </div>
+                <div css={[editButton]}>편집</div>
               </Link>
             )}
           </div>
@@ -202,13 +188,9 @@ export default PageBlock;
 
 const siteViewBZone = css`
   position: relative;
-  width: 17vw;
-  height: 12vw;
-  min-width: 240px;
-  min-height: 173px;
-  max-width: 320px;
-  max-height: 230px;
-  border-radius: 20px 20px 20px 20px;
+  width: 263.75px;
+  height: 196.875px;
+  border-radius: 17px;
   background-color: white;
   display: inline-block;
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
@@ -216,15 +198,42 @@ const siteViewBZone = css`
   color: gray;
 `;
 
-const imgLayout = css`
+const imgLayout = (status) => css`
   position: absolute;
   left: 50%;
   top: 50%;
   width: 100%;
   height: 100%;
   transform: translate(-50%, -50%);
-  border-radius: 20px 20px 0 0;
-  object-fit: cover;
+  border-radius: 17px 17px 0 0;
+  object-fit: ${status === 'thumb' ? 'cover' : 'contain'};
+  ${status === 'none' && 'padding: 5px;'};
+  box-sizing: border-box;
+`;
+
+const titleBox = css`
+  display: flex;
+  width: 70%;
+  line-height: 20px;
+`;
+
+const titleFont = css`
+  font-size: 14px;
+  color: #222;
+  font-weight: bold;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+const editButton = css`
+  font-size: 13px;
+  display: flex;
+  white-space: nowrap;
+  &:hover {
+    color: ${mainColor};
+  }
 `;
 
 const hoverButtonOrder = css`

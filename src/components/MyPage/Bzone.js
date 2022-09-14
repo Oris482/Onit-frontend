@@ -27,6 +27,7 @@ function Bzone({
           setBindingPopUp={setBindingPopUp}
           bindingPopUp={bindingPopUp}
         />
+        <div />
         <PageList
           title='Paper'
           pageType='single'
