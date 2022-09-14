@@ -62,6 +62,7 @@ export function isURL(formedUrl) {
 export const regexNumber = /\d/gi;
 export const regexAlpha = /[a-zA-Z]/gi;
 export const regexAlnum = /[0-9a-zA-Z]/gi;
+export const regexKorean = /^[가-힣]/;
 export const regexSymbol = /[\^~`$@$+="':;/\\,.<>[\]{}|₩!%*#?&()_-]/gi;
 
 export function hasNumber(word) {
@@ -78,12 +79,25 @@ export function hasSymbol(word) {
   return matched ? matched.length : 0;
 }
 
+export function hasKorean(word) {
+  const matched = word.match(regexKorean);
+  return matched ? matched.length : 0;
+}
+
 export function isPassword(word) {
   const numberLen = hasNumber(word);
   const alphaLen = hasAlpha(word);
   const symbolLen = hasSymbol(word);
   if (!!numberLen + !!alphaLen + !!symbolLen < 2) return false;
   if (numberLen + alphaLen + symbolLen !== word.length) return false;
+  return true;
+}
+
+export function isValidNickname(word) {
+  const numberLen = hasNumber(word);
+  const alphaLen = hasAlpha(word);
+  const koreanLen = hasKorean(word);
+  if (numberLen + alphaLen + koreanLen !== word.length) return false;
   return true;
 }
 
