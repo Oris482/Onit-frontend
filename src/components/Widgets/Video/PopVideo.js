@@ -74,7 +74,7 @@ function PopVideo({ label, endPop }) {
 
       <button
         type='button'
-        css={[InitButtonStyle, OrangeColorButton, RoundButtonSmall]}
+        css={[InitButtonStyle, OrangeColorButton, RoundButtonSmall, buttonFont]}
         onClick={() => {
           handleSubmit();
           endPop();
@@ -119,4 +119,9 @@ const GuideMessage = css`
   margin-top: 30px;
   font-weight: bold;
   color: ${COLOR_STYLE.brownishGrey};
+`;
+
+const buttonFont = css`
+  font-size: 14.4px;
+  line-height: 14.4px;
 `;
