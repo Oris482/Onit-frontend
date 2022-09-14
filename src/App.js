@@ -14,6 +14,11 @@ import {
 import PublishingSplitPage from './pages/PublishingSplitPage';
 import ScrollToTop from './components/ScrollToTop';
 
+/**
+ *
+ * 막아야하는 url -> Main, join, feedback, callback, certificate
+ */
+
 function App() {
   return (
     <Router>

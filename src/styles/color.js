@@ -1,2 +1,2 @@
-export const mainColor = '#FF3D00';
-export const subColor = '#F0986C';
+export const mainColor = '#ff3d00';
+export const subColor = '#ff754a';

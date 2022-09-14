@@ -4,9 +4,10 @@ import { css } from '@emotion/react';
 import { useHistory } from 'react-router';
 import { HeaderWrapper } from '..';
 import { logoImg } from '../../asset';
-import { getApiEndpoint, logout } from '../../utils/util';
+import { logout } from '../../utils/util';
 import { useMyInfo } from '../../hooks/myInfo';
 import Login from '../Login';
+import { subColor } from '../../styles/color';
 
 function Header({ userMatched, pageType }) {
   const history = useHistory();
@@ -49,7 +50,7 @@ function Header({ userMatched, pageType }) {
       css={[commonButtonStyle, confirmButtonWidth, marginRight40]}
       onClick={() => setPopUpLogin(!popUpLogin)}
     >
-      LOG IN
+      시작하기
     </button>
   );
 
@@ -63,25 +64,16 @@ function Header({ userMatched, pageType }) {
     </button>
   );
 
-  const joinPageBtn = (
-    <button
-      type='button'
+  const guideBtn = (
+    <a
       css={[commonButtonStyle, confirmButtonWidth, marginRight40]}
-      onClick={() =>
-        history.push({
-          pathname: '/join',
-          state: {
-            endpoint: `${getApiEndpoint()}/auth/join/local`,
-            joinType: 'local',
-            userEmail: null,
-          },
-        })
-      }
+      rel='noreferrer'
+      target='_blank'
+      href='https://heom.notion.site/ONIT-3d91a0aee6b545aab841167248f54fb4'
     >
-      회원가입
-    </button>
+      온잇 가이드
+    </a>
   );
-
   const logoBtn = (
     <a href='/main' css={[marginLeft17, height21]}>
       <img alt='img' src={logoImg} css={hieght100p} />
@@ -107,6 +99,7 @@ function Header({ userMatched, pageType }) {
             {btn1}
             {btn2}
             {btn3}
+            {guideBtn}
           </>
         );
       else
@@ -115,6 +108,7 @@ function Header({ userMatched, pageType }) {
             {btn4}
             {btn5}
             {btn6}
+            {guideBtn}
           </>
         );
     },
@@ -162,19 +156,12 @@ function Header({ userMatched, pageType }) {
         logOutBtn,
         feedbackBtn,
         logInBtn,
-        joinPageBtn
+        noBtn
       );
     } else if (pageType === 'myPage') {
       return myPageHeader;
     } else if (pageType === 'feedback') {
-      return headerForm(
-        myPageBtn,
-        mainBtn,
-        logOutBtn,
-        noBtn,
-        logInBtn,
-        joinPageBtn
-      );
+      return headerForm(myPageBtn, mainBtn, logOutBtn, noBtn, logInBtn, noBtn);
     } else {
       return <div>정의되지 않은 타입입니다.</div>;
     }
@@ -217,18 +204,18 @@ const commonButtonStyle = css`
   display: inline-block;
   text-align: justify;
   height: 35px;
+  line-height: 35px;
   border-radius: 17px;
   border: none;
   font-size: 13.5px;
   font-weight: 500;
   font-stretch: normal;
   font-style: normal;
-  line-height: 1;
   letter-spacing: normal;
   color: #000;
   padding: 0px;
   &:hover {
-    color: #ef6408;
+    color: ${subColor};
   }
 `;
 

@@ -43,8 +43,8 @@ function PageList({
   }, [pagesInfo]);
 
   return (
-    <div>
-      <div>
+    <div css={[container]}>
+      <div css={[titleBox]}>
         <p css={[titleFont]}>{title}</p>
       </div>
       <div css={[flexWrap]}>
@@ -60,9 +60,17 @@ function PageList({
   );
 }
 
+const container = css`
+  margin-top: 50px;
+`;
+
+const titleBox = css`
+  margin-bottom: -10px;
+`;
+
 const titleFont = css`
-  font-size: 16px;
-  font-weight: 500;
+  font-size: 18px;
+  font-weight: 600;
   font-stretch: normal;
   font-style: normal;
   line-height: normal;
