@@ -66,6 +66,8 @@ function Header({ userMatched, pageType }) {
   const guideBtn = (
     <a
       css={[commonButtonStyle, confirmButtonWidth, marginRight40]}
+      rel='noreferrer'
+      target='_blank'
       href='https://heom.notion.site/ONIT-3d91a0aee6b545aab841167248f54fb4'
     >
       온잇 가이드
