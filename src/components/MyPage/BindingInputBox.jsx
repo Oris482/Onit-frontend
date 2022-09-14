@@ -21,7 +21,7 @@ const BindingInputBox = (props) => {
     if (url === '' || !isUrl) return '';
     if (!isURL(url)) return '숫자와 영어만 사용하실 수 있습니다!';
     else if (url.length < 4) return '4글자 이상 입력해주세요.';
-    else if (url.length > 20) return '16글자 이하로 입력해주세요';
+    else if (url.length > 16) return '16글자 이하로 입력해주세요';
     else {
       // 중복 체크 API 들어갈 부분
       return 'ok';
