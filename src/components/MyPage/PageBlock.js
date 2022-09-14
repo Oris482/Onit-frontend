@@ -81,9 +81,9 @@ function PageBlock({ userMatched, data, userUrl, pageType }) {
   };
 
   const deletePopUpText = {
-    topText: '페이지 삭제',
-    middleText: '확인 버튼을 누르면 페이지가 삭제됩니다!',
-    bottomText: '삭제하신 페이지는 복구가 어려우니 한 번 더 확인해주세요!',
+    topText: '페이퍼 삭제',
+    middleText: '확인 버튼을 누르면 페이퍼가 삭제됩니다!',
+    bottomText: '삭제하신 페이퍼는 복구가 어려우니 한 번 더 확인해주세요!',
   };
 
   const diameter = 44;
@@ -172,7 +172,7 @@ function PageBlock({ userMatched, data, userUrl, pageType }) {
                     white-space: nowrap;
                   `}
                 >
-                  수정
+                  편집
                 </div>
               </Link>
             )}

@@ -13,7 +13,7 @@ function TextBox({ element, mode }) {
   return mode === 'normal' ? (
     <Viewer content={element.widget_data.thumbnail} />
   ) : (
-    <TextEditor widgetId={element.i} />
+    <TextEditor widgetId={element.i} isStatic={element.static} />
   );
 }
 

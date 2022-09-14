@@ -22,5 +22,10 @@
 }
 
 .ck.ck-editor__editable_inline {
+  overflow: hidden !important;
   overflow-wrap: break-word;
+}
+
+.ck.ck-read-only .ck-placeholder:before {
+  display: block !important;
 }

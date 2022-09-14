@@ -99,14 +99,14 @@ function ModifyPageInfoPopUp({ pageType, userSeq, data, setPopUp }) {
 
   const { btn, img } = getAbsoluteBtn(25, 42, 25);
   const firstInput = {
-    head: '페이지 제목',
+    head: '페이퍼 제목',
     placeholder: data.title,
   };
 
   return (
     <div css={[backGroundPopStyle]}>
       <div css={[pagePopUpBoxStyle]}>
-        <div css={[pagePopUpBoxTitle]}>페이지 수정</div>
+        <div css={[pagePopUpBoxTitle]}>페이퍼 수정</div>
         <form css={[formWidth]}>
           <button
             type='button'
