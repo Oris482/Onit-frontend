@@ -41,6 +41,10 @@ function Login() {
   }, []);
 
   const handleLocalLogin = () => {
+    if (emailValue === '') {
+      alert('회원가입을 위한 페이지로 이동할게요!');
+      handleLocalJoin();
+    }
     request();
   };
 
@@ -56,8 +60,9 @@ function Login() {
         res.data.code === 'unauthorized' &&
         res.data.message === 'password incorrect'
       ) {
-        alert('비밀번호를 잘못 입력하셨습니다.');
+        alert('비밀번호를 잘못 입력했어요.');
       } else if (res.data.code === 'unauthorized') {
+        alert('가입되지 않은 아이디에요. 회원가입을 위한 페이지로 이동할게요!');
         handleLocalJoin();
       } else if (res.data.code === 'ok') {
         setLocalStorage(res.data.data);
@@ -69,7 +74,7 @@ function Login() {
   useEffect(() => {
     if (userInfoRes && userInfoRes.data) {
       if (userInfoRes.data.code !== 'ok') {
-        alert('정보를 가져오는 과정에서 오류가 발생하였습니다.');
+        alert('정보를 가져오는 과정에서 오류가 발생했어요.');
       } else {
         window.location.reload();
       }
