@@ -67,8 +67,8 @@ function EditModeGrid() {
     strategy,
     update: updateFloatingUi,
   } = useFloating({
-    placement: 'top-start',
-    middleware: [shift(), flip(), offset(25)],
+    placement: 'top-end',
+    middleware: [shift(), flip(), offset(5)],
   });
 
   const dispatch = useDispatch();

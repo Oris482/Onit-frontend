@@ -21,6 +21,7 @@ function ModifyPageInfoPopUp({ pageType, userSeq, data, setPopUp }) {
   });
   const [thumbnail, setThumbnail] = useState(data.thumbnail);
   const { title } = inputs;
+  const pageTypeText = pageType === 'single' ? '페이퍼 ' : '페이지 ';
 
   const onChange = useCallback(
     (e) => {
@@ -99,14 +100,14 @@ function ModifyPageInfoPopUp({ pageType, userSeq, data, setPopUp }) {
 
   const { btn, img } = getAbsoluteBtn(25, 42, 25);
   const firstInput = {
-    head: '페이퍼 제목',
+    head: `${pageTypeText}제목`,
     placeholder: data.title,
   };
 
   return (
     <div css={[backGroundPopStyle]}>
       <div css={[pagePopUpBoxStyle]}>
-        <div css={[pagePopUpBoxTitle]}>페이퍼 수정</div>
+        <div css={[pagePopUpBoxTitle]}>{pageTypeText}수정</div>
         <form css={[formWidth]}>
           <button
             type='button'
