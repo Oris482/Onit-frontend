@@ -142,7 +142,12 @@ function PopImage(props) {
 
         <button
           type='button'
-          css={[InitButtonStyle, OrangeColorButton, RoundButtonSmall]}
+          css={[
+            InitButtonStyle,
+            OrangeColorButton,
+            RoundButtonSmall,
+            buttonFont,
+          ]}
           onClick={() => {
             handleSubmit();
           }}
@@ -193,6 +198,8 @@ const urlInputStyle = css`
   ${BasicInputStyle}
   width: 80%;
   height: 40px;
+  font-size: 14.4px;
+  line-height: 24px;
   margin: 28px 15px 32px 0;
   padding: 8px 17px;
   box-sizing: border-box;
@@ -221,6 +228,11 @@ const ChangeModeButton = css`
   padding: 5px 8%;
   display: block;
   margin: 0px;
+`;
+
+const buttonFont = css`
+  font-size: 14.4px;
+  line-height: 14.4px;
 `;
 
 export default PopImage;

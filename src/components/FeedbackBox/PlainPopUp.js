@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
+import { mainColor, subColor } from '../../styles/color';
 import { BlockDrag } from '../../styles/GlobalStyles';
 
 export function PlainPopUp(props) {
@@ -107,16 +108,17 @@ const ConfirmButtom = css`
   width: 105px;
   height: 28px;
   font-size: 12px;
+  line-height: 12px;
   text-align: center;
-  background-color: var(--red-orange, #ff3d00);
+  background-color: ${subColor};
   color: white;
   border: none;
   border-radius: 30px;
   margin-top: 20px;
   margin-bottom: 20px;
-  padding: 7px 30px 7px 30px;
+  padding: 8px 30px;
   :hover:enabled {
-    opacity: 0.8;
+    background-color: ${mainColor};
     cursor: pointer;
   }
 `;

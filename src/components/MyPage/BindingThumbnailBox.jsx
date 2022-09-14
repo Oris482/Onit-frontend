@@ -3,6 +3,7 @@ import { css } from '@emotion/react';
 import React, { useState, useEffect } from 'react';
 import BindingThumbnailPopUp from './BindingThumbnailPopUp';
 import { BlockDrag } from '../../styles/GlobalStyles';
+import { mainColor, subColor } from '../../styles/color';
 
 const BindingThumbnailBox = (props) => {
   const { thumbnail, setThumbnail } = props;
@@ -84,9 +85,9 @@ const thumbnailImg = css`
 
 const LoginButtonColor = css`
   color: rgba(255, 255, 255, 1);
-  background-color: rgba(239, 100, 8, 1);
+  background-color: ${subColor};
   border: none;
   &:hover {
-    background-color: rgba(300, 100, 8, 1);
+    background-color: ${mainColor};
   }
 `;
