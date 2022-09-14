@@ -8,7 +8,12 @@ import {
   FlexSpaceBetweenCenter,
   SHADOW_STYLE,
 } from '../styles/GlobalStyles';
-import { isPassword, getApiEndpoint, isURL } from '../utils/util';
+import {
+  isPassword,
+  getApiEndpoint,
+  isURL,
+  isValidNickname,
+} from '../utils/util';
 import useRequestAuth from './useRequestAuth';
 
 function useInput({ inputType, id, type, ...args }) {
@@ -29,10 +34,11 @@ function useInput({ inputType, id, type, ...args }) {
       if (!isEmail(value)) return '잘못된 형식입니다.';
     } else if (inputType === 'password') {
       if (!isPassword(value))
-        return '영문, 숫자, 특수문자 중 최소 2가지 조합으로 입력해주세요.';
+        return '영어, 숫자, 특수문자 중 최소 2가지 조합으로 입력해주세요.';
       else if (value.length < 5) return '5글자 이상 입력해주세요.';
     } else if (inputType === 'nickname') {
-      if (value.length > 15) return '15글자 이하로 입력해주세요';
+      if (!isValidNickname(value)) return '한글, 영어, 숫자만 사용가능합니다!';
+      else if (value.length > 15) return '15글자 이하로 입력해주세요';
     } else if (inputType === 'url') {
       // const formedUrl = `http://${value}.kr`;
       if (!isURL(value)) return '숫자와 영어만 사용하실 수 있습니다!';
