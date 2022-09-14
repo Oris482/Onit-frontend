@@ -158,7 +158,6 @@ function AddPagePopUp({ userSeq, setPopUp }) {
 
   useEffect(() => {
     if (res && res.data.code === 'ok') {
-      console.log(res);
       closeSendingPopUp();
       history.push(`/${personalUrl}/${inputs.url}/edit`);
     }

@@ -52,7 +52,7 @@ function PublishingSplitPage() {
 
   useEffect(() => {
     if (userSeqData) {
-      const { code, data, message } = userSeqData.data;
+      const { code, data } = userSeqData.data;
       // if (isError(code) && urlOwnerNotFound(message)) {
       //   alert('유저를 찾을 수 없습니다.');
       //   history.goBack();
