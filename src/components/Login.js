@@ -4,11 +4,7 @@ import { css } from '@emotion/react';
 import { useHistory } from 'react-router';
 import { getApiEndpoint, setLocalStorage } from '../utils/util';
 import { useRequest } from '../hooks/useRequest';
-import {
-  COLOR_STYLE,
-  FlexColCenter,
-  InitButtonStyle,
-} from '../styles/GlobalStyles';
+import { FlexColCenter } from '../styles/GlobalStyles';
 import useRequestAuth from '../hooks/useRequestAuth';
 
 function Login() {
@@ -45,14 +41,6 @@ function Login() {
   }, []);
 
   const handleLocalLogin = () => {
-    // if (email.state !== 'ok' && password.state !== 'ok') {
-    //   alert('아이디와 비밀번호를 확인해주세요.');
-    // } else if (email.state !== 'ok') {
-    //   alert(email.state);
-    // } else if (password.state !== 'ok') {
-    //   alert(password.state);
-    // } else {
-    // }
     request();
   };
 
@@ -70,7 +58,7 @@ function Login() {
       ) {
         alert('비밀번호를 잘못 입력하셨습니다.');
       } else if (res.data.code === 'unauthorized') {
-        alert('존재하지 않는 아이디입니다.');
+        handleLocalJoin();
       } else if (res.data.code === 'ok') {
         setLocalStorage(res.data.data);
         userInfoRequest();
@@ -130,23 +118,20 @@ function Login() {
             css={[commonLoginButtonStyle, LoginButtonColor]}
             onClick={handleLocalLogin}
           >
-            로그인
+            이메일로 시작하기
           </button>
         </form>
+        <div css={loginBoundary}>
+          <div css={borderLine} />
+          <p css={JoinMessageStyle}>또는</p>
+          <div css={borderLine} />
+        </div>
         <button
           type='button'
           css={[commonLoginButtonStyle, KakaoLoginButtonStyle]}
           onClick={handleKakaoLogin}
         >
-          카카오 로그인
-        </button>
-        <p css={JoinMessageStyle}>아직 onit의 회원이 아니세요?</p>
-        <button
-          type='button'
-          onClick={handleLocalJoin}
-          css={[commonLoginButtonStyle, joinButton]}
-        >
-          회원가입
+          카카오로 시작하기
         </button>
       </div>
     </>
@@ -156,10 +141,12 @@ function Login() {
 export default Login;
 
 const JoinMessageStyle = css`
-  font-size: 0.85rem;
-  margin: 20px 0 5px 0;
+  font-size: 0.75rem;
+  line-height: 1;
+  padding: 0 0.75rem;
   font-weight: bold;
-  color: ${COLOR_STYLE.brownishGrey};
+  flex-shrink: 0;
+  color: #dbdbdb;
 `;
 
 const formWidth = css`
@@ -189,7 +176,7 @@ const commonInputBoxStyle = css`
   border: 1px solid #707070;
   padding: 3px 15px;
   box-sizing: border-box;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 `;
 
 const marginBottom10px = css`
@@ -225,6 +212,21 @@ const LoginButtonColor = css`
   }
 `;
 
+const loginBoundary = css`
+  display: flex;
+  width: 100%;
+  margin: 5px 0 15px 0;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+`;
+
+const borderLine = css`
+  width: 48%;
+  height: 1px;
+  border-bottom: 1px solid #dbdbdb;
+`;
+
 const KakaoLoginButtonStyle = css`
   color: rgba(55, 55, 55, 1);
   background-color: rgba(255, 225, 28, 1);
@@ -232,15 +234,4 @@ const KakaoLoginButtonStyle = css`
     background-color: rgba(255, 235, 28, 1);
   }
   margin-bottom: 25px;
-`;
-
-const joinButton = css`
-  ${InitButtonStyle}
-  font-size: 0.8rem;
-  margin: 5px 0 5px 0;
-  font-weight: 600;
-  background-color: #f2f2f2;
-  &:hover {
-    background-color: rgba(232, 232, 232, 10);
-  }
 `;

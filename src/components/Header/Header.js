@@ -4,7 +4,7 @@ import { css } from '@emotion/react';
 import { useHistory } from 'react-router';
 import { HeaderWrapper } from '..';
 import { logoImg } from '../../asset';
-import { getApiEndpoint, logout } from '../../utils/util';
+import { logout } from '../../utils/util';
 import { useMyInfo } from '../../hooks/myInfo';
 import Login from '../Login';
 
@@ -49,7 +49,7 @@ function Header({ userMatched, pageType }) {
       css={[commonButtonStyle, confirmButtonWidth, marginRight40]}
       onClick={() => setPopUpLogin(!popUpLogin)}
     >
-      LOG IN
+      시작하기
     </button>
   );
 
@@ -71,26 +71,6 @@ function Header({ userMatched, pageType }) {
       온잇 가이드
     </a>
   );
-
-  const joinPageBtn = (
-    <button
-      type='button'
-      css={[commonButtonStyle, confirmButtonWidth, marginRight40]}
-      onClick={() =>
-        history.push({
-          pathname: '/join',
-          state: {
-            endpoint: `${getApiEndpoint()}/auth/join/local`,
-            joinType: 'local',
-            userEmail: null,
-          },
-        })
-      }
-    >
-      회원가입
-    </button>
-  );
-
   const logoBtn = (
     <a href='/main' css={[marginLeft17, height21]}>
       <img alt='img' src={logoImg} css={hieght100p} />
@@ -173,19 +153,12 @@ function Header({ userMatched, pageType }) {
         logOutBtn,
         feedbackBtn,
         logInBtn,
-        joinPageBtn
+        noBtn
       );
     } else if (pageType === 'myPage') {
       return myPageHeader;
     } else if (pageType === 'feedback') {
-      return headerForm(
-        myPageBtn,
-        mainBtn,
-        logOutBtn,
-        noBtn,
-        logInBtn,
-        joinPageBtn
-      );
+      return headerForm(myPageBtn, mainBtn, logOutBtn, noBtn, logInBtn, noBtn);
     } else {
       return <div>정의되지 않은 타입입니다.</div>;
     }
