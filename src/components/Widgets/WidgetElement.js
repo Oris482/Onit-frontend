@@ -199,6 +199,7 @@ const widgetFrame = css`
   width: 100%;
   height: 100%;
   border-diameter: ${WIDGET_COMMON_RADIUS};
+  overflow: hidden;
 `;
 
 /*
