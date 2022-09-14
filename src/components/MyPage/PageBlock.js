@@ -220,7 +220,7 @@ const titleBox = css`
 const titleFont = css`
   font-size: 14px;
   color: #222;
-  font-weight: bold;
+  font-weight: 500;
   text-align: left;
   white-space: nowrap;
   overflow: hidden;
