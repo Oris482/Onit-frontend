@@ -47,7 +47,7 @@ const BindingSelectSinglePages = ({ selectedPages, setSelectedPages }) => {
     </div>
   ) : (
     <div css={[siteViewBZone, noneScrollBar]}>
-      <div css={[noneSinglePageMsg]}>합칠 수 있는 페이지가 없어요!</div>
+      <div css={[noneSinglePageMsg]}>합칠 수 있는 페이퍼가 없어요!</div>
     </div>
   );
 };

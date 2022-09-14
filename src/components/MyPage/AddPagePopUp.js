@@ -1,11 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import React, { useState, useCallback, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router';
 import { useRequest } from '../../hooks/useRequest';
 import useRequestAuth from '../../hooks/useRequestAuth';
 import { getApiEndpoint } from '../../utils/util';
-import { createReplacementSinglePagesAction } from '../../redux/slice';
+import { useGetPersonalUrl } from '../../hooks/useParamsUrl';
 import { commonBtn, getAbsoluteBtn } from '../../styles/GlobalStyles';
 import { closeSet } from '../../asset';
 import { PlainPopUp } from '../FeedbackBox/PlainPopUp';
@@ -52,12 +52,8 @@ function AddPagePopUp({ userSeq, setPopUp }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [thumbnail]);
 
-  const dispatch = useDispatch();
-  // eslint-disable-next-line no-unused-vars
-  const { res: singlePagesData, request: requestSinglePagesData } = useRequest({
-    endpoint: `${getApiEndpoint()}/user/page/singles/${userSeq}`,
-    method: 'get',
-  });
+  const history = useHistory();
+  const personalUrl = useGetPersonalUrl();
 
   const { res: urlOverlapRes, request: requestUrlOverlap } = useRequest({
     endpoint: `${getApiEndpoint()}/user/page/overlap/${inputs.url}/${userSeq}`,
@@ -93,7 +89,7 @@ function AddPagePopUp({ userSeq, setPopUp }) {
       setPopUpText({
         topText: '데이터 전송 중',
         middleText: '열심히 데이터를 보내고 있습니다!',
-        bottomText: '조금만 더 기다려주시면 멋진 페이지를 보여드릴게요!',
+        bottomText: '조금만 더 기다려주시면 멋진 페이퍼를 보여드릴게요!',
       });
       setSendingPopUp(true);
       request();
@@ -110,18 +106,18 @@ function AddPagePopUp({ userSeq, setPopUp }) {
       setHasButton(true);
       setPopUpText({
         topText: '문제가 발생했어요!',
-        middleText: '가지고 계신 페이지에 이미 해당 주소가 있어요.',
+        middleText: '가지고 계신 페이퍼에 이미 해당 주소가 있어요.',
         bottomText:
-          '같은 주소에는 하나의 페이지만 있을 수 있습니다.\n아쉽지만 다른 주소로 설정해주세요!',
+          '같은 주소에는 하나의 페이퍼만 있을 수 있습니다.\n아쉽지만 다른 주소로 설정해주세요!',
       });
       setSendingPopUp(true);
     } else if (errorRes === URL_FORMAT_ERROR) {
       setHasButton(true);
       setPopUpText({
         topText: '문제가 발생했어요!',
-        middleText: '설정하신 페이지 주소가 규칙에 맞지 않아요.',
+        middleText: '설정하신 페이퍼 주소가 규칙에 맞지 않아요.',
         bottomText:
-          '페이지 주소는 4글자 이상 20글자 이하\n영어와 숫자만 사용가능해요!',
+          '페이퍼 주소는 4글자 이상 20글자 이하\n영어와 숫자만 사용가능해요!',
       });
       setSendingPopUp(true);
     }
@@ -141,10 +137,10 @@ function AddPagePopUp({ userSeq, setPopUp }) {
     }
   }, [urlOverlapRes]);
 
-  function closeSendingPopUp() {
+  const closeSendingPopUp = useCallback(() => {
     setErrorRes(null);
     setSendingPopUp(false);
-  }
+  }, []);
 
   const checkFormInputs = (e) => {
     if (inputs.url === '' || inputs.title === '') {
@@ -162,28 +158,23 @@ function AddPagePopUp({ userSeq, setPopUp }) {
 
   useEffect(() => {
     if (res && res.data.code === 'ok') {
-      requestSinglePagesData();
+      console.log(res);
+      closeSendingPopUp();
+      history.push(`/${personalUrl}/${inputs.url}/edit`);
     }
-  }, [res, requestSinglePagesData]);
-
-  useEffect(() => {
-    if (singlePagesData && singlePagesData.data) {
-      dispatch(createReplacementSinglePagesAction(singlePagesData.data));
-      setPopUp(false);
-    }
-  }, [singlePagesData, dispatch, setPopUp]);
+  }, [res]);
 
   const { btn, img } = getAbsoluteBtn(25, 42, 25);
   const firstInput = {
-    head: '페이지 제목',
+    head: '페이퍼 제목',
     placeholder: '제목을 입력해주세요!',
   };
-  const secondInput = { head: '페이지 주소', placeholder: '' };
+  const secondInput = { head: '페이퍼 주소', placeholder: '' };
 
   return (
     <div css={[backGroundPopStyle]}>
       <div css={[pagePopUpBoxStyle]}>
-        <div css={[pagePopUpBoxTitle]}>페이지 추가</div>
+        <div css={[pagePopUpBoxTitle]}>페이퍼 추가</div>
         <form css={[formWidth]}>
           <button
             type='button'

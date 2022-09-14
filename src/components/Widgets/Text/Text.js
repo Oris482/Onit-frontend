@@ -26,20 +26,21 @@ function TextEditor(props) {
 
   useEffect(() => {
     const editor = editorRef.current;
-    const newList = JSON.parse(JSON.stringify(widgets.list));
-    const found = newList.find((widget) => widget.i === props.widgetId);
-    let isPinned = false;
-    if (found?.static !== undefined) {
-      isPinned = found.static;
-    }
+    // const newList = JSON.parse(JSON.stringify(widgets.list));
+    // const found = newList.find((widget) => widget.i === props.widgetId);
+    // let isPinned = false;
+    // if (found?.static !== undefined) {
+    //   isPinned = found.static;
+    // }
     if (editor.editor) {
-      if (isPinned === true) {
+      if (props.isStatic === true) {
         editor.editor.disableReadOnlyMode(props.widgetId);
-      } else if (isPinned === false) {
+        editor.editor.focus();
+      } else if (props.isStatic === false) {
         editor.editor.enableReadOnlyMode(props.widgetId);
       }
     }
-  }, [widgets.list, props.widgetId]);
+  }, [props.isStatic]);
 
   // const handleClick = useCallback(() => {
   //   const editor = editorRef.current;
@@ -103,7 +104,7 @@ function TextEditor(props) {
                 isFloating: true,
                 shouldNotGroupWhenFull: true,
               },
-              placeholder: '텍스트를 입력하세요!',
+              placeholder: '설정 버튼으로 입력/이동 모드를 전환',
               heading: {
                 options: [
                   {

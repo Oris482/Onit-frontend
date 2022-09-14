@@ -65,7 +65,7 @@ function BindingPopUp({ userSeq, setPopUp }) {
   return (
     <div css={[backGroundPopStyle]}>
       <div css={[pagePopUpBoxStyle]}>
-        <div css={[pagePopUpBoxTitle, BlockDrag]}>페이지 합치기</div>
+        <div css={[pagePopUpBoxTitle, BlockDrag]}>페이퍼 합치기</div>
         <form css={[formWidth]}>
           <button
             type='button'
@@ -95,7 +95,7 @@ function BindingPopUp({ userSeq, setPopUp }) {
             </div>
             <div>
               <div css={[VerticalLayout]}>
-                <div css={[pagePopUpBoxContents, BlockDrag]}>페이지 선택</div>
+                <div css={[pagePopUpBoxContents, BlockDrag]}>페이퍼 선택</div>
                 <BindingSelectSinglePages
                   selectedPages={selectedPages}
                   setSelectedPages={setSelectedPages}

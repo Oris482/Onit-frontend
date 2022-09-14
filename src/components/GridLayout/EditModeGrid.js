@@ -6,7 +6,10 @@ import { useFloating, shift, offset } from '@floating-ui/react-dom';
 import { flip } from '@floating-ui/core';
 import GridLayout from './GridLayout';
 import MouseGridLayout from './MouseGridLayout';
-import { createReplacementWidgetsAction } from '../../redux/slice';
+import {
+  createReplacementWidgetsAction,
+  createReplacementModalAction,
+} from '../../redux/slice';
 import { WidgetElement } from '../Widgets/WidgetElement';
 import {
   GRID_COLS,
@@ -20,6 +23,7 @@ import {
   ACTION_EDIT,
   TYPE_MOUSE,
   TYPE_NONEDISPLAY,
+  TYPE_NEW,
 } from '../../utils/constantValue';
 import useWindowSize from './useWindowSize';
 import ToolBar from '../ToolBar/ToolBar';
@@ -54,6 +58,7 @@ function EditModeGrid() {
   // toolBar 선택위한 위젯
   const [selectedWidget, setSelectedWidget] = useState(null);
   const [gridHeight, setGridHeight] = useState(1);
+  const [newWidgetFlag, setNewWidgetFlag] = useState(false);
   const {
     x,
     y,
@@ -67,7 +72,7 @@ function EditModeGrid() {
   });
 
   const dispatch = useDispatch();
-  const { widgets } = useSelector((state) => ({
+  const { widgets, modal } = useSelector((state) => ({
     widgets: state.info.widgets,
     modal: state.info.modal,
   }));
@@ -79,6 +84,31 @@ function EditModeGrid() {
       window.removeEventListener('scroll', () => handleScrollWidth()); // clean up
     };
   }, []);
+
+  useEffect(() => {
+    if (newWidgetFlag && widgets) {
+      const target = widgets.list[widgets.count];
+      if (
+        target &&
+        target.widget_action === 'C' &&
+        target.widget_type === TYPE_NEW
+      ) {
+        setSelectedWidget(target.i);
+        openEditWindow(target.i);
+        setNewWidgetFlag(false);
+      }
+    }
+  }, [widgets, newWidgetFlag]);
+
+  const openEditWindow = (id) => {
+    dispatch(
+      createReplacementModalAction({
+        ...modal,
+        imgInputWindow: true,
+        targetWidgetId: id,
+      })
+    );
+  };
 
   const handleScrollWidth = () => {
     if (window.scrollY > 100 && window.scrollY < 10000) {
@@ -102,6 +132,7 @@ function EditModeGrid() {
     }
     if (isWidgetOverlap === false) {
       addEmptyWidget(mouseOverWidget);
+      setNewWidgetFlag(true);
     }
   };
 

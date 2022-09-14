@@ -176,12 +176,22 @@ export function useIsPathExist() {
       if (publishPageRes.data.code !== 'ok') setErrorCode('page_error');
       else if (publishPageRes.data.data.isMultiPage === true)
         setIsMultiPage(true);
+      else if (publishPageRes.data.data.isMultiPage === false && pageUrl)
+        setErrorCode('page_error');
       else setErrorCode('ok');
     }
   }, [publishPageRes]);
 
   useEffect(() => {
-    if (isMultiPage && pageUrl) requestSinglePageInfo();
+    if (isMultiPage && pageUrl) {
+      if (
+        publishPageRes.data.data.singlePages.find(
+          (list) => list.singlePageUrl === pageUrl
+        )
+      )
+        requestSinglePageInfo();
+      else setErrorCode('page_error');
+    }
   }, [isMultiPage, pageUrl]);
 
   useEffect(() => {
