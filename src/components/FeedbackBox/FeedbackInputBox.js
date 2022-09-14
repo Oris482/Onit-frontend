@@ -58,6 +58,7 @@ function FeedbackInputBox({ sendReloadSignal }) {
         setShowPopUp(true);
       } else {
         request();
+        setInputmessage('');
         // alert(
         //   '온잇 팀이 의견을 검토하기까지는 피드백 화면에서 나의 의견을 확인할 수 없어요. 소중한 의견을 신속하게 확인할게요!'
         // );
