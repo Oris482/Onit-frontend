@@ -133,7 +133,7 @@ function PageBlock({ userMatched, data, userUrl, pageType }) {
             <div
               css={css`
                 position: relative;
-                height: 82.5%;
+                height: 80%;
                 border-radius: 20px 20px 0px 0px;
                 box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.1);
               `}
@@ -151,7 +151,7 @@ function PageBlock({ userMatched, data, userUrl, pageType }) {
               justify-content: space-between;
               padding: 0 15px;
               box-sizing: border-box;
-              height: 17.5%;
+              height: 20%;
               width: 100%;
               align-items: center;
             `}
