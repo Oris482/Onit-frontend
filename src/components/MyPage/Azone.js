@@ -1,15 +1,16 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { useSelector } from 'react-redux';
+import { logoImg } from '../../asset';
 import { PAGE_MARGIN, PAGE_WIDTH } from '../../styles/style';
 import ProfileBlock from './ProfileBlock';
-import { logoImg } from '../../asset';
 
 function Azone({ profileImage, nickname, userSeq, setPopUp, popUp }) {
   const { myInfoState } = useSelector((state) => ({
     myInfoState: state.info.user,
   }));
 
+  console.log(profileImage === '' ? logoImg : profileImage);
   return (
     <div css={MyPageAZone}>
       <div
@@ -26,10 +27,7 @@ function Azone({ profileImage, nickname, userSeq, setPopUp, popUp }) {
           `}
         >
           <div className='profileImage' css={ProfileAZone} />
-          <img
-            css={profileImg}
-            src={profileImage !== '' ? profileImage : logoImg}
-          />
+          <img css={profileImg} src={!profileImage ? logoImg : profileImage} />
         </div>
         <div
           css={css`
