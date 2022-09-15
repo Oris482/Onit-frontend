@@ -315,6 +315,9 @@ const ConfirmButtonStyle = css`
   ${InitButtonStyle}
   ${RoundButtonSmall}
   ${OrangeColorButton}
+  line-height: 14.4px;
+  width: fit-content;
+  white-space: nowrap;
 `;
 
 const InputInnerButton = css`
