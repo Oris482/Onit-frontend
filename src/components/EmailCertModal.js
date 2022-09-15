@@ -89,7 +89,12 @@ function EmailCertModal({ closeModal, certSucceed, email, state }) {
             </div>
             <button
               type='button'
-              css={[InitButtonStyle, OrangeColorButton, RoundButtonSmall]}
+              css={[
+                InitButtonStyle,
+                OrangeColorButton,
+                RoundButtonSmall,
+                buttonAlignCenter,
+              ]}
               onClick={() => setClose(true)}
             >
               확인
@@ -121,7 +126,12 @@ function EmailCertModal({ closeModal, certSucceed, email, state }) {
             {!emailSend && (
               <button
                 type='button'
-                css={[InitButtonStyle, OrangeColorButton, RoundButtonSmall]}
+                css={[
+                  InitButtonStyle,
+                  OrangeColorButton,
+                  RoundButtonSmall,
+                  buttonAlignCenter,
+                ]}
                 onClick={() => {
                   handleSubmit(true);
                 }}
@@ -133,7 +143,12 @@ function EmailCertModal({ closeModal, certSucceed, email, state }) {
             {emailSend && (
               <button
                 type='button'
-                css={[InitButtonStyle, OrangeColorButton, RoundButtonSmall]}
+                css={[
+                  InitButtonStyle,
+                  OrangeColorButton,
+                  RoundButtonSmall,
+                  buttonAlignCenter,
+                ]}
                 onClick={() => {
                   checkVerification(true);
                 }}
@@ -214,4 +229,10 @@ const MessageEmphasizeStyle = css`
   color: ${COLOR_STYLE.black};
   margin-bottom: 3px;
   background-color: ${COLOR_STYLE.paleGrey};
+`;
+
+const buttonAlignCenter = css`
+  line-height: 14.4px;
+  width: fit-content;
+  white-space: nowrap;
 `;
