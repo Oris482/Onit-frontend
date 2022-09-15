@@ -10,7 +10,6 @@ function Azone({ profileImage, nickname, userSeq, setPopUp, popUp }) {
     myInfoState: state.info.user,
   }));
 
-  console.log(profileImage === '' ? logoImg : profileImage);
   return (
     <div css={MyPageAZone}>
       <div
