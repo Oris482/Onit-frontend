@@ -93,8 +93,8 @@ function EditModeGrid() {
         target.widget_action === 'C' &&
         target.widget_type === TYPE_NEW
       ) {
-        setSelectedWidget(target.i);
         openEditWindow(target.i);
+        setSelectedWidget(target.i);
         setNewWidgetFlag(false);
       }
     }
