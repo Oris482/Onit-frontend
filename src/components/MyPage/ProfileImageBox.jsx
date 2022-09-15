@@ -28,16 +28,14 @@ const ProfileImageBox = (props) => {
       onMouseEnter={() => setProfileBoxHover(true)}
       onMouseLeave={() => setProfileBoxHover(false)}
     >
-      {previewProfile !== '' && (
-        <img css={[thumbnailImg]} src={previewProfile} />
-      )}
-      {(profileImage === '' || profileBoxHover) && (
+      {!!previewProfile && <img css={[thumbnailImg]} src={previewProfile} />}
+      {(!profileImage || profileBoxHover) && (
         <button
           css={[thumbnailButton, LoginButtonColor]}
           type='button'
           onClick={() => setProfileImagePopUp(true)}
         >
-          {previewProfile === '' ? '이미지 설정' : '이미지 수정'}
+          {!previewProfile ? '이미지 설정' : '이미지 수정'}
         </button>
       )}
       {profileImagePopUp && (
