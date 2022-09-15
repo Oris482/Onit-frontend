@@ -62,7 +62,7 @@ export function isURL(formedUrl) {
 export const regexNumber = /\d/gi;
 export const regexAlpha = /[a-zA-Z]/gi;
 export const regexAlnum = /[0-9a-zA-Z]/gi;
-export const regexKorean = /^[가-힣]/;
+export const regexKorean = /[가-힣]/g;
 export const regexSymbol = /[\^~`$@$+="':;/\\,.<>[\]{}|₩!%*#?&()_-]/gi;
 
 export function hasNumber(word) {

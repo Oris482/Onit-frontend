@@ -151,7 +151,7 @@ const BindingButtonSet = (props) => {
     setPopUpText({
       topText: '앗..! 죄송합니다',
       middleText: '아직 사용할 수 없는 기능입니다 ㅠ.ㅠ',
-      bottomText: '오닛팀이 열심히 노력 중이니 조금만 기다려주세요!',
+      bottomText: '온잇팀이 열심히 노력 중이니 조금만 기다려주세요!',
     });
     setSendingPopUp(true);
   };
